@@ -1,2 +1,0 @@
-# RD_TRAINING
-
