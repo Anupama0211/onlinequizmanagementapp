@@ -2,6 +2,7 @@ package com.epam;
 
 import com.epam.userinterface.QuizPortalUI;
 
+
 import java.util.Scanner;
 
 public class Main {
@@ -9,7 +10,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         QuizPortalUI.launch(scanner);
         scanner.close();
-
     }
 }
 

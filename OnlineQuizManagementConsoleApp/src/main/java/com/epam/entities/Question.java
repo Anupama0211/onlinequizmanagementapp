@@ -19,8 +19,10 @@ public class Question {
     @Override
     public String toString() {
         String optionDisplay = "";
+        char optionNumber = 'a';
         for (String option : options) {
-            optionDisplay += option + "\n";
+            optionDisplay += optionNumber + "." + option + "\n";
+            optionNumber = (char) (optionNumber + 1);
         }
         return title + "\n" + optionDisplay + "\n--------------------------------------------------------\n";
     }

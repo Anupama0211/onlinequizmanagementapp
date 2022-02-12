@@ -3,14 +3,16 @@ package com.epam.userinterface;
 import java.util.Scanner;
 
 public class QuizPortalUI {
-    static Scanner scanner = new Scanner(System.in);
+    private QuizPortalUI() {
 
+    }
     public static void displayOptions() {
         System.out.println("-----------------WELCOME TO THE QUIZ PORTAL-----------------");
         System.out.println("1.Login as Admin");
         System.out.println("2.Login as Player");
         System.out.println("3.Exit");
     }
+
 
     public static void launch(Scanner scanner) {
 
@@ -22,7 +24,7 @@ public class QuizPortalUI {
                 choice = Integer.parseInt(scanner.nextLine());
                 if (choice == 1) {
                     loginStatus = LoginUI.loginUser(scanner);
-                    if (loginStatus == true) {
+                    if (loginStatus) {
                         AdminLoginUI.goToTheLibraries(scanner);
                     }
                 } else if (choice == 2) { //PlayerLogin

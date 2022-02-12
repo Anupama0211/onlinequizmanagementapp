@@ -1,11 +1,14 @@
-package com.epam.userinterface;
+package com.epam.userinterface.questionlibraryui;
 
 import com.epam.entities.Question;
-import com.epam.services.QuestionGenerator;
+import com.epam.services.questionservices.QuestionBuilder;
 
 import java.util.Scanner;
 
 public class QuestionGeneratorUI {
+    private QuestionGeneratorUI() {
+
+    }
 
     public static Question createAQuestion() {
         Scanner scanner = new Scanner(System.in);
@@ -27,6 +30,12 @@ public class QuestionGeneratorUI {
         System.out.println("Enter the marks of the question");
         int marks = scanner.nextInt();
 
-        return QuestionGenerator.makeQuestions(title,difficulty,topic,options,answer,marks);
+        return new QuestionBuilder().setAnswer(answer)
+                .setDifficulty(difficulty)
+                .setMarks(marks)
+                .setOptions(options)
+                .setTopic(topic)
+                .setTitle(title)
+                .build();
     }
 }

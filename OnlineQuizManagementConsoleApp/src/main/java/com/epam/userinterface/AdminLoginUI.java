@@ -1,9 +1,15 @@
 package com.epam.userinterface;
 
 
+import com.epam.userinterface.questionlibraryui.QuestionLibraryPortal;
+import com.epam.userinterface.quizlibraryui.QuizLibraryPortal;
+
 import java.util.Scanner;
 
 public class AdminLoginUI {
+    private AdminLoginUI() {
+
+    }
 
     public static void displayOptions() {
         System.out.println("Welcome to the Admin Portal!!!");
@@ -20,9 +26,9 @@ public class AdminLoginUI {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
                 if (choice == 1) {
-                   QuestionLibraryPortal.createChangesInQuestionsLibrary(scanner);
+                    QuestionLibraryPortal.modifyInQuestionsLibrary(scanner);
                 } else if (choice == 2) {
-                    QuizLibraryPortal.createChangesInTheQuizLibrary(scanner);
+                    QuizLibraryPortal.modifyTheQuizLibrary(scanner);
                 } else if (choice == 3) {
                     return false;
                 } else {

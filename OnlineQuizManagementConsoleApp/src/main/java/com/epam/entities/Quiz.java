@@ -1,10 +1,9 @@
 package com.epam.entities;
 
-import com.epam.database.QuestionLibrary;
+import com.epam.database.QuestionsDatabase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class Quiz {
 
     public Quiz() {
         title = "Default Java Quiz";
-        questionList = QuestionLibrary.getQuestions();
+        questionList = QuestionsDatabase.getQuestions();
     }
 
     @Override

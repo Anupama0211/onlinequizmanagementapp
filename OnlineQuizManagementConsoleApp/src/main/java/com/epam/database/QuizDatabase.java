@@ -8,7 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class QuizLibrary {
+public class QuizDatabase {
+    private QuizDatabase() {
+
+    }
+
     private static List<Quiz> quizzes = new ArrayList<>(Arrays.asList(new Quiz()));
 
 
@@ -20,15 +24,17 @@ public class QuizLibrary {
         return quizzes.size();
     }
 
-    public static void printQuizTitles() {
+    public static String getQuizTitles() {
         List<String> quizTiltles = quizzes.stream()
-                .map(quiz -> quiz.getTitle())
+                .map(Quiz::getTitle)
                 .collect(Collectors.toList());
+        String tiles = "";
         int index = 0;
         for (String title : quizTiltles) {
             index++;
-            System.out.println(index + ". " + title);
+            tiles += (index + ". " + title + "\n");
         }
+        return tiles;
     }
 
 
@@ -45,7 +51,7 @@ public class QuizLibrary {
     }
 
     public static Quiz deleteQuiz(int indexTobeDeleted) {
-        Quiz quiz=quizzes.get(indexTobeDeleted);
+        Quiz quiz = quizzes.get(indexTobeDeleted);
         quizzes.remove(indexTobeDeleted);
         return quiz;
     }
