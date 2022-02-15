@@ -2,11 +2,16 @@ package com.epam.userinterface;
 
 
 import com.epam.entities.Question;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class GetQuestionIndex {
+
+    private static final Logger LOGGER= LogManager.getLogger(GetQuestionIndex.class);
+
     private GetQuestionIndex() {
 
     }
@@ -16,15 +21,15 @@ public class GetQuestionIndex {
         int questionIndex = 0;
         do {
             try {
-                System.out.println("Enter the question number.");
+                LOGGER.info("Enter the question number.");
                 questionIndex = Integer.parseInt(scanner.nextLine());
                 if (questionIndex > questions.size() || questionIndex < 0) {
-                    System.out.println("Enter the correct question number");
+                    LOGGER.info("Enter the correct question number");
                 } else {
                     return questionIndex;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Enter the correct question number");
+                LOGGER.info("Enter the correct question number");
             }
         } while (true);
     }

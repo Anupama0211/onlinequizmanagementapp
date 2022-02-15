@@ -24,7 +24,9 @@ public class Question {
             optionDisplay += optionNumber + "." + option + "\n";
             optionNumber = (char) (optionNumber + 1);
         }
-        return title + "\n" + optionDisplay + "\n--------------------------------------------------------\n";
+        return "\n--------------------------------------------------------------------------\n"+
+                title + "\n" + optionDisplay +
+                "\n--------------------------------------------------------------------------\n";
     }
 }
 

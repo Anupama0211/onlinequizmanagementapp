@@ -2,42 +2,42 @@ package com.epam.userinterface.questionlibraryui;
 
 import com.epam.services.questionservices.QuestionLibraryService;
 import com.epam.services.questionservices.QuestionLibraryServicesFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.util.Optional;
 import java.util.Scanner;
 
 public class QuestionLibraryPortal {
-    private QuestionLibraryPortal() {
+    private static final Logger LOGGER= LogManager.getLogger(QuestionLibraryPortal.class);
 
+    public  void displayOptions() {
+        LOGGER.info("Welcome to the Questions Library!!!");
+        LOGGER.info("1.Create and add a Question to the library");
+        LOGGER.info("2.Modify a question from the library");
+        LOGGER.info("3.Remove a question from the library");
+        LOGGER.info("4.View Questions in the Library");
+        LOGGER.info("5.Exit Questions Portal");
+        LOGGER.info("Enter your choice--");
     }
 
-    public static void displayOptions() {
-        System.out.println("Welcome to the Questions Library!!!");
-        System.out.println("1.Create and add a Question to the library");
-        System.out.println("2.Modify a question from the library");
-        System.out.println("3.Remove a question from the library");
-        System.out.println("4.View Questions in the Library");
-        System.out.println("5.Exit Questions Portal");
-        System.out.println("Enter your choice--");
-    }
-
-    public static boolean modifyInQuestionsLibrary(Scanner scanner) {
-        QuestionLibraryServicesFactory questionLibraryServiceFactory = new QuestionLibraryServicesFactory();
+    public  void  modifyInQuestionsLibrary(Scanner scanner) {
+        String display = "Enter a valid choice!!!";
         do {
             try {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
-                Optional<QuestionLibraryService> questionLibraryService = questionLibraryServiceFactory.getQuestionServices(choice);
+                Optional<QuestionLibraryService> questionLibraryService = new QuestionLibraryServicesFactory().getQuestionServices(choice);
                 if (questionLibraryService.isPresent()) {
                     questionLibraryService.get().perform();
                 } else if (choice == 5) {
-                    return false;
+                   break;
                 } else {
-                    System.out.println("Enter a valid choice!!!");
+                    LOGGER.info(display);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Enter a valid choice!!!");
+                LOGGER.info(display);
             }
         } while (true);
     }

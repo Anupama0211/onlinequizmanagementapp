@@ -21,7 +21,7 @@ public class Quiz {
 
     @Override
     public String toString() {
-        String quizDisplay = title+"\n--------------------------------------------------------\n";
+        String quizDisplay = title+"\n--------------------------------------------------------------------------\n";
         int questionNumber=1;
         for (Question question : questionList) {
             quizDisplay += questionNumber+" "+question + "\n";

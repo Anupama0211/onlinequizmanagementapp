@@ -1,19 +1,21 @@
 package com.epam.services.quizservices;
 
-import com.epam.database.QuestionsDatabase;
 import com.epam.database.QuizDatabase;
 import com.epam.userinterface.GetQuizIndex;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class PrintAQuiz implements QuizLibraryService {
+    private static final Logger LOGGER= LogManager.getLogger(PrintAQuiz.class);
     @Override
     public void perform() {
-        if (QuestionsDatabase.size() > 0) {
-            System.out.println(QuizDatabase.getQuizTitles());
+        if (QuizDatabase.size() > 0) {
+            LOGGER.info(new QuizTitles().get());
             int quizIndex = GetQuizIndex.get();
-            System.out.println(QuizDatabase.getQuiz(quizIndex - 1));
+            LOGGER.info(QuizDatabase.getQuiz(quizIndex - 1));
         } else {
-            System.out.println("Quiz Library is Empty");
+            LOGGER.info("Quiz Library is Empty");
         }
     }
 }

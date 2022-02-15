@@ -4,18 +4,21 @@ import com.epam.database.QuestionsDatabase;
 import com.epam.entities.Question;
 import com.epam.userinterface.GetQuestionIndex;
 import com.epam.userinterface.questionlibraryui.QuestionGeneratorUI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ModifyQuestion implements QuestionLibraryService {
+    private static final Logger LOGGER= LogManager.getLogger(ModifyQuestion.class);
     public void perform() {
         if (QuestionsDatabase.size() > 0) {
-            System.out.println("Following are the questions in the Library");
-            new PrintQuestions().perform();
+           LOGGER.info("Following are the questions in the Library");
+            LOGGER.info(QuestionsDatabase.getQuestions());
             int questionIndex = GetQuestionIndex.get(QuestionsDatabase.getQuestions());
             Question question = QuestionGeneratorUI.createAQuestion();
             QuestionsDatabase.modifyQuestion(question, questionIndex - 1);
-            System.out.println("Question Modified!");
+            LOGGER.info("Question Modified!");
         } else {
-            System.out.println("The question library is empty");
+         LOGGER.warn("The question library is empty");
         }
     }
 }

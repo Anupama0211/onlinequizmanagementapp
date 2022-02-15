@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        QuizPortalUI.launch(scanner);
+        new QuizPortalUI().launch(scanner);
         scanner.close();
     }
 }

@@ -3,28 +3,23 @@ package com.epam.database;
 import com.epam.entities.User;
 
 
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.stream.Collectors;
+
 
 public class UsersDatabase {
     static Map<String, User> users = new HashMap<>();
+    static final String ADMIN ="Admin";
 
     static {
-        users.put("Anupama", new User("Admin", "Anupama ", "abcdef"));
-        users.put("Anuj", new User("Admin", "Anuj", "1234563"));
-        users.put("Anurag", new User("Admin", "Anurag", "abcdef"));
+        users.put("Anupama", new User(ADMIN, "Anupama ", "abcdef"));
+        users.put("Anuj", new User(ADMIN, "Anuj", "1234563"));
+        users.put("Anurag", new User(ADMIN, "Anurag", "abcdef"));
     }
+
     private UsersDatabase() {
 
     }
-
-
-    public static boolean checkPassword(String name, String password) {
-        return users.get(name).getPassword().equals(password);
-    }
-
 
     public static void addUser(User newUser) {
         users.put(newUser.getName(), newUser);
@@ -35,11 +30,7 @@ public class UsersDatabase {
     }
 
 
-
-    public static List<User> getUsers() {
-        return users.values()
-                .stream()
-                .map(user -> new User(user.getType(), user.getName(), ""))
-                .collect(Collectors.toList());
+    public static Map<String, User> getUsers() {
+        return users;
     }
 }

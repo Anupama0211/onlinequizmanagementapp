@@ -76,33 +76,11 @@ public class QuestionsDatabase {
         return question;
     }
 
-    public static void modifyTitle(int indexToBeModified, String title) {
-        questions.get(indexToBeModified).setTitle(title);
-    }
-
-    public static void modifyDifficulty(int indexToBeModified, String difficulty) {
-        questions.get(indexToBeModified).setDifficulty(difficulty);
-    }
-
-    public static void modifyTopic(int indexToBeModified, String topic) {
-        questions.get(indexToBeModified).setTopic(topic);
-    }
 
     public static int size() {
         return questions.size();
     }
 
-    public static void modifyOptions(int indexToBeModified, String[] options) {
-        questions.get(indexToBeModified).setOptions(options);
-    }
-
-    public static void modifyAnswer(int indexToBeModified, String answer) {
-        questions.get(indexToBeModified).setAnswer(answer);
-    }
-
-    public static void modifyMarks(int indexToBeModified, int marks) {
-        questions.get(indexToBeModified).setMarks(marks);
-    }
 
     public static void modifyQuestion(Question question, int indexTobeModified) {
         questions.set(indexTobeModified, question);
