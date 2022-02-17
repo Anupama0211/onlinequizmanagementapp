@@ -13,7 +13,6 @@ public class GetQuestionIndex {
     private static final Logger LOGGER= LogManager.getLogger(GetQuestionIndex.class);
 
     private GetQuestionIndex() {
-
     }
 
     public static int get(List<Question> questions) {

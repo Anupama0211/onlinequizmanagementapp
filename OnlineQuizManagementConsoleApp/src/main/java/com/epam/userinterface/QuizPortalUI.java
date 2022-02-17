@@ -33,7 +33,7 @@ public class QuizPortalUI {
                 Optional<UserService> userService = new UserServicesFactory().getUserservice(choice);
                 Optional<Login> login = new LoginFactory().getLogin(choice);
                 if (login.isPresent() && userService.isPresent()) {
-                    login.get().perform(scanner, userService.get());
+                    login.get().perform(scanner, userService.get(),choice);
                 } else if (choice == 5) {
                     LOGGER.info("Exited......");
                     break;

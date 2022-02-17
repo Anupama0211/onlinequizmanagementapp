@@ -18,14 +18,17 @@ public class Question {
 
     @Override
     public String toString() {
-        String optionDisplay = "";
+        StringBuilder optionDisplay = new StringBuilder();
         char optionNumber = 'a';
         for (String option : options) {
-            optionDisplay += optionNumber + "." + option + "\n";
+            optionDisplay
+                    .append(".")
+                    .append(option)
+                    .append("\n") ;
             optionNumber = (char) (optionNumber + 1);
         }
         return "\n--------------------------------------------------------------------------\n"+
-                title + "\n" + optionDisplay +
+                title + "\n" + optionDisplay.toString()+
                 "\n--------------------------------------------------------------------------\n";
     }
 }

@@ -20,9 +20,7 @@ public class QuizGeneratorUI {
 
     static String display = "Enter a valid number";
 
-    private QuizGeneratorUI() {
-
-    }
+    private QuizGeneratorUI() {    }
 
     public static Quiz createAQuizFromQuestionLibrary() {
         Scanner scanner = new Scanner(System.in);

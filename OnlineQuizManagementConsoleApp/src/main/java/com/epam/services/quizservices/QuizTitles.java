@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 
 public class QuizTitles {
     public String get() {
-        List<String> quizTiltles = QuizDatabase.get().stream()
+        List<String> quizTiltles = QuizDatabase
+                .get()
+                .stream()
                 .map(Quiz::getTitle)
                 .collect(Collectors.toList());
         String titles = "";
