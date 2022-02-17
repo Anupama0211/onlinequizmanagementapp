@@ -43,12 +43,12 @@ public class QuizGeneratorUI {
                         questionsToBeAddedInQuiz.add(questionList.get(indexOfQuestion));
                     }
                 } else {
-                    LOGGER.info("We have only " + QuestionsDatabase.size() + "  questions in the library ");
+                    LOGGER.info("We have only {}   questions in the library ",QuestionsDatabase.size());
                     noOfQuestions = -1;
-                    LOGGER.info(display);
+                    LOGGER.warn(display);
                 }
             } catch (NumberFormatException e) {
-                LOGGER.info(display);
+                LOGGER.error(display);
                 noOfQuestions = -1;
             }
         } while (noOfQuestions < 0);
@@ -73,7 +73,7 @@ public class QuizGeneratorUI {
                     QuestionsDatabase.addQuestion(question);
                 }
             } catch (NumberFormatException e) {
-                LOGGER.info(display);
+                LOGGER.error(display);
                 noOfQuestions = -1;
             }
         } while (noOfQuestions < 0);

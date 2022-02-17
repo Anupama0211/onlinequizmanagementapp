@@ -20,7 +20,7 @@ public class AddQuestionInQuiz implements QuizLibraryService {
             QuizDatabase.addQuestionInAQuiz(quizIndex - 1, question);
             LOGGER.info("Question added in the Quiz!!!");
         } else {
-            LOGGER.info("The Quiz library is empty!!!Make a new Quiz");
+            LOGGER.warn("The Quiz library is empty!!!Make a new Quiz");
         }
     }
 }

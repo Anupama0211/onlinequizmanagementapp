@@ -16,7 +16,7 @@ public class RemoveQuestions implements QuestionLibraryService {
             LOGGER.info("The following question is removed.....");
             LOGGER.info(QuestionsDatabase.removeQuestion(questionIndex - 1));
         } else {
-            LOGGER.info("Question Library is empty!!!");
+            LOGGER.warn("Question Library is empty!!!");
         }
     }
 }

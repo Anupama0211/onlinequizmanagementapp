@@ -4,7 +4,6 @@ import com.epam.database.QuizDatabase;
 import com.epam.entities.Quiz;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class QuizTitles {
     public String get() {
@@ -12,13 +11,16 @@ public class QuizTitles {
                 .get()
                 .stream()
                 .map(Quiz::getTitle)
-                .collect(Collectors.toList());
-        String titles = "";
+                .toList();
+        StringBuilder titles =new StringBuilder();
         int index = 0;
         for (String title : quizTiltles) {
             index++;
-            titles += (index + ". " + title + "\n");
+            titles.append(index)
+                    .append(". ")
+                    .append(title)
+                    .append("\n");
         }
-        return titles;
+        return titles.toString();
     }
 }

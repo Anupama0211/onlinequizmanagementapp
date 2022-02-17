@@ -14,11 +14,11 @@ public class PrintQuestions implements QuestionLibraryService {
             List<Question> questions = QuestionsDatabase.getQuestions();
             int index = 1;
             for (Question question : questions) {
-               LOGGER.info(index + " " + question);
+               LOGGER.info( "{} {}",index,question);
                 index++;
             }
         } else {
-            LOGGER.info("The question library is empty!!!");
+            LOGGER.warn("The question library is empty!!!");
         }
     }
 }

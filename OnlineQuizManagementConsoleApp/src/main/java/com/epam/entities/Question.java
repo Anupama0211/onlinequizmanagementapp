@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.swing.text.html.Option;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class Question {
         StringBuilder optionDisplay = new StringBuilder();
         char optionNumber = 'a';
         for (String option : options) {
-            optionDisplay
+            optionDisplay.append(optionNumber)
                     .append(".")
                     .append(option)
                     .append("\n") ;

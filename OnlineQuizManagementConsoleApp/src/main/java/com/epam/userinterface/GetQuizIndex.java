@@ -24,7 +24,7 @@ public class GetQuizIndex {
                     return quizIndex;
                 }
             } catch (NumberFormatException e) {
-                LOGGER.info("Enter the correct quiz number");
+                LOGGER.error("Enter the correct quiz number");
             }
         } while (true);
     }

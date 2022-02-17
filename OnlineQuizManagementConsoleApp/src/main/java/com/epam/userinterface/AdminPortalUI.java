@@ -36,7 +36,7 @@ public class AdminPortalUI {
                     LOGGER.info("Enter a valid choice!!!");
                 }
             } catch (NumberFormatException e) {
-                LOGGER.info("Enter a valid choice!!!");
+                LOGGER.error("Enter a valid choice!!!");
             }
         } while (true);
     }

@@ -37,7 +37,7 @@ public class QuestionLibraryPortal {
                     LOGGER.info(display);
                 }
             } catch (NumberFormatException e) {
-                LOGGER.info(display);
+                LOGGER.warn(display);
             }
         } while (true);
     }

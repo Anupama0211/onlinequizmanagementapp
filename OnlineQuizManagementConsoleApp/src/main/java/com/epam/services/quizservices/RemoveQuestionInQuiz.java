@@ -26,7 +26,7 @@ public class RemoveQuestionInQuiz implements QuizLibraryService {
                 LOGGER.info("Question deleted in the quiz!!!");
             }
         } else {
-            LOGGER.info("The Quiz library is empty!!!Make a new Quiz");
+            LOGGER.warn("The Quiz library is empty!!!Make a new Quiz");
         }
     }
 }

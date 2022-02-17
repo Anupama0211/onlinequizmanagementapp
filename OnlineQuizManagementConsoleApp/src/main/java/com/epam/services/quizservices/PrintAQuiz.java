@@ -13,9 +13,9 @@ public class PrintAQuiz implements QuizLibraryService {
         if (QuizDatabase.size() > 0) {
             LOGGER.info(new QuizTitles().get());
             int quizIndex = GetQuizIndex.get();
-            LOGGER.info(QuizDatabase.getQuiz(quizIndex - 1));
+            LOGGER.info(QuizDatabase.getQuiz(quizIndex - 1).get());
         } else {
-            LOGGER.info("Quiz Library is Empty");
+            LOGGER.warn("Quiz Library is Empty");
         }
     }
 }

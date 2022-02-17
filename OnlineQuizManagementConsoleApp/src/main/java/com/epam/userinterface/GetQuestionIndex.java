@@ -28,7 +28,7 @@ public class GetQuestionIndex {
                     return questionIndex;
                 }
             } catch (NumberFormatException e) {
-                LOGGER.info("Enter the correct question number");
+                LOGGER.error("Enter the correct question number");
             }
         } while (true);
     }

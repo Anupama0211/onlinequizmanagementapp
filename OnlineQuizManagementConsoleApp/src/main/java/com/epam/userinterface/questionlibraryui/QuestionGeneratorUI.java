@@ -24,7 +24,7 @@ public class QuestionGeneratorUI {
         String[] options = new String[4];
         char c = 'a';
         for (int i = 0; i < 4; i++) {
-            LOGGER.info(String.format("Option %d->", (i + 1)));
+            LOGGER.info("Option {}->", (i + 1));
             options[i] = (char) (c + 1) + scanner.nextLine();
         }
         LOGGER.info("Enter the answer of the question");
@@ -36,7 +36,7 @@ public class QuestionGeneratorUI {
                 marks = Integer.parseInt(scanner.nextLine());
                 break;
             } catch (NumberFormatException e) {
-                LOGGER.info("Enter Valid number for marks");
+                LOGGER.error("Enter Valid number for marks");
             }
         }
 
