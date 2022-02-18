@@ -12,10 +12,10 @@ public class ValidateUserCredentials implements UserService {
         boolean check = false;
 
         Map<String, User> users = UsersDatabase.getUsers();
-        if (users.containsKey(name) && users.get(name).getPassword().equals(password)) {
-            if ((choice == 1 && users.get(name).getType().equals("Admin")) || (choice == 2 && users.get(name).getType().equals("Player"))) {
-                check = true;
-            }
+        if (users.containsKey(name) && users.get(name).getPassword().equals(password)
+               &&((choice == 1 && users.get(name).getType().equals("Admin"))
+                || (choice == 2 && users.get(name).getType().equals("Player")))) {
+            check = true;
         }
         return check;
     }

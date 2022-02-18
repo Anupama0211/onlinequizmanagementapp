@@ -16,7 +16,7 @@ public class RemoveQuestionInQuiz implements QuizLibraryService {
             LOGGER.info(new QuizTitles().get());
             LOGGER.info("In which quiz do you want to delete the question");
             int quizIndex = GetQuizIndex.get();
-            Quiz quiz = QuizDatabase.getQuiz(quizIndex - 1).get();
+            Quiz quiz = QuizDatabase.getQuiz(quizIndex - 1);
             if (quiz.getQuestionList().isEmpty()) {
                 LOGGER.info("Quiz is empty!Add Question in the quiz");
             } else {

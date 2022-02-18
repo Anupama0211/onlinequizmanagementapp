@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.swing.text.html.Option;
 
 @Getter
 @Setter
@@ -30,7 +29,7 @@ public class Question {
             optionNumber = (char) (optionNumber + 1);
         }
         return "\n--------------------------------------------------------------------------\n"+
-                title + "\n" + optionDisplay.toString()+
+                title + "\n" + optionDisplay+
                 "\n--------------------------------------------------------------------------\n";
     }
 }

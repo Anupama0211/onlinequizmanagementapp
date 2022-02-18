@@ -5,7 +5,7 @@ import com.epam.entities.Quiz;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 public class QuizDatabase {
     private QuizDatabase() {
@@ -22,8 +22,8 @@ public class QuizDatabase {
         return quizzes;
     }
 
-    public static Optional<Quiz> getQuiz(int indexOfQuiz) {
-        return Optional.ofNullable(quizzes.get(indexOfQuiz));
+    public static Quiz getQuiz(int indexOfQuiz) {
+        return quizzes.get(indexOfQuiz);
     }
 
     public static int size() {
@@ -41,9 +41,7 @@ public class QuizDatabase {
         quizzes.get(indexToBeModified).getQuestionList().remove(questionNumber);
     }
 
-    public static Quiz deleteQuiz(int indexTobeDeleted) {
-        Quiz quiz = quizzes.get(indexTobeDeleted);
-        quizzes.remove(indexTobeDeleted);
-        return quiz;
+    public static void deleteQuiz(int indexTobeDeleted) {
+         quizzes.remove(indexTobeDeleted);
     }
 }
