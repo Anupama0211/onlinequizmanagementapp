@@ -1,6 +1,6 @@
-package com.epam.userinterface;
+package com.epam.userinterface.quizlibraryui;
 
-import com.epam.database.QuizDatabase;
+import com.epam.services.quizservices.QuizListSize;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class GetQuizIndex {
             try {
                 LOGGER.info("Enter the quiz number");
                 quizIndex = Integer.parseInt(scanner.nextLine());
-                if (quizIndex > QuizDatabase.size() || quizIndex < 0) {
+                if (quizIndex > new QuizListSize().get() || quizIndex < 0) {
                     LOGGER.info("Enter the correct quiz number");
                 } else {
                     return quizIndex;

@@ -1,8 +1,8 @@
 package com.epam.userinterface.quizlibraryui;
 
 
-import com.epam.services.quizservices.QuizLibraryService;
-import com.epam.services.quizservices.QuizLibraryServicesFactory;
+import com.epam.userinterface.quizlibraryui.quizoperationsui.QuizOperationsUI;
+import com.epam.userinterface.quizlibraryui.quizoperationsui.QuizOperationsUIFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,12 +28,12 @@ public class QuizLibraryPortal {
     }
 
     public void modifyTheQuizLibrary(Scanner scanner) {
-        QuizLibraryServicesFactory quizLibraryServicesFactory = new QuizLibraryServicesFactory();
+        QuizOperationsUIFactory quizOperationsUIFactory = new QuizOperationsUIFactory();
         do {
             try {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
-                Optional<QuizLibraryService> quizLibraryService = quizLibraryServicesFactory.getQuizServices(choice);
+                Optional<QuizOperationsUI> quizLibraryService = quizOperationsUIFactory.getQuizOperations(choice);
                 if (quizLibraryService.isPresent()) {
                     quizLibraryService.get().perform();
                 } else if (choice == 7) {
