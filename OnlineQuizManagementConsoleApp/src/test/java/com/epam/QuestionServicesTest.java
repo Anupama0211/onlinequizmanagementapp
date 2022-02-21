@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class QuestionServicesTest {
-
     Question question;
     @BeforeEach
      void setup(){
@@ -21,7 +20,6 @@ class QuestionServicesTest {
                 .setMarks(2)
                 .build();
     }
-
     @Test
     void modifyQuestionTest() {
         assertTrue( new ModifyQuestion().perform(question, 1));
