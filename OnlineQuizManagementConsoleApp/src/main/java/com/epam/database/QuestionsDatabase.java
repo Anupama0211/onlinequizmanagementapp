@@ -7,8 +7,11 @@ import java.util.List;
 
 public class QuestionsDatabase {
     private static List<Question> questions = new ArrayList<>();
-    static final  String BASICS = "Basics";
+    static final String BASICS = "Basics";
     static final String EASY = "Easy";
+
+    private QuestionsDatabase() {
+    }
 
     static {
         questions.add(new Question("The malicious software program, which is detrimental to other computer programs is known as",
@@ -64,9 +67,6 @@ public class QuestionsDatabase {
                 ".java", 1));
     }
 
-    private QuestionsDatabase() {
-
-    }
 
     public static void addQuestion(Question question) {
         questions.add(question);
