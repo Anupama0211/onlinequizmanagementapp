@@ -13,6 +13,7 @@ public class CreateAndAddQuestionUI implements QuestionOperationsUI {
     @Override
     public void perform(QuestionService questionService) {
         Question question = new QuestionGeneratorUI().createAQuestion();
+        LOGGER.info(question);
         questionService.addQuestion(question);
         LOGGER.info("Question added!");
     }

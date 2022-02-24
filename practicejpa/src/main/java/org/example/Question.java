@@ -1,30 +1,36 @@
-package com.epam.entities;
+package org.example;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@NoArgsConstructor
+
 @Getter
+@Setter
 @Entity
 public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int questionId;
-
-    private @Setter String title;
-    private @Setter String difficulty;
-    private @Setter String topic;
-    private @Setter int marks;
+    private String title;
+    private String difficulty;
+    private String topic;
+    private int marks;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Option> options;
     //@ManyToMany(mappedBy = "questions" ,cascade=CascadeType.PERSIST)
     //private List<Quiz> quizzes;
+
+    public Question(String title, String difficulty, String topic, int marks) {
+        this.title = title;
+        this.difficulty = difficulty;
+        this.topic = topic;
+        this.marks = marks;
+    }
 
 
     public void setOptions(List<Option> options) {

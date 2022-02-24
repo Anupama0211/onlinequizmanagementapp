@@ -24,8 +24,8 @@ public class UserDAO {
         return insertStatus;
     }
 
-    public Optional<User> delete(String userName) {
-        Optional<User> userOptional = getUser(userName);
+    public Optional<List<User>> delete(String userName) {
+        Optional<List<User>> userOptional = getUser(userName);
         if (userOptional.isPresent()) {
             entityManager.getTransaction().begin();
             entityManager.remove(userOptional.get());
@@ -34,11 +34,10 @@ public class UserDAO {
         return userOptional;
     }
 
-    public Optional<User> getUser(String userName) {
-        List<User> user = entityManager
-                .createQuery("select user from User user where userName=:userName")
-                .setParameter("userName", userName).getResultList();
-        Optional<User> userOptional = Optional.ofNullable(user.get(0));
+    public Optional<List<User>> getUser(String userName) {
+        Optional<List<User>> userOptional = Optional.ofNullable(entityManager
+                .createQuery("select user from User user where user.userName like :userName")
+                .setParameter("userName", userName).getResultList());
         return userOptional;
     }
 

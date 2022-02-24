@@ -2,7 +2,6 @@ package com.epam.userinterface.questionlibraryui;
 
 import com.epam.entities.Option;
 import com.epam.entities.Question;
-import com.epam.services.questionservices.QuestionBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,11 +69,11 @@ public class QuestionGeneratorUI {
                 LOGGER.error("Enter Valid number for marks");
             }
         }
-        Question question = new QuestionBuilder().setDifficulty(difficulty)
-                .setMarks(marks)
-                .setTopic(topic)
-                .setTitle(title)
-                .build();
+        Question question = new Question();
+        question.setMarks(marks);
+        question.setTitle(title);
+        question.setTopic(topic);
+        question.setDifficulty(difficulty);
         question.setOptions(options);
         return question;
     }
