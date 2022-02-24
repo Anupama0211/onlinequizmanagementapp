@@ -1,14 +1,28 @@
 package com.epam.entities;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int userId;
+    @Column(unique = true)
+    private String userName;
     private String type;
-    private String name;
     private String password;
+
+    public User(String userName, String password, String type) {
+        this.userName = userName;
+        this.password = password;
+        this.type = type;
+    }
 }

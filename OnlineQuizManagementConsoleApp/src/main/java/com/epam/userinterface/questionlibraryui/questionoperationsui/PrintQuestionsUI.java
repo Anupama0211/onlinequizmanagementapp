@@ -1,8 +1,7 @@
 package com.epam.userinterface.questionlibraryui.questionoperationsui;
 
 import com.epam.entities.Question;
-import com.epam.services.questionservices.QuestionListSize;
-import com.epam.services.questionservices.ViewQuestions;
+import com.epam.services.QuestionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,9 +11,9 @@ public class PrintQuestionsUI implements QuestionOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(PrintQuestionsUI.class);
 
     @Override
-    public void perform() {
-        if (new QuestionListSize().get() > 0) {
-            List<Question> questions = new ViewQuestions().perform();
+    public void perform(QuestionService questionService) {
+        List<Question> questions = questionService.readQuestions();
+        if (questions.size() > 0) {
             int index = 1;
             for (Question question : questions) {
                 LOGGER.info("{} {}", index, question);

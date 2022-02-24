@@ -1,6 +1,7 @@
 package com.epam.userinterface.loginui;
 
-import com.epam.services.userservices.UserService;
+import com.epam.services.UserService;
+
 
 import java.util.Scanner;
 

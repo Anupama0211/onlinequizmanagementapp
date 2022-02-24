@@ -1,14 +1,17 @@
 package com.epam.services.questionservices;
 
+import com.epam.entities.Option;
 import com.epam.entities.Question;
+
+import java.util.List;
 
 public class QuestionBuilder {
     private String title;
     private String difficulty;
     private String topic;
-    private String[] options;
-    private String answer;
+    private List<Option> options;
     private int marks;
+
 
     public QuestionBuilder setDifficulty(String difficulty) {
         this.difficulty = difficulty;
@@ -21,28 +24,19 @@ public class QuestionBuilder {
 
     }
 
-    public QuestionBuilder setOptions(String[] options) {
-        this.options = options;
-        return  this;
-    }
 
-    public QuestionBuilder setAnswer(String answer) {
-        this.answer = answer;
-        return  this;
-    }
 
     public QuestionBuilder setMarks(int marks) {
         this.marks = marks;
-        return  this;
+        return this;
     }
 
     public QuestionBuilder setTitle(String title) {
         this.title = title;
-        return  this;
+        return this;
     }
 
-    public Question build()
-    {
-        return new Question(title,difficulty,topic,options,answer,marks);
+    public Question build() {
+        return new Question(title, difficulty, topic, marks);
     }
 }
