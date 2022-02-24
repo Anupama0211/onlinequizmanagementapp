@@ -1,6 +1,5 @@
 package com.epam.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,13 +14,13 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int questionId;
+    private int id;
 
     private @Setter String title;
     private @Setter String difficulty;
     private @Setter String topic;
     private @Setter int marks;
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Option> options;
     //@ManyToMany(mappedBy = "questions" ,cascade=CascadeType.PERSIST)
     //private List<Quiz> quizzes;
@@ -44,7 +43,7 @@ public class Question {
             optionNumber = (char) (optionNumber + 1);
         }
         return "\n--------------------------------------------------------------------------\n" +
-                "ID : " + questionId + "\n" + title + "\n" + optionDisplay +
+                "ID : " + id + "\n" + title + "\n" + optionDisplay +
                 "\n--------------------------------------------------------------------------\n";
     }
 }

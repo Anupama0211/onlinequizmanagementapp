@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "Options`")
+@Table(name = "Options")
 public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int optionId;
-    private String value;
-    private boolean isAnswer;
+    int optionId;
+    String value;
+    boolean isAnswer;
     @ManyToOne
     Question question;
 

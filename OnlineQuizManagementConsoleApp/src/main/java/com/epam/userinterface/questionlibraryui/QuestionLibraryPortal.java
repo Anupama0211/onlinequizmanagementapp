@@ -26,16 +26,15 @@ public class QuestionLibraryPortal {
 
     public void goToQuestionsLibrary(Scanner scanner) {
         String display = "Enter a valid choice!!!";
+        QuestionDAO questionDAO=new QuestionDAO();
+        QuestionService questionService=new QuestionService(questionDAO);
         do {
             try {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
-                QuestionDAO questionDAO=new QuestionDAO();
-                QuestionService questionService=new QuestionService(questionDAO);
                 Optional<QuestionOperationsUI> questionOperationsUI = new QuestionOperationsUIFactory().getQuestionOperations(choice);
                 if (questionOperationsUI.isPresent()) {
                     questionOperationsUI.get().perform(questionService);
-                    questionDAO.close();
                 } else if (choice == 5) {
                     break;
                 } else {

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class QuestionGeneratorUI {
-    private static final Logger LOGGER = LogManager.getLogger(QuestionGeneratorUI.class);
 
+    private static final Logger LOGGER = LogManager.getLogger(QuestionGeneratorUI.class);
     public List<Option> createOptions(int noOfOptions, Scanner scanner) {
         LOGGER.info("Enter the  options of the questions");
         List<Option> options = new ArrayList<>();

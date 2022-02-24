@@ -2,56 +2,91 @@ package org.example;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.Option;
 
 import javax.persistence.*;
 import java.util.List;
 
-
-@Getter
-@Setter
 @Entity
+@Table(name = "questions")
 public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int questionId;
-    private String title;
-    private String difficulty;
-    private String topic;
-    private int marks;
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Option> options;
-    //@ManyToMany(mappedBy = "questions" ,cascade=CascadeType.PERSIST)
-    //private List<Quiz> quizzes;
+    private int id;
 
-    public Question(String title, String difficulty, String topic, int marks) {
-        this.title = title;
-        this.difficulty = difficulty;
+    private @Setter String title;
+    private @Setter String difficulty;
+    private @Setter String topic;
+    private @Setter int marks;
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    List<Option> options;
+
+    public Question() {
+
+    }
+
+    public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public void setMarks(int marks) {
         this.marks = marks;
     }
 
+    public Question(String difficulty, String title) {
+        this.difficulty = difficulty;
+        this.title = title;
+    }
 
-    public void setOptions(List<Option> options) {
-        options.forEach(option -> option.setQuestion(this));
-        this.options = options;
+    public String getTopic() {
+        return topic;
+    }
+
+    public int getMarks() {
+        return marks;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setQuestionId(int id) {
+        this.id=id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
     @Override
     public String toString() {
-        StringBuilder optionDisplay = new StringBuilder();
-        char optionNumber = 'a';
-        for (Option option : options) {
-            optionDisplay.append(optionNumber)
-                    .append(".")
-                    .append(option.getValue())
-                    .append("\n");
-            optionNumber = (char) (optionNumber + 1);
-        }
-        return "\n--------------------------------------------------------------------------\n" +
-                "ID : " + questionId + "\n" + title + "\n" + optionDisplay +
-                "\n--------------------------------------------------------------------------\n";
+        return "Question [optionId=" + id + ", title=" + title + ", difficulty=" + difficulty + "]";
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        options.forEach(option -> {
+            option.setQuestion(this);
+        });
+        this.options = options;
     }
 }
 

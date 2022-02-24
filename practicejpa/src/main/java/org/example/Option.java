@@ -1,28 +1,51 @@
 package org.example;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "Options`")
+@Table(name ="question_options")
 public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int optionId;
-    private String value;
-    private boolean isAnswer;
+    int optionId;
+    String value;
+    boolean isAnswer;
+
     @ManyToOne
     Question question;
 
-    @Override
-    public String toString() {
+    public int getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(int optionId) {
+        this.optionId = optionId;
+    }
+
+    public String getValue() {
         return value;
     }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public boolean isAnswer() {
+        return isAnswer;
+    }
+
+    public void setAnswer(boolean isAnswer) {
+        this.isAnswer = isAnswer;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+
 }
