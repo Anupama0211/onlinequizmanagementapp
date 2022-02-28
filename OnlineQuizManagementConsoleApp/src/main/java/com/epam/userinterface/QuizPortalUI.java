@@ -1,7 +1,7 @@
 package com.epam.userinterface;
 
-import com.epam.dao.UserDAO;
-import com.epam.services.UserService;
+import com.epam.services.userservices.UserService;
+import com.epam.services.userservices.UserServicesFactory;
 import com.epam.userinterface.loginui.Login;
 import com.epam.userinterface.loginui.LoginFactory;
 import org.apache.logging.log4j.LogManager;
@@ -30,10 +30,10 @@ public class QuizPortalUI {
             try {
                 displayOptions();
                 choice = Integer.parseInt(scanner.nextLine());
+                Optional<UserService> userService = new UserServicesFactory().getUserservice(choice);
                 Optional<Login> login = new LoginFactory().getLogin(choice);
-                UserService userService=new UserService(new UserDAO());
-                if (login.isPresent()) {
-                    login.get().perform(scanner,userService,choice);
+                if (login.isPresent() && userService.isPresent()) {
+                    login.get().perform(scanner, userService.get(),choice);
                 } else if (choice == 5) {
                     LOGGER.info("Exited......");
                     break;

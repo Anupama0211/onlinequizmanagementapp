@@ -1,7 +1,5 @@
 package com.epam.userinterface.questionlibraryui;
 
-import com.epam.dao.QuestionDAO;
-import com.epam.services.QuestionService;
 import com.epam.userinterface.questionlibraryui.questionoperationsui.QuestionOperationsUI;
 import com.epam.userinterface.questionlibraryui.questionoperationsui.QuestionOperationsUIFactory;
 import org.apache.logging.log4j.LogManager;
@@ -24,17 +22,15 @@ public class QuestionLibraryPortal {
         LOGGER.info("Enter your choice--");
     }
 
-    public void goToQuestionsLibrary(Scanner scanner) {
+    public void modifyInQuestionsLibrary(Scanner scanner) {
         String display = "Enter a valid choice!!!";
-        QuestionDAO questionDAO=new QuestionDAO();
-        QuestionService questionService=new QuestionService(questionDAO);
         do {
             try {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
                 Optional<QuestionOperationsUI> questionOperationsUI = new QuestionOperationsUIFactory().getQuestionOperations(choice);
                 if (questionOperationsUI.isPresent()) {
-                    questionOperationsUI.get().perform(questionService);
+                    questionOperationsUI.get().perform();
                 } else if (choice == 5) {
                     break;
                 } else {

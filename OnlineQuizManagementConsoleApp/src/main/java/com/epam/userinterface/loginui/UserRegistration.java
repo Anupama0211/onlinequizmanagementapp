@@ -1,8 +1,6 @@
 package com.epam.userinterface.loginui;
 
-
-import com.epam.entities.User;
-import com.epam.services.UserService;
+import com.epam.services.userservices.UserService;
 import com.epam.userinterface.AdminPortalUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,26 +16,15 @@ public class UserRegistration implements Login {
         String username = scanner.nextLine();
         LOGGER.info("Enter Password");
         String password = scanner.nextLine();
-        if (choice == 3) {
-
-            User user = new User(username, password, "ADMIN");
-            if (userService.registerUser(user)) {
-                LOGGER.info("Registration Successful");
+        if (userService.perform(username, password, choice)) {
+            LOGGER.info("Registration Successful");
+            if (choice == 3){
                 new AdminPortalUI().goToTheLibraries(scanner);
             } else {
-                LOGGER.info("User already exists!!!");
+                LOGGER.info("PLAYER FUNCTIONALITIES NOT DEFINED");
             }
-
         } else {
-
-            User user = new User(username, password, "PLAYER");
-            if (userService.registerUser(user)) {
-                LOGGER.info("Registration Successful");
-                LOGGER.info("PLAYER FUNCTIONALITIES NOT DEFINED!");
-            } else {
-                LOGGER.info("User already exists!!!");
-            }
-
+            LOGGER.warn("Username already exists , try another username!");
         }
     }
 }

@@ -2,7 +2,7 @@ package com.epam.userinterface;
 
 
 import com.epam.userinterface.questionlibraryui.QuestionLibraryPortal;
-//import com.epam.userinterface.quizlibraryui.QuizLibraryPortal;
+import com.epam.userinterface.quizlibraryui.QuizLibraryPortal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,10 +27,9 @@ public class AdminPortalUI {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
                 if (choice == 1) {
-                    new QuestionLibraryPortal().goToQuestionsLibrary(scanner);
+                    new QuestionLibraryPortal().modifyInQuestionsLibrary(scanner);
                 } else if (choice == 2) {
-                   // new QuizLibraryPortal().modifyTheQuizLibrary(scanner);
-                    LOGGER.info("QUIZ NOT DEFINED");
+                    new QuizLibraryPortal().modifyTheQuizLibrary(scanner);
                 } else if (choice == 3) {
                     break;
                 } else {
