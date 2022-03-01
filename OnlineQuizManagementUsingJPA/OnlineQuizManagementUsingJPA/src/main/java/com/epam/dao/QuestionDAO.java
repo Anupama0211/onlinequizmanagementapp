@@ -9,10 +9,11 @@ import java.util.Optional;
 public class QuestionDAO {
     EntityManager entityManager = GetManager.getEntityManger();
 
-    public void insert(Question question) {
+    public Question insert(Question question) {
         entityManager.getTransaction().begin();
         entityManager.persist(question);
         entityManager.getTransaction().commit();
+        return question;
     }
     public  Optional<Question> findQuestion(int questionID){
      return  Optional
@@ -51,8 +52,8 @@ public class QuestionDAO {
                 .setParameter("questionTitle",questionTitle)
                 .getSingleResult();
     }
-    public List<Question> read() {
-       return  entityManager.createQuery("from Question").getResultList();
+    public Optional<List<Question>> getAllQuestions() {
+       return  Optional.ofNullable(entityManager.createQuery("from Question").getResultList());
     }
     public void close(){
         entityManager.close();

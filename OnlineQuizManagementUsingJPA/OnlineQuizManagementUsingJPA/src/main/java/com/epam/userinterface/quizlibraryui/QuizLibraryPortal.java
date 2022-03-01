@@ -24,7 +24,7 @@ public class QuizLibraryPortal {
         LOGGER.info("3.Create a Quiz From Question Library");
         LOGGER.info("4.Delete a Quiz");
         LOGGER.info("5.Add a question in an Existing Quiz on your own ");
-        LOGGER.info("6.Add a question in an Existing Quiz on from Question Library");
+        LOGGER.info("6.Add a question in an Existing Quiz from Question Library");
         LOGGER.info("7.Delete a question in a Quiz");
         LOGGER.info("8.Exit Quiz Portal");
         LOGGER.info("Enter your choice");

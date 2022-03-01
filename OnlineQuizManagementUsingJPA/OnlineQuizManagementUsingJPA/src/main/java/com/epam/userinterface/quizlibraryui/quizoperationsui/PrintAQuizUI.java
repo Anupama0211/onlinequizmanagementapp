@@ -3,42 +3,28 @@ package com.epam.userinterface.quizlibraryui.quizoperationsui;
 
 import com.epam.entities.Quiz;
 import com.epam.services.QuizService;
+import com.epam.userinterface.GetIdUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class PrintAQuizUI implements QuizOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(PrintAQuizUI.class);
 
-    public int getQuizId() {
-        Scanner scanner = new Scanner(System.in);
-        int quizId = 0;
-        while (true) {
-            try {
-                LOGGER.info("Enter the quizID");
-                quizId = Integer.parseInt(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                LOGGER.info("Enter a valid Quiz ID");
-            }
-        }
-        return quizId;
-    }
-
     @Override
     public void perform(QuizService quizService) {
-        List<String> quizTitles = quizService.viewQuizTitles();
+
+        Optional<List<Quiz>> optionalQuizzes = quizService.getAllQuizzes();
         int quizId = 0;
-        if (quizTitles.isEmpty()) {
-            LOGGER.warn("Quiz Library is Empty");
-        } else {
+        if (optionalQuizzes.isPresent()) {
+            List<String> quizTitles = quizService.viewQuizTitles(optionalQuizzes.get());
             quizTitles.forEach(LOGGER::info);
+            GetIdUI getIdUI = new GetIdUI();
             while (true) {
-                quizId = getQuizId();
-                Optional<Quiz> quizOptional = quizService.viewAQuiz(quizId);
+                quizId = getIdUI.getId("Quiz ID");
+                Optional<Quiz> quizOptional = quizService.findQuiz(optionalQuizzes.get(), quizId);
                 if (quizOptional.isPresent()) {
                     LOGGER.info(quizOptional.get());
                     break;
@@ -46,6 +32,8 @@ public class PrintAQuizUI implements QuizOperationsUI {
                     LOGGER.info("Enter a valid Quiz ID");
                 }
             }
+        } else {
+            LOGGER.warn("Quiz Library is Empty");
         }
     }
 }

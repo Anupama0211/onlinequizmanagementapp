@@ -6,7 +6,6 @@ import com.epam.dao.QuizDAO;
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +17,11 @@ public class QuizService {
         this.quizDAO = quizDAO;
     }
 
-    public Optional<Quiz> viewAQuiz(int quizId) {
-        return quizDAO.findQuiz(quizId);
+    public Optional<Quiz> getAQuiz(int quizId) {
+        return quizDAO.getAQuiz(quizId);
     }
 
-    public int insertQuiz(Quiz quiz) {
+    public Quiz insertQuiz(Quiz quiz) {
         return quizDAO.insertQuiz(quiz);
     }
 
@@ -30,62 +29,64 @@ public class QuizService {
         return quizDAO.delete(quizId);
     }
 
-    public List<String> viewQuizTitles() {
-        List<String> quizTitles = new ArrayList<>();
-        Optional<List<Quiz>> optionalQuizzes = quizDAO.readQuizzes();
-        if (optionalQuizzes.isPresent()) {
-            List<Quiz> quizzes = optionalQuizzes.get();
-            quizTitles = quizzes.stream()
-                    .map(quiz -> "ID: " + quiz.getQuizId() + "\n" + quiz.getTitle() + "\n--------------------------")
-                    .toList();
-        }
-        return quizTitles;
+    public Optional<List<Quiz>> getAllQuizzes() {
+        return quizDAO.getAllQuizzes();
     }
 
-    public Optional<Question> getQuestionInAQuiz(Quiz quiz, int questionId) {
-        return quiz.getQuestions().stream().filter(question -> question.getQuestionId() == questionId).findFirst();
+    public Optional<Quiz> findQuiz(List<Quiz> quizzes, int quizId) {
+        return quizzes
+                .stream()
+                .filter(quiz -> quiz.getQuizId() == quizId)
+                .findFirst();
     }
 
-    public boolean deleteQuestionInQuiz(int quizId, int questionId) {
-        boolean status = false;
-        Optional<Quiz> quizOptional = viewAQuiz(quizId);
+    public List<String> viewQuizTitles(List<Quiz> quizzes) {
+        return quizzes.stream()
+                .map(quiz -> "ID: " + quiz.getQuizId() + "\n" + quiz.getTitle() + "\n--------------------------")
+                .toList();
+    }
+
+    public Optional<Question> getQuestionInAQuiz(Optional<Quiz> quizOptional, int questionId) {
+       Optional<Question> questionOptional=Optional.ofNullable(null);
         if (quizOptional.isPresent()) {
-            Quiz quiz = quizOptional.get();
-            Optional<Question> questionOptional = getQuestionInAQuiz(quiz, questionId);
-            if (questionOptional.isPresent()) {
-                Question question = questionOptional.get();
-                quiz.getQuestions().remove(question);
-                insertQuiz(quiz);
-                status = true;
-            }
+            questionOptional= quizOptional
+                    .get()
+                    .getQuestions()
+                    .stream()
+                    .filter(question -> question.getQuestionId() == questionId)
+                    .findFirst();
         }
-        return status;
+        return questionOptional;
     }
 
-    public boolean addQuestionFromQuestionLibrary(int quizId, int questionId) {
+    public boolean deleteQuestionInQuiz(Quiz quiz,Optional<Question> questionOptional) {
         boolean status = false;
-        Optional<Quiz> quizOptional = viewAQuiz(quizId);
-        if (quizOptional.isPresent()) {
-            Quiz quiz = quizOptional.get();
-            Optional<Question> questionOptional = new QuestionService(new QuestionDAO()).findQuestion(questionId);
-            if (questionOptional.isPresent()) {
-                quiz.getQuestions().add(questionOptional.get());
-                insertQuiz(quiz);
-                status = true;
-            }
+        if (questionOptional.isPresent()) {
+            Question question = questionOptional.get();
+            quiz.getQuestions().remove(question);
+            quizDAO.insertQuiz(quiz);
+            status = true;
         }
         return status;
     }
 
-    public boolean addQuetsionInQuizOnYourOwn(int quizId, Question question) {
+    public boolean addQuestionFromQuestionLibrary(Optional<Quiz> quizOptional, Optional<Question> questionOptional) {
         boolean status = false;
-        Optional<Quiz> quizOptional = viewAQuiz(quizId);
+        if (quizOptional.isPresent() && questionOptional.isPresent()) {
+            Quiz quiz = quizOptional.get();
+            quiz.getQuestions().add(questionOptional.get());
+            quizDAO.insertQuiz(quiz);
+            status = true;
+        }
+        return status;
+    }
+
+    public boolean addQuetsionInQuizOnYourOwn(Optional<Quiz> quizOptional, Question question) {
+        boolean status = false;
         if (quizOptional.isPresent()) {
             Quiz quiz = quizOptional.get();
-            new QuestionService(new QuestionDAO()).addQuestion(question);
-            Question questionInQuiz = new QuestionService(new QuestionDAO())
-                    .findQuestionByTitle(question.getTitle());
-            quiz.getQuestions().add(questionInQuiz);
+            Question questionToBeAddedInQuiz = new QuestionService(new QuestionDAO()).addQuestion(question);
+            quiz.getQuestions().add(questionToBeAddedInQuiz);
             insertQuiz(quiz);
             status = true;
         }

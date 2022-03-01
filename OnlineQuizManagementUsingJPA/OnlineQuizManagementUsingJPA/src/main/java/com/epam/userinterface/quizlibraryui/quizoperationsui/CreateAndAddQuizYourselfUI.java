@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
@@ -20,7 +21,17 @@ public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
         LOGGER.info("ENTER THE QUIZ TITLE");
         quiz.setTitle(scanner.nextLine());
         quiz.setQuestions(new HashSet<>());
+        int noOfQuestions = getNoOfQuestions(scanner);
+        quiz = quizService.insertQuiz(quiz);
+        QuestionGeneratorUI questionGeneratorUI = new QuestionGeneratorUI();
+        for (int i = 0; i < noOfQuestions; i++) {
+            Question question = questionGeneratorUI.createAQuestion();
+            quizService.addQuetsionInQuizOnYourOwn(Optional.of(quiz), question);
+        }
+        LOGGER.info("Quiz Created");
+    }
 
+    private int getNoOfQuestions(Scanner scanner) {
         int noOfQuestions;
         while (true) {
             try {
@@ -31,12 +42,7 @@ public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
                 LOGGER.info("Enter a valid number");
             }
         }
-        int quizId = quizService.insertQuiz(quiz);
-        for (int i = 0; i < noOfQuestions; i++) {
-            Question question = new QuestionGeneratorUI().createAQuestion();
-            quizService.addQuetsionInQuizOnYourOwn(quizId, question);
-        }
-        LOGGER.info("Quiz Created");
+        return noOfQuestions;
     }
 }
 

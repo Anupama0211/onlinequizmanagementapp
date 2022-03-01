@@ -5,7 +5,7 @@ import com.epam.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
-import java.util.List;
+
 import java.util.Optional;
 
 public class UserDAO {
@@ -19,12 +19,13 @@ public class UserDAO {
             entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
             insertStatus = false;
+            entityManager.getTransaction().rollback();
         }
         return insertStatus;
     }
 
-    public Optional<List<User>> delete(String userName) {
-        Optional<List<User>> userOptional = getUser(userName);
+    public Optional<User> delete(String userName) {
+        Optional<User> userOptional = getUser(userName);
         if (userOptional.isPresent()) {
             entityManager.getTransaction().begin();
             entityManager.remove(userOptional.get());
@@ -33,9 +34,9 @@ public class UserDAO {
         return userOptional;
     }
 
-    public Optional<List<User>> getUser(String userName) {
-        return Optional.ofNullable(entityManager
+    public Optional<User> getUser(String userName) {
+        return Optional.ofNullable((User)entityManager
                 .createQuery("select user from User user where user.userName like :userName")
-                .setParameter("userName", userName).getResultList());
+                .setParameter("userName", userName).getSingleResult());
     }
 }

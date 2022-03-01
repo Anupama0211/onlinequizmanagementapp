@@ -27,7 +27,7 @@ public class RemoveQuestionsUI implements QuestionOperationsUI {
 
     @Override
     public void perform(QuestionService questionService) {
-        if (questionService.readQuestions().isEmpty()) {
+        if (questionService.getAllQuestions().isEmpty()) {
             LOGGER.warn("Question Library is empty!!!");
         } else {
             LOGGER.info("Following are the questions in the Library");

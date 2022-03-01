@@ -14,8 +14,8 @@ public class QuestionService {
         this.questionDAO = questionDAO;
     }
 
-    public void addQuestion(Question question) {
-        questionDAO.insert(question);
+    public Question addQuestion(Question question) {
+        return questionDAO.insert(question);
     }
 
     public int removeQuestion(int questionId) {
@@ -34,19 +34,14 @@ public class QuestionService {
         return questionDAO.update(questionId, question);
     }
 
-    public List<Question> readQuestions() {
-        return questionDAO.read();
+    public Optional<List<Question>> getAllQuestions() {
+        return questionDAO.getAllQuestions();
     }
 
-    public int size() {
-        return questionDAO.read().size();
-    }
-
-    public Question findQuestionByTitle(String questionTitle) {
-        return questionDAO.findQuestionByTitle(questionTitle);
-    }
-
-    public Optional<Question> findQuestion(int questionID) {
-        return questionDAO.findQuestion(questionID);
+    public Optional<Question> findQuestion(List<Question> questions,int questionId) {
+       return questions
+               .stream()
+               .filter(question -> question.getQuestionId()==questionId)
+               .findFirst();
     }
 }

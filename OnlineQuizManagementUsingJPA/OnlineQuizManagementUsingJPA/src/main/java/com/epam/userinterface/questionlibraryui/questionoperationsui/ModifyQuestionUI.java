@@ -7,6 +7,8 @@ import com.epam.userinterface.questionlibraryui.QuestionGeneratorUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ModifyQuestionUI implements QuestionOperationsUI {
@@ -31,14 +33,13 @@ public class ModifyQuestionUI implements QuestionOperationsUI {
     @Override
     public void perform(QuestionService questionService) {
         Scanner scanner = new Scanner(System.in);
-        if (questionService.readQuestions().isEmpty()) {
-            LOGGER.warn("The question library is empty");
-        } else {
-            questionService.readQuestions().forEach(LOGGER::info);
+        Optional<List<Question>> questionsOptional = questionService.getAllQuestions();
+        if (questionsOptional.isPresent()) {
+            questionsOptional.get().forEach(LOGGER::info);
             LOGGER.info("Enter the Question ID of the question you want to modify");
             int questionId = getQuestionID(scanner);
             while (true) {
-                if (questionService.findQuestion(questionId).isPresent()) {
+                if (questionService.findQuestion(questionsOptional.get(), questionId).isPresent()) {
                     LOGGER.info("Enter the modified question");
                     Question question = new QuestionGeneratorUI().createAQuestion();
                     questionService.modifyQuestion(questionId, question);
@@ -49,6 +50,8 @@ public class ModifyQuestionUI implements QuestionOperationsUI {
                     getQuestionID(scanner);
                 }
             }
+        } else {
+            LOGGER.warn("The question library is empty");
         }
     }
 }
