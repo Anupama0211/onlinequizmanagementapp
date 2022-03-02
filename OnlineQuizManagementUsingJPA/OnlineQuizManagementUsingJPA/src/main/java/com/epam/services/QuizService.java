@@ -1,6 +1,7 @@
 package com.epam.services;
 
 
+import com.epam.dao.GetManager;
 import com.epam.dao.QuestionDAO;
 import com.epam.dao.QuizDAO;
 import com.epam.entities.Question;
@@ -85,7 +86,7 @@ public class QuizService {
         boolean status = false;
         if (quizOptional.isPresent()) {
             Quiz quiz = quizOptional.get();
-            Question questionToBeAddedInQuiz = new QuestionService(new QuestionDAO()).addQuestion(question);
+            Question questionToBeAddedInQuiz = new QuestionService(new QuestionDAO(GetManager.getEntityManger())).addQuestion(question);
             quiz.getQuestions().add(questionToBeAddedInQuiz);
             insertQuiz(quiz);
             status = true;

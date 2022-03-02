@@ -1,5 +1,6 @@
 package com.epam.userinterface.questionlibraryui;
 
+import com.epam.dao.GetManager;
 import com.epam.dao.QuestionDAO;
 import com.epam.services.QuestionService;
 import com.epam.userinterface.questionlibraryui.questionoperationsui.QuestionOperationsUI;
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -26,7 +28,8 @@ public class QuestionLibraryPortal {
 
     public void goToQuestionsLibrary(Scanner scanner) {
         String display = "Enter a valid choice!!!";
-        QuestionDAO questionDAO=new QuestionDAO();
+        EntityManager entityManager= GetManager.getEntityManger();
+        QuestionDAO questionDAO=new QuestionDAO(entityManager);
         QuestionService questionService=new QuestionService(questionDAO);
         do {
             try {

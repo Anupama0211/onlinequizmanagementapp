@@ -7,13 +7,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class QuizDAO {
-    EntityManager entityManager=GetManager.getEntityManger();
+    EntityManager entityManager;
+
+    public QuizDAO(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
 
     public Quiz insertQuiz(Quiz quiz) {
-            entityManager.getTransaction().begin();
-            entityManager.persist(quiz);
-            entityManager.getTransaction().commit();
-            return quiz;
+        entityManager.getTransaction().begin();
+        entityManager.persist(quiz);
+        entityManager.getTransaction().commit();
+        return quiz;
     }
 
     public Optional<Quiz> getAQuiz(int quizId) {
@@ -37,9 +42,4 @@ public class QuizDAO {
         return Optional
                 .ofNullable(entityManager.createQuery("from Quiz").getResultList());
     }
-
-    public void close() {
-        entityManager.close();
-    }
-
 }

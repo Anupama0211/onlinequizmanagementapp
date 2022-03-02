@@ -1,5 +1,6 @@
 package com.epam.userinterface;
 
+import com.epam.dao.GetManager;
 import com.epam.dao.UserDAO;
 import com.epam.services.UserService;
 import com.epam.userinterface.loginui.Login;
@@ -31,7 +32,7 @@ public class QuizPortalUI {
                 displayOptions();
                 choice = Integer.parseInt(scanner.nextLine());
                 Optional<Login> login = new LoginFactory().getLogin(choice);
-                UserService userService=new UserService(new UserDAO());
+                UserService userService=new UserService(new UserDAO(GetManager.getEntityManger()));
                 if (login.isPresent()) {
                     login.get().perform(scanner,userService,choice);
                 } else if (choice == 5) {

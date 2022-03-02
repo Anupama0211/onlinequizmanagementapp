@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class QuestionDAO {
-    EntityManager entityManager = GetManager.getEntityManger();
+    EntityManager entityManager ;
+    public QuestionDAO(EntityManager entityManager){
+        this.entityManager=entityManager;
+    }
 
     public Question insert(Question question) {
         entityManager.getTransaction().begin();
@@ -46,16 +49,8 @@ public class QuestionDAO {
         return modifiedStatus;
     }
 
-    public Question findQuestionByTitle(String questionTitle){
-       return (Question) entityManager
-                .createQuery("select q from Question q where q.title like :questionTitle")
-                .setParameter("questionTitle",questionTitle)
-                .getSingleResult();
-    }
     public Optional<List<Question>> getAllQuestions() {
        return  Optional.ofNullable(entityManager.createQuery("from Question").getResultList());
     }
-    public void close(){
-        entityManager.close();
-    }
+
 }

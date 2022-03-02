@@ -9,7 +9,11 @@ import javax.persistence.PersistenceException;
 import java.util.Optional;
 
 public class UserDAO {
-    EntityManager entityManager = GetManager.getEntityManger();
+    EntityManager entityManager;
+
+    public UserDAO(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     public boolean insert(User user) {
         boolean insertStatus = true;
@@ -35,7 +39,7 @@ public class UserDAO {
     }
 
     public Optional<User> getUser(String userName) {
-        return Optional.ofNullable((User)entityManager
+        return Optional.ofNullable((User) entityManager
                 .createQuery("select user from User user where user.userName like :userName")
                 .setParameter("userName", userName).getSingleResult());
     }

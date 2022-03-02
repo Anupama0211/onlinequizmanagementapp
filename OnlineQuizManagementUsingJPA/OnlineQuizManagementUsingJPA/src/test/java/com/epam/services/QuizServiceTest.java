@@ -1,14 +1,16 @@
-package com.epam;
+package com.epam.services;
 
 import com.epam.dao.QuestionDAO;
 import com.epam.dao.QuizDAO;
 import com.epam.entities.Option;
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
-import com.epam.services.QuestionService;
-import com.epam.services.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,13 +19,13 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class QuizServiceTest {
-    // @Mock
+
+    @Mock
     QuizDAO quizDAOmock;
 
-
-    //@InjectMocks
+    @InjectMocks
     QuizService quizService;
 
 
@@ -47,8 +49,6 @@ class QuizServiceTest {
         questions.add(question);
         quiz.setQuestions(questions);
         quiz.setTitle("DEMO");
-        quizDAOmock = mock(QuizDAO.class);
-        quizService = new QuizService(quizDAOmock);
     }
 
 

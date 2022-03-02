@@ -1,11 +1,14 @@
-package com.epam;
+package com.epam.services;
 
 import com.epam.dao.QuestionDAO;
 import com.epam.entities.Option;
 import com.epam.entities.Question;
-import com.epam.services.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import javax.persistence.RollbackException;
@@ -15,12 +18,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
-    // @Mock
-    QuestionDAO questionDAOmock;
+    @Mock
+    private static QuestionDAO questionDAOmock;
 
-    //@InjectMocks
-    QuestionService questionService;
+    @InjectMocks
+    private static QuestionService questionService;
 
     Question question;
 
@@ -34,9 +38,6 @@ class QuestionServiceTest {
         question.setMarks(2);
         question.setOptions(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
-        questionDAOmock = mock(QuestionDAO.class);
-        questionService = new QuestionService(questionDAOmock);
-
     }
 
 

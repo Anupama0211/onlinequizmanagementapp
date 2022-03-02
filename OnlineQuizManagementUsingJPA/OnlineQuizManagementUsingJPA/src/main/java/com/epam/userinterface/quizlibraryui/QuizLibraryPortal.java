@@ -1,6 +1,7 @@
 package com.epam.userinterface.quizlibraryui;
 
 
+import com.epam.dao.GetManager;
 import com.epam.dao.QuizDAO;
 import com.epam.services.QuizService;
 import com.epam.userinterface.quizlibraryui.quizoperationsui.QuizOperationsUI;
@@ -9,12 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class QuizLibraryPortal {
 
-    private static final Logger LOGGER= LogManager.getLogger(QuizLibraryPortal.class);
+    private static final Logger LOGGER = LogManager.getLogger(QuizLibraryPortal.class);
 
 
     public void displayOptions() {
@@ -33,13 +35,14 @@ public class QuizLibraryPortal {
     public void modifyTheQuizLibrary(Scanner scanner) {
         String display = "Enter a valid choice!!!";
         QuizOperationsUIFactory quizOperationsUIFactory = new QuizOperationsUIFactory();
-         QuizDAO quizDAO= new QuizDAO();
-        QuizService quizService=new QuizService(quizDAO);
+        EntityManager entityManager = GetManager.getEntityManger();
+        QuizDAO quizDAO = new QuizDAO(entityManager);
+        QuizService quizService = new QuizService(quizDAO);
         do {
             try {
                 displayOptions();
                 int choice = Integer.parseInt(scanner.nextLine());
-                Optional<QuizOperationsUI> quizOperationsUI= quizOperationsUIFactory.getQuizOperations(choice);
+                Optional<QuizOperationsUI> quizOperationsUI = quizOperationsUIFactory.getQuizOperations(choice);
                 if (quizOperationsUI.isPresent()) {
                     quizOperationsUI.get().perform(quizService);
                 } else if (choice == 8) {

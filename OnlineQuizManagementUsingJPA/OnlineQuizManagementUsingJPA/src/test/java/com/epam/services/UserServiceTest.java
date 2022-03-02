@@ -1,27 +1,33 @@
-package com.epam;
+package com.epam.services;
 
 import com.epam.dao.UserDAO;
 import com.epam.entities.User;
-import com.epam.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
+    @Mock
     UserDAO userDAOmock;
+    @InjectMocks
     UserService userService;
     User user;
 
     @BeforeEach
     void setUp() {
-        userDAOmock = mock(UserDAO.class);
-        userService = new UserService(userDAOmock);
+
         User user = new User();
         user.setUserId(22);
         user.setPassword("12345");

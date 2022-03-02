@@ -1,5 +1,6 @@
 package com.epam.userinterface.quizlibraryui.quizoperationsui;
 
+import com.epam.dao.GetManager;
 import com.epam.dao.QuestionDAO;
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
@@ -43,7 +44,7 @@ public class CreateAndAddQuizFromLibraryUI implements QuizOperationsUI {
         LOGGER.info("ENTER THE QUIZ TITLE");
         quiz.setTitle(scanner.nextLine());
         quiz.setQuestions(new HashSet<>());
-        QuestionService questionService = new QuestionService(new QuestionDAO());
+        QuestionService questionService = new QuestionService(new QuestionDAO(GetManager.getEntityManger()));
         Optional<List<Question>> questionsOptional = questionService.getAllQuestions();
         if (questionsOptional.isPresent()) {
             List<Question> questions = questionsOptional.get();
