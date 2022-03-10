@@ -1,16 +1,11 @@
 package com.epam.userinterface.quizlibraryui;
 
 
-import com.epam.entities.Quiz;
-import com.epam.services.QuestionService;
-import com.epam.services.QuizService;
-import com.epam.userinterface.questionlibraryui.questionoperationsui.QuestionOperationsUIFactory;
 import com.epam.userinterface.quizlibraryui.quizoperationsui.QuizOperationsUI;
 import com.epam.userinterface.quizlibraryui.quizoperationsui.QuizOperationsUIFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -20,8 +15,6 @@ import java.util.Scanner;
 public class QuizLibraryPortal {
 
     private static final Logger LOGGER = LogManager.getLogger(QuizLibraryPortal.class);
-    @Autowired
-    QuizService quizService;
     @Autowired
     QuizOperationsUIFactory quizOperationsUIFactory;
 
@@ -46,7 +39,7 @@ public class QuizLibraryPortal {
                 int choice = Integer.parseInt(scanner.nextLine());
                 Optional<QuizOperationsUI> quizOperationsUI = quizOperationsUIFactory.getQuizOperations(choice);
                 if (quizOperationsUI.isPresent()) {
-                    quizOperationsUI.get().perform(quizService);
+                    quizOperationsUI.get().perform();
                 } else if (choice == 8) {
                     break;
                 } else {

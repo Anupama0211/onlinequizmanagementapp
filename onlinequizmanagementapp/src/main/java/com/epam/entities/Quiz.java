@@ -2,8 +2,7 @@ package com.epam.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+
 
 import javax.persistence.*;
 import java.util.Set;

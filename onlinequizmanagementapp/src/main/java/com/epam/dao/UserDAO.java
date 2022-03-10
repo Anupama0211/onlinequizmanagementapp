@@ -1,13 +1,14 @@
 package com.epam.dao;
 
 import com.epam.entities.User;
+import com.epam.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
-import java.util.Optional;
+
 @Component
 public class UserDAO {
 
@@ -31,17 +32,16 @@ public class UserDAO {
         return insertStatus;
     }
 
-    public Optional<User> delete(String userName) {
-        Optional<User> userOptional = getUser(userName);
-        if (userOptional.isPresent()) {
+    public User delete(String userName)throws UserNotFoundException {
+        User user = getUser(userName);
             entityManager.getTransaction().begin();
-            entityManager.remove(userOptional.get());
+            entityManager.remove(user);
             entityManager.getTransaction().commit();
-        }
-        return userOptional;
+
+        return user;
     }
 
-    public Optional<User> getUser(String userName) {
+    public User getUser(String userName)throws UserNotFoundException {
         User user;
         try {
             user=(User) entityManager
@@ -49,8 +49,8 @@ public class UserDAO {
                     .setParameter("userName", userName).getSingleResult();
         }
         catch (NoResultException e){
-            user=null;
+            throw new UserNotFoundException("User doesnt exist!! Register!");
         }
-        return Optional.ofNullable(user);
+        return user;
     }
 }

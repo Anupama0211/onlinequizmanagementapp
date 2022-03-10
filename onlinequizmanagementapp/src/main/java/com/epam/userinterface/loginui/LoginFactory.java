@@ -3,7 +3,6 @@ package com.epam.userinterface.loginui;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Access;
 import java.util.Optional;
 @Component
 public class LoginFactory {

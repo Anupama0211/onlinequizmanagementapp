@@ -1,12 +1,10 @@
 package com.epam.userinterface.questionlibraryui;
 
-import com.epam.services.QuestionService;
 import com.epam.userinterface.questionlibraryui.questionoperationsui.QuestionOperationsUI;
 import com.epam.userinterface.questionlibraryui.questionoperationsui.QuestionOperationsUIFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

@@ -26,12 +26,7 @@ public class QuestionService {
     }
 
     public Question removeQuestion(Question question) throws RollbackException {
-
-        try {
             return questionDAO.remove(question);
-        } catch (RollbackException e) {
-            throw e;
-        }
     }
 
     public Question modifyQuestion(Question oldQuestion, Question newQuestion){

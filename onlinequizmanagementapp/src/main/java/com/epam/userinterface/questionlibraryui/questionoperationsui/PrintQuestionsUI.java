@@ -1,7 +1,6 @@
 package com.epam.userinterface.questionlibraryui.questionoperationsui;
 
 import com.epam.entities.Question;
-import com.epam.entities.Quiz;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.services.QuestionService;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Component
 public class PrintQuestionsUI implements QuestionOperationsUI {

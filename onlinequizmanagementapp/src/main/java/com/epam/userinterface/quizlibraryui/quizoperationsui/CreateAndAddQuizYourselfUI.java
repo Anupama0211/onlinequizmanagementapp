@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Scanner;
 
 @Component
 public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(CreateAndAddQuizYourselfUI.class);
-//    @Autowired
-//    QuestionGeneratorUI questionGeneratorUI;
-
+    @Autowired
+    QuestionGeneratorUI questionGeneratorUI;
+    @Autowired
+    QuizService quizService;
     @Override
-    public void perform(QuizService quizService) {
+    public void perform() {
         Scanner scanner = new Scanner(System.in);
         Quiz quiz = new Quiz();
         LOGGER.info("ENTER THE QUIZ TITLE");
@@ -29,7 +29,7 @@ public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
         int noOfQuestions = getNoOfQuestions(scanner);
         quiz = quizService.insertQuiz(quiz);
         for (int i = 0; i < noOfQuestions; i++) {
-            Question question = new QuestionGeneratorUI().createAQuestion();
+            Question question = questionGeneratorUI.createAQuestion();
             quizService.addQuetsionInQuizOnYourOwn(quiz, question);
         }
         LOGGER.info("Quiz Created");

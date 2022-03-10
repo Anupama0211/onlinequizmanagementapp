@@ -33,21 +33,26 @@ public class RemoveQuestionsUI implements QuestionOperationsUI {
             LOGGER.info("Following are the questions in the Library");
             printQuestionsUI.perform();
             while (true) {
-                try {
-                    int questionID = getIdUI.getId("Question ID");
-                    Question questionToBeRemoved = questionService.findQuestion(questions, questionID);
-                    questionService.removeQuestion(questionToBeRemoved);
-                    LOGGER.info("Question is Removed!");
-                    break;
-                } catch (InvalidIDException e) {
-                    LOGGER.warn(e.getMessage());
-                }
+                if (remove(questions)) break;
             }
         } catch (EmptyLibraryException e) {
             LOGGER.warn(e.getMessage());
         } catch (RollbackException e) {
             LOGGER.warn("Question cannot be deleted as it is used in a quiz!!");
         }
+    }
+
+    private boolean remove(List<Question> questions) {
+        try {
+            int questionID = getIdUI.getId("Question ID");
+            Question questionToBeRemoved = questionService.findQuestion(questions, questionID);
+            questionService.removeQuestion(questionToBeRemoved);
+            LOGGER.info("Question is Removed!");
+            return true;
+        } catch (InvalidIDException e) {
+            LOGGER.warn(e.getMessage());
+        }
+        return false;
     }
 }
 

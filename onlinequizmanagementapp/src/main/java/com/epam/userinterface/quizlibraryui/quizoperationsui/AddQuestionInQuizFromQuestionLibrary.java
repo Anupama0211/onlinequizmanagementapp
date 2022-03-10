@@ -7,15 +7,12 @@ import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
 import com.epam.services.QuizService;
 import com.epam.userinterface.GetIdUI;
-import com.epam.userinterface.questionlibraryui.QuestionGeneratorUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class AddQuestionInQuizFromQuestionLibrary implements QuizOperationsUI {
@@ -25,33 +22,40 @@ public class AddQuestionInQuizFromQuestionLibrary implements QuizOperationsUI {
     GetIdUI getIdUI;
     @Autowired
     QuestionService questionService;
+    @Autowired
+    QuizService quizService;
 
     @Override
-    public void perform(QuizService quizService) {
+    public void perform() {
 
         try {
             List<Quiz> quizzes = quizService.getAllQuizzes();
             List<Question> questions = questionService.getAllQuestions();
             LOGGER.info(" =========================QUIZZES =========================");
             quizService.viewQuizTitles(quizzes).forEach(LOGGER::info);
-            int quizId = getIdUI.getId("Quiz ID");
-            Quiz quiz = quizService.findQuiz(quizzes, quizId);
             LOGGER.info(" =========================QUESTIONS =========================");
             questions.forEach(LOGGER::info);
             while (true) {
-                try {
-                    int questionId = getIdUI.getId("Question ID");
-                    Question question = questionService.findQuestion(questions, questionId);
-                    quizService.addQuestionFromQuestionLibrary(quiz, question);
-                    LOGGER.info("Question Added");
-                    break;
-                } catch (InvalidIDException e) {
-                    LOGGER.warn(e.getMessage());
-                }
+                if (addQuestionInQuiz(quizService, quizzes, questions)) break;
             }
-        } catch (EmptyLibraryException | InvalidIDException e) {
+        } catch (EmptyLibraryException e) {
             LOGGER.warn(e.getMessage());
         }
+    }
+
+    private boolean addQuestionInQuiz(QuizService quizService, List<Quiz> quizzes, List<Question> questions) {
+        try {
+            int quizId = getIdUI.getId("Quiz ID");
+            Quiz quiz = quizService.findQuiz(quizzes, quizId);
+            int questionId = getIdUI.getId("Question ID");
+            Question question = questionService.findQuestion(questions, questionId);
+            quizService.addQuestionFromQuestionLibrary(quiz, question);
+            LOGGER.info("Question Added");
+            return true;
+        } catch (InvalidIDException e) {
+            LOGGER.warn(e.getMessage());
+        }
+        return false;
     }
 }
 

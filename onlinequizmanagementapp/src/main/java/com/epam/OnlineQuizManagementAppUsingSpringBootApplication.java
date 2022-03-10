@@ -2,16 +2,12 @@ package com.epam;
 
 import com.epam.dao.GetManager;
 import com.epam.userinterface.QuizPortalUI;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import javax.persistence.EntityManager;
-import java.util.ConcurrentModificationException;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -30,10 +26,4 @@ public class OnlineQuizManagementAppUsingSpringBootApplication {
 		return GetManager.getEntityManger();
 	}
 
-//	@Override
-//	1public void run(String... args) throws Exception {
-//		Scanner scanner = new Scanner(System.in);
-//		new QuizPortalUI().launch(scanner);
-//		scanner.close();
-//	}
 }

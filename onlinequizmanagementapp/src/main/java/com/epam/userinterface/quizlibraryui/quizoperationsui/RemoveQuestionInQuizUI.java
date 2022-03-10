@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class RemoveQuestionInQuizUI implements QuizOperationsUI {
@@ -20,9 +19,10 @@ public class RemoveQuestionInQuizUI implements QuizOperationsUI {
 
     @Autowired
     GetIdUI getIdUI;
-
+    @Autowired
+    QuizService quizService;
     @Override
-    public void perform(QuizService quizService) {
+    public void perform() {
         while (true) {
             try {
                 List<Quiz> quizzes = quizService.getAllQuizzes();
@@ -40,19 +40,5 @@ public class RemoveQuestionInQuizUI implements QuizOperationsUI {
                 LOGGER.warn(e.getMessage());
             }
         }
-
-//        Optional<
-//                int quizId = 0;
-//        int questionId = 0;
-//        if (quizzesOptional.isPresent()) {
-//            List<Quiz> quizzes = quizzesOptional.get();
-//
-//
-//        }
-//    } else
-//
-//    {
-//        LOGGER.warn("The Quiz library is empty!!!Make a new Quiz");
-//    }
     }
 }

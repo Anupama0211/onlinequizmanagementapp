@@ -12,16 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class PrintAQuizUI implements QuizOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(PrintAQuizUI.class);
     @Autowired
     GetIdUI getIdUI;
-
+    @Autowired
+    QuizService quizService;
     @Override
-    public void perform(QuizService quizService) {
+    public void perform() {
         try {
             List<Quiz> quizzes = quizService.getAllQuizzes();
             int quizId = 0;

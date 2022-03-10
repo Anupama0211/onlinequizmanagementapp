@@ -11,33 +11,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Component
 public class RemoveQuizUI implements QuizOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(RemoveQuizUI.class);
     @Autowired
     GetIdUI getIdUI;
-
+    @Autowired
+    QuizService quizService;
     @Override
-    public void perform(QuizService quizService) {
+    public void perform() {
         try {
             List<Quiz> quizzes = quizService.getAllQuizzes();
             List<String> quizTitles = quizService.viewQuizTitles(quizzes);
             quizTitles.forEach(LOGGER::info);
             while (true) {
-                try {
-                    int quizId = getIdUI.getId("Quiz ID");
-                    Quiz quiz = quizService.findQuiz(quizzes, quizId);
-                    quizService.deleteQuiz(quiz);
-                    LOGGER.info("Quiz Deleted!!!!");
-                    break;
-                } catch (InvalidIDException e) {
-                   LOGGER.warn(e.getMessage());
-                }
+                if (removeQuiz(quizService, quizzes)) break;
             }
         } catch (EmptyLibraryException e) {
            LOGGER.warn(e.getMessage());
         }
+    }
+
+    private boolean removeQuiz(QuizService quizService, List<Quiz> quizzes) {
+        try {
+            int quizId = getIdUI.getId("Quiz ID");
+            Quiz quiz = quizService.findQuiz(quizzes, quizId);
+            quizService.deleteQuiz(quiz);
+            LOGGER.info("Quiz Deleted!!!!");
+            return true;
+        } catch (InvalidIDException e) {
+           LOGGER.warn(e.getMessage());
+        }
+        return false;
     }
 }
