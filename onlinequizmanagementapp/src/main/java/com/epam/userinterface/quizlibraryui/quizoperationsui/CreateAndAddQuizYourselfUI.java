@@ -6,6 +6,7 @@ import com.epam.services.QuizService;
 import com.epam.userinterface.questionlibraryui.QuestionGeneratorUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -15,6 +16,8 @@ import java.util.Scanner;
 @Component
 public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(CreateAndAddQuizYourselfUI.class);
+//    @Autowired
+//    QuestionGeneratorUI questionGeneratorUI;
 
     @Override
     public void perform(QuizService quizService) {
@@ -25,10 +28,9 @@ public class CreateAndAddQuizYourselfUI implements QuizOperationsUI {
         quiz.setQuestions(new HashSet<>());
         int noOfQuestions = getNoOfQuestions(scanner);
         quiz = quizService.insertQuiz(quiz);
-        QuestionGeneratorUI questionGeneratorUI = new QuestionGeneratorUI();
         for (int i = 0; i < noOfQuestions; i++) {
-            Question question = questionGeneratorUI.createAQuestion();
-            quizService.addQuetsionInQuizOnYourOwn(Optional.of(quiz), question);
+            Question question = new QuestionGeneratorUI().createAQuestion();
+            quizService.addQuetsionInQuizOnYourOwn(quiz, question);
         }
         LOGGER.info("Quiz Created");
     }

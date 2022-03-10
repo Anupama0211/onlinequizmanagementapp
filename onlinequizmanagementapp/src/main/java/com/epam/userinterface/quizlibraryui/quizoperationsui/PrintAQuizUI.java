@@ -2,6 +2,8 @@ package com.epam.userinterface.quizlibraryui.quizoperationsui;
 
 
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuizService;
 import com.epam.userinterface.GetIdUI;
 import org.apache.logging.log4j.LogManager;
@@ -17,25 +19,22 @@ public class PrintAQuizUI implements QuizOperationsUI {
     private static final Logger LOGGER = LogManager.getLogger(PrintAQuizUI.class);
     @Autowired
     GetIdUI getIdUI;
+
     @Override
     public void perform(QuizService quizService) {
-        Optional<List<Quiz>> optionalQuizzes = quizService.getAllQuizzes();
-        int quizId = 0;
-        if (optionalQuizzes.isPresent()) {
-            List<String> quizTitles = quizService.viewQuizTitles(optionalQuizzes.get());
+        try {
+            List<Quiz> quizzes = quizService.getAllQuizzes();
+            int quizId = 0;
+            List<String> quizTitles = quizService.viewQuizTitles(quizzes);
             quizTitles.forEach(LOGGER::info);
             while (true) {
                 quizId = getIdUI.getId("Quiz ID");
-                Optional<Quiz> quizOptional = quizService.findQuiz(optionalQuizzes.get(), quizId);
-                if (quizOptional.isPresent()) {
-                    LOGGER.info(quizOptional.get());
-                    break;
-                } else {
-                    LOGGER.info("Enter a valid Quiz ID");
-                }
+                Quiz quiz = quizService.findQuiz(quizzes, quizId);
+                LOGGER.info(quiz);
+                break;
             }
-        } else {
-            LOGGER.warn("Quiz Library is Empty");
+        } catch (InvalidIDException | EmptyLibraryException e) {
+           LOGGER.warn(e.getMessage());
         }
     }
 }

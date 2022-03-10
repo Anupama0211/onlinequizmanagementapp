@@ -15,12 +15,11 @@ import java.util.Scanner;
 public class UserRegistration implements Login {
     private static final Logger LOGGER = LogManager.getLogger(UserRegistration.class);
     @Autowired
-    User user;
-    @Autowired
     AdminPortalUI adminPortalUI;
     @Override
     public void perform(Scanner scanner, UserService userService, int choice) {
 
+        User user=new User();
         LOGGER.info("Enter Username ");
         String username = scanner.nextLine();
         LOGGER.info("Enter Password");

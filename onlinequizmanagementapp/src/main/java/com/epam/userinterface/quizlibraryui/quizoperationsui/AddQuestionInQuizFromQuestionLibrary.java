@@ -2,6 +2,8 @@ package com.epam.userinterface.quizlibraryui.quizoperationsui;
 
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
 import com.epam.services.QuizService;
 import com.epam.userinterface.GetIdUI;
@@ -27,29 +29,29 @@ public class AddQuestionInQuizFromQuestionLibrary implements QuizOperationsUI {
     @Override
     public void perform(QuizService quizService) {
 
-        Optional<List<Quiz>> quizzesOptional = quizService.getAllQuizzes();
-        Optional<List<Question>> questionsOptional = questionService.getAllQuestions();
-        if (!quizzesOptional.isPresent()) {
-            LOGGER.info("Quiz Library is empty!!");
-        } else if (!questionsOptional.isPresent()) {
-            LOGGER.info("Questions Library is empty!!");
-        } else {
+        try {
+            List<Quiz> quizzes = quizService.getAllQuizzes();
+            List<Question> questions = questionService.getAllQuestions();
+            LOGGER.info(" =========================QUIZZES =========================");
+            quizService.viewQuizTitles(quizzes).forEach(LOGGER::info);
+            int quizId = getIdUI.getId("Quiz ID");
+            Quiz quiz = quizService.findQuiz(quizzes, quizId);
+            LOGGER.info(" =========================QUESTIONS =========================");
+            questions.forEach(LOGGER::info);
             while (true) {
-                LOGGER.info(" =========================QUIZZES =========================");
-                quizService.viewQuizTitles(quizzesOptional.get()).forEach(LOGGER::info);
-                int quizId = getIdUI.getId("Quiz ID");
-                Optional<Quiz> quizOptional = quizService.findQuiz(quizzesOptional.get(), quizId);
-                LOGGER.info(" =========================QUESTIONS =========================");
-                questionsOptional.get().forEach(LOGGER::info);
-                int questionId = getIdUI.getId("Question ID");
-                Optional<Question> questionOptional = questionService.findQuestion(questionsOptional.get(), questionId);
-                if (quizService.addQuestionFromQuestionLibrary(quizOptional, questionOptional)) {
+                try {
+                    int questionId = getIdUI.getId("Question ID");
+                    Question question = questionService.findQuestion(questions, questionId);
+                    quizService.addQuestionFromQuestionLibrary(quiz, question);
                     LOGGER.info("Question Added");
                     break;
-                } else {
-                    LOGGER.info("Wrong Question ID or Quiz ID!!");
+                } catch (InvalidIDException e) {
+                    LOGGER.warn(e.getMessage());
                 }
             }
+        } catch (EmptyLibraryException | InvalidIDException e) {
+            LOGGER.warn(e.getMessage());
         }
     }
 }
+

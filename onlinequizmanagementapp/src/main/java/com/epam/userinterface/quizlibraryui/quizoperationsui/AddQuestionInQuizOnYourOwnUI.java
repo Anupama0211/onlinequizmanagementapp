@@ -2,6 +2,8 @@ package com.epam.userinterface.quizlibraryui.quizoperationsui;
 
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuizService;
 import com.epam.userinterface.GetIdUI;
 import com.epam.userinterface.questionlibraryui.QuestionGeneratorUI;
@@ -19,35 +21,29 @@ public class AddQuestionInQuizOnYourOwnUI implements QuizOperationsUI {
 
     @Autowired
     GetIdUI getIdUI;
+//    @Autowired
+//    QuestionGeneratorUI questionGeneratorUI;
 
     @Override
     public void perform(QuizService quizService) {
-        Optional<List<Quiz>> optionalQuizzes = quizService.getAllQuizzes();
-
-        if (optionalQuizzes.isPresent()) {
-            List<Quiz> quizzes=optionalQuizzes.get();
+        try {
+            List<Quiz> quizzes = quizService.getAllQuizzes();
             quizService.viewQuizTitles(quizzes).forEach(LOGGER::info);
             while (true) {
-                if (addQuestion(quizService, quizzes)) {
+                try {
+                    int quizId = getIdUI.getId("Quiz ID");
+                    Question question = new QuestionGeneratorUI().createAQuestion();
+                    Quiz quiz = quizService.findQuiz(quizzes, quizId);
+                    quizService.addQuetsionInQuizOnYourOwn(quiz, question);
+                    LOGGER.info("Question added in the quiz");
                     break;
+                } catch (InvalidIDException e) {
+                    LOGGER.warn(e.getMessage());
                 }
             }
-        } else {
-            LOGGER.info("Quiz Library is empty!!!");
+        } catch (EmptyLibraryException e) {
+            LOGGER.warn(e.getMessage());
         }
-    }
-
-    private boolean addQuestion(QuizService quizService, List<Quiz> quizzes) {
-        int quizId;
-        Question question = new QuestionGeneratorUI().createAQuestion();
-        quizId = getIdUI.getId("Quiz ID");
-        Optional<Quiz> quizOptional = quizService.findQuiz(quizzes, quizId);
-        if (quizService.addQuetsionInQuizOnYourOwn(quizOptional, question)) {
-            LOGGER.info("Question added in the quiz");
-            return true;
-        } else {
-            LOGGER.info("Wrong quizID");
-        }
-        return false;
     }
 }
+

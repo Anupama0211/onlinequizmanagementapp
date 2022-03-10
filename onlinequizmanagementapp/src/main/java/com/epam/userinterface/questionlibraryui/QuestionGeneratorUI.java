@@ -4,19 +4,19 @@ import com.epam.entities.Option;
 import com.epam.entities.Question;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
+@Component
 public class QuestionGeneratorUI {
 
     private static final Logger LOGGER = LogManager.getLogger(QuestionGeneratorUI.class);
 
-    public List<Option> createOptions(int noOfOptions, Scanner scanner) {
+    public Set<Option> createOptions(int noOfOptions, Scanner scanner) {
         LOGGER.info("Enter the  options of the questions");
-        List<Option> options = new ArrayList<>();
-
+        Set<Option> options = new HashSet<>();
         for (int i = 0; i < noOfOptions; i++) {
             LOGGER.info("Option {}->", (i + 1));
             Option option = new Option();
@@ -33,7 +33,9 @@ public class QuestionGeneratorUI {
                 }
             }
             options.add(option);
+            LOGGER.info(options);
         }
+        LOGGER.info(options);
 
         return options;
     }
@@ -56,7 +58,7 @@ public class QuestionGeneratorUI {
                 LOGGER.error("Enter Valid number of Options");
             }
         }
-        List<Option> options = createOptions(noOfOptions, scanner);
+        Set<Option> options = createOptions(noOfOptions, scanner);
         int marks = 0;
         while (true) {
             try {
@@ -67,7 +69,7 @@ public class QuestionGeneratorUI {
                 LOGGER.error("Enter Valid number for marks");
             }
         }
-        Question question = new Question();
+        Question question=new Question();
         question.setMarks(marks);
         question.setTitle(title);
         question.setTopic(topic);

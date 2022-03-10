@@ -2,6 +2,8 @@ package com.epam.services;
 
 import com.epam.dao.QuestionDAO;
 import com.epam.entities.Question;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,34 +25,31 @@ public class QuestionService {
         return questionDAO.insert(question);
     }
 
-    public int removeQuestion(int questionId) {
-        int status = 0;
+    public Question removeQuestion(Question question) throws RollbackException {
+
         try {
-            if (questionDAO.remove(questionId).isPresent()) {
-                status = 1;
-            }
+            return questionDAO.remove(question);
         } catch (RollbackException e) {
-            status = 2;
+            throw e;
         }
-        return status;
     }
 
-    public boolean modifyQuestion(int questionId, Question question) {
-        return questionDAO.update(questionId, question);
+    public Question modifyQuestion(Question oldQuestion, Question newQuestion){
+        return questionDAO.update(oldQuestion, newQuestion);
     }
 
-    public Optional<List<Question>> getAllQuestions() {
-        List<Question> questions = questionDAO.getAllQuestions();
-        if (questions.isEmpty()) {
-            questions = null;
-        }
-        return Optional.ofNullable(questions);
+    public List<Question> getAllQuestions() throws EmptyLibraryException {
+        return questionDAO.getAllQuestions();
     }
 
-    public Optional<Question> findQuestion(List<Question> questions, int questionId) {
-        return questions
+    public Question findQuestion(List<Question> questions, int questionId) throws InvalidIDException {
+        Optional<Question> questionOptional = questions
                 .stream()
                 .filter(question -> question.getQuestionId() == questionId)
                 .findFirst();
+        if (questionOptional.isEmpty()) {
+            throw new InvalidIDException("Invalid Question ID!!!");
+        }
+        return questionOptional.get();
     }
 }

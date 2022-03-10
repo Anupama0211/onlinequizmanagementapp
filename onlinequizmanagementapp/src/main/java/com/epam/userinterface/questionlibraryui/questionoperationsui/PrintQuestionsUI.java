@@ -2,6 +2,7 @@ package com.epam.userinterface.questionlibraryui.questionoperationsui;
 
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
 import com.epam.services.QuestionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,16 +20,15 @@ public class PrintQuestionsUI implements QuestionOperationsUI {
 
     @Override
     public void perform() {
-        Optional<List<Question>> questionsOptional = questionService.getAllQuestions();
-        if (questionsOptional.isPresent()) {
-            List<Question> questions = questionsOptional.get();
+        try {
+            List<Question> questions= questionService.getAllQuestions();
             int index = 1;
             for (Question question : questions) {
                 LOGGER.info("{} {}", index, question);
                 index++;
             }
-        } else {
-            LOGGER.warn("The question library is empty!!!");
+        } catch (EmptyLibraryException e) {
+            LOGGER.warn(e.getMessage());
 
         }
     }

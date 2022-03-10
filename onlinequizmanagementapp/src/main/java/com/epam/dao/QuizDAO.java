@@ -1,6 +1,8 @@
 package com.epam.dao;
 
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,24 +28,26 @@ public class QuizDAO {
         return quiz;
     }
 
-    public Optional<Quiz> getAQuiz(int quizId) {
-        return Optional.
+    public Quiz getAQuiz(int quizId) throws InvalidIDException {
+        Optional<Quiz> quizOptional = Optional.
                 ofNullable(entityManager.find(Quiz.class, quizId));
-    }
-
-    public boolean delete(int quizId) {
-        boolean status = false;
-        Optional<Quiz> quizOptional = getAQuiz(quizId);
-        if (quizOptional.isPresent()) {
-            entityManager.getTransaction().begin();
-            entityManager.remove(quizOptional.get());
-            entityManager.getTransaction().commit();
-            status = true;
+        if (quizOptional.isEmpty()) {
+            throw new InvalidIDException("Invalid Quiz ID");
         }
-        return status;
+        return quizOptional.get();
     }
 
-    public List<Quiz> getAllQuizzes() {
-        return (entityManager.createQuery("from Quiz").getResultList());
+    public void delete(Quiz quiz) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(quiz);
+        entityManager.getTransaction().commit();
+    }
+
+    public List<Quiz> getAllQuizzes()throws EmptyLibraryException {
+        List<Quiz> quizzes=entityManager.createQuery("from Quiz").getResultList();
+        if(quizzes.isEmpty()){
+            throw new EmptyLibraryException("Quiz Library is empty!!!");
+        }
+        return quizzes;
     }
 }

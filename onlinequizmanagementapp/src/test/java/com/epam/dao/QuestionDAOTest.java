@@ -3,6 +3,9 @@ package com.epam.dao;
 
 import com.epam.entities.Option;
 import com.epam.entities.Question;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +18,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,7 +53,7 @@ class QuestionDAOTest {
         question.setTitle("What is JAVA");
         question.setTopic("Programming");
         question.setMarks(2);
-        question.setOptions(List.of(new Option(1, "Island", false)
+        question.setOptions(Set.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
     }
 
@@ -60,18 +64,18 @@ class QuestionDAOTest {
         verify(entityManagerMock).persist(question);
     }
 
-    @Test
-    void findQuestion() {
+
+    void findQuestion() throws InvalidIDException {
         when(entityManagerMock.find(Question.class, 1)).thenReturn(question);
-        assertEquals(Optional.ofNullable(question), questionDAO.findQuestion(1));
+        assertEquals(question, questionDAO.getQuestion(1));
         verify(entityManagerMock).find(Question.class, 1);
     }
 
-    @Test
+    @Test()
     void remove() {
         when(entityManagerMock.getTransaction()).thenReturn(entityTransactionmock);
         when(entityManagerMock.find(Question.class, 1)).thenReturn(question);
-        assertEquals(Optional.ofNullable(question), questionDAO.remove(1));
+        assertEquals(question, questionDAO.remove(question));
         verify(entityManagerMock).remove(question);
     }
 
@@ -79,11 +83,11 @@ class QuestionDAOTest {
     void update() {
         when(entityManagerMock.find(Question.class, 1)).thenReturn(question);
         when(entityManagerMock.getTransaction()).thenReturn(entityTransactionmock);
-        assertTrue(questionDAO.update(1, question));
+        assertEquals(question,questionDAO.update(question, question));
     }
 
     @Test
-    void getAllQuestions() {
+    void getAllQuestions() throws EmptyLibraryException {
        when(entityManagerMock.createQuery("from Question")).thenReturn(query);
        when(query.getResultList()).thenReturn(List.of(question));
        assertEquals(List.of(question),questionDAO.getAllQuestions());

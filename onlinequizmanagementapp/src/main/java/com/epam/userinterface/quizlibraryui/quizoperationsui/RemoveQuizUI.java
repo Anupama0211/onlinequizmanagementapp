@@ -1,6 +1,8 @@
 package com.epam.userinterface.quizlibraryui.quizoperationsui;
 
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuizService;
 import com.epam.userinterface.GetIdUI;
 import org.apache.logging.log4j.LogManager;
@@ -19,22 +21,23 @@ public class RemoveQuizUI implements QuizOperationsUI {
 
     @Override
     public void perform(QuizService quizService) {
-        Optional<List<Quiz>> quizzesOptional = quizService.getAllQuizzes();
-        if (quizzesOptional.isPresent()) {
-            List<String> quizTitles = quizService.viewQuizTitles(quizzesOptional.get());
+        try {
+            List<Quiz> quizzes = quizService.getAllQuizzes();
+            List<String> quizTitles = quizService.viewQuizTitles(quizzes);
             quizTitles.forEach(LOGGER::info);
             while (true) {
-                int quizId = getIdUI.getId("Quiz ID");
-                if (quizService.deleteQuiz(quizId)) {
+                try {
+                    int quizId = getIdUI.getId("Quiz ID");
+                    Quiz quiz = quizService.findQuiz(quizzes, quizId);
+                    quizService.deleteQuiz(quiz);
                     LOGGER.info("Quiz Deleted!!!!");
                     break;
-                } else {
-                    LOGGER.info("Wrong quiz ID");
+                } catch (InvalidIDException e) {
+                   LOGGER.warn(e.getMessage());
                 }
             }
-        } else {
-            LOGGER.info("Quiz is not present!!");
+        } catch (EmptyLibraryException e) {
+           LOGGER.warn(e.getMessage());
         }
     }
-
 }

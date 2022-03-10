@@ -4,6 +4,8 @@ package com.epam.services;
 import com.epam.dao.QuizDAO;
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
+import com.epam.exceptions.EmptyLibraryException;
+import com.epam.exceptions.InvalidIDException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -22,7 +24,7 @@ public class QuizService {
         this.quizDAO = quizDAO;
     }
 
-    public Optional<Quiz> getAQuiz(int quizId) {
+    public Quiz getAQuiz(int quizId) throws InvalidIDException {
         return quizDAO.getAQuiz(quizId);
     }
 
@@ -30,23 +32,23 @@ public class QuizService {
         return quizDAO.insertQuiz(quiz);
     }
 
-    public boolean deleteQuiz(int quizId) {
-        return quizDAO.delete(quizId);
+    public void deleteQuiz(Quiz quiz) {
+        quizDAO.delete(quiz);
     }
 
-    public Optional<List<Quiz>> getAllQuizzes() {
-            List<Quiz> quizzes = quizDAO.getAllQuizzes();
-            if (quizzes.isEmpty()) {
-                quizzes = null;
-            }
-           return Optional.ofNullable(quizzes);
+    public List<Quiz> getAllQuizzes() throws EmptyLibraryException {
+        return quizDAO.getAllQuizzes();
     }
 
-    public Optional<Quiz> findQuiz(List<Quiz> quizzes, int quizId) {
-        return quizzes
+    public Quiz findQuiz(List<Quiz> quizzes, int quizId) throws InvalidIDException {
+        Optional<Quiz> quizOptional = quizzes
                 .stream()
                 .filter(quiz -> quiz.getQuizId() == quizId)
                 .findFirst();
+        if (quizOptional.isEmpty()) {
+            throw new InvalidIDException("Invalid Quiz ID!!");
+        }
+        return quizOptional.get();
     }
 
     public List<String> viewQuizTitles(List<Quiz> quizzes) {
@@ -55,50 +57,32 @@ public class QuizService {
                 .toList();
     }
 
-    public Optional<Question> getQuestionInAQuiz(Optional<Quiz> quizOptional, int questionId) {
-        Optional<Question> questionOptional = Optional.ofNullable(null);
-        if (quizOptional.isPresent()) {
-            questionOptional = quizOptional
-                    .get()
-                    .getQuestions()
-                    .stream()
-                    .filter(question -> question.getQuestionId() == questionId)
-                    .findFirst();
+    public Question getQuestionInAQuiz(Quiz quiz, int questionId) throws InvalidIDException {
+        Optional<Question> questionOptional =  quiz
+                .getQuestions()
+                .stream()
+                .filter(question -> question.getQuestionId() == questionId)
+                .findFirst();
+        if (questionOptional.isEmpty()) {
+            throw new InvalidIDException("Such a Question ID does not exist in the Quiz!!!");
         }
-        return questionOptional;
+        return questionOptional.get();
+
     }
 
-    public boolean deleteQuestionInQuiz(Quiz quiz, Optional<Question> questionOptional) {
-        boolean status = false;
-        if (questionOptional.isPresent()) {
-            Question question = questionOptional.get();
-            quiz.getQuestions().remove(question);
+    public void deleteQuestionInQuiz(Quiz quiz, Question question) {
+        quiz.getQuestions().remove(question);
+        quizDAO.insertQuiz(quiz);
+}
+
+    public void addQuestionFromQuestionLibrary(Quiz quiz, Question question) {
+            quiz.getQuestions().add(question);
             quizDAO.insertQuiz(quiz);
-            status = true;
-        }
-        return status;
     }
 
-    public boolean addQuestionFromQuestionLibrary(Optional<Quiz> quizOptional, Optional<Question> questionOptional) {
-        boolean status = false;
-        if (quizOptional.isPresent() && questionOptional.isPresent()) {
-            Quiz quiz = quizOptional.get();
-            quiz.getQuestions().add(questionOptional.get());
-            quizDAO.insertQuiz(quiz);
-            status = true;
-        }
-        return status;
-    }
-
-    public boolean addQuetsionInQuizOnYourOwn(Optional<Quiz> quizOptional, Question question) {
-        boolean status = false;
-        if (quizOptional.isPresent()) {
-            Quiz quiz = quizOptional.get();
-            Question questionToBeAddedInQuiz = questionService.addQuestion(question);
-            quiz.getQuestions().add(questionToBeAddedInQuiz);
-            insertQuiz(quiz);
-            status = true;
-        }
-        return status;
+    public void addQuetsionInQuizOnYourOwn(Quiz quiz, Question question) {
+        Question questionToBeAddedInQuiz = questionService.addQuestion(question);
+        quiz.getQuestions().add(questionToBeAddedInQuiz);
+        insertQuiz(quiz);
     }
 }

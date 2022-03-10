@@ -1,17 +1,21 @@
 package com.epam.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 @Component
+@Scope("prototype")
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "Question_Options")
 public class Option {
 

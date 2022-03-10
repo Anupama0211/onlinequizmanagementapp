@@ -3,13 +3,15 @@ package com.epam.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.List;
-
+import java.util.Set;
 
 @Component
+@Scope("prototype")
 @NoArgsConstructor
 @Getter
 @Entity
@@ -23,10 +25,10 @@ public class Question {
     private @Setter String topic;
     private @Setter int marks;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Option> options;
+    private Set<Option> options;
 
 
-    public void setOptions(List<Option> options) {
+    public void setOptions(Set<Option> options) {
         options.forEach(option -> option.setQuestion(this));
         this.options = options;
     }

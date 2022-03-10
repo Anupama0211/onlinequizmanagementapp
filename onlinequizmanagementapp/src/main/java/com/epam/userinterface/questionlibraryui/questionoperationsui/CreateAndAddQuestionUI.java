@@ -14,6 +14,8 @@ public class CreateAndAddQuestionUI implements QuestionOperationsUI {
 
     @Autowired
     QuestionService questionService;
+    @Autowired
+    QuestionGeneratorUI questionGeneratorUI;
     @Override
     public void perform() {
         Question question = new QuestionGeneratorUI().createAQuestion();
