@@ -11,26 +11,16 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Table(name = "quizzes")
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "quiz_id")
     private int quizId;
     private String title;
     @ManyToMany(fetch = FetchType.EAGER)
     @Column(unique = true)
-    private  Set<Question> questions;
+    private Set<Question> questions;
 
-    @Override
-    public String toString() {
-        StringBuilder quizDisplay = new StringBuilder(title)
-                .append("\n--------------------------------------------------------------------------\n");
-        int questionNumber = 1;
-        for (Question question : questions) {
-            quizDisplay.append(questionNumber)
-                    .append(question)
-                    .append("\n");
-            questionNumber++;
-        }
-        return quizDisplay.toString();
-    }
+
 }

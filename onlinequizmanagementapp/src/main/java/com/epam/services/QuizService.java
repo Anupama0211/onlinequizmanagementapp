@@ -1,87 +1,86 @@
 package com.epam.services;
 
 
-import com.epam.dao.QuizDAO;
+import com.epam.dao.QuizRepository;
+import com.epam.dto.QuestionDto;
+import com.epam.dto.QuizDto;
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.exceptions.InvalidIDException;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class QuizService {
+
+
     @Autowired
-    QuizDAO quizDAO;
+    QuizRepository quizRepository;
+
     @Autowired
-    QuestionService questionService;
+    ModelMapper modelMapper;
 
-    public QuizService(QuizDAO quizDAO) {
-        this.quizDAO = quizDAO;
-    }
 
-    public Quiz getAQuiz(int quizId) throws InvalidIDException {
-        return quizDAO.getAQuiz(quizId);
-    }
-
-    public Quiz insertQuiz(Quiz quiz) {
-        return quizDAO.insertQuiz(quiz);
-    }
-
-    public void deleteQuiz(Quiz quiz) {
-        quizDAO.delete(quiz);
-    }
-
-    public List<Quiz> getAllQuizzes() throws EmptyLibraryException {
-        return quizDAO.getAllQuizzes();
-    }
-
-    public Quiz findQuiz(List<Quiz> quizzes, int quizId) throws InvalidIDException {
-        Optional<Quiz> quizOptional = quizzes
-                .stream()
-                .filter(quiz -> quiz.getQuizId() == quizId)
-                .findFirst();
+    public QuizDto getAQuiz(int quizId) throws InvalidIDException {
+        Optional<Quiz> quizOptional = quizRepository.findById(quizId);
         if (quizOptional.isEmpty()) {
-            throw new InvalidIDException("Invalid Quiz ID!!");
+            throw new InvalidIDException("Invalid Question ID!!");
         }
-        return quizOptional.get();
+        return modelMapper.map(quizOptional.get(), QuizDto.class);
     }
 
-    public List<String> viewQuizTitles(List<Quiz> quizzes) {
-        return quizzes.stream()
-                .map(quiz -> "ID: " + quiz.getQuizId() + "\n" + quiz.getTitle() + "\n--------------------------")
-                .toList();
+    public QuizDto insertQuiz(QuizDto quizDto, Set<QuestionDto> questionDtoSet) {
+        Quiz quiz = modelMapper.map(quizDto, Quiz.class);
+        Set<Question> questions = new HashSet<>();
+        questionDtoSet
+                .forEach(questionDto -> questions
+                        .add(modelMapper.map(questionDto, Question.class)));
+        quiz.setQuestions(questions);
+        return modelMapper.map(quizRepository.save(quiz), QuizDto.class);
     }
 
-    public Question getQuestionInAQuiz(Quiz quiz, int questionId) throws InvalidIDException {
-        Optional<Question> questionOptional =  quiz
-                .getQuestions()
-                .stream()
-                .filter(question -> question.getQuestionId() == questionId)
-                .findFirst();
-        if (questionOptional.isEmpty()) {
-            throw new InvalidIDException("Such a Question ID does not exist in the Quiz!!!");
+    public void deleteQuiz(int quizId) {
+        quizRepository.deleteById(quizId);
+    }
+
+    public List<QuizDto> getAllQuizzes() throws EmptyLibraryException {
+        List<Quiz> quizzes = (List<Quiz>) quizRepository.findAll();
+        if (quizzes.isEmpty()) {
+            throw new EmptyLibraryException("Quiz Library is empty!!");
         }
-        return questionOptional.get();
-
+        return modelMapper.map(quizzes, new TypeToken<List<QuizDto>>() {
+        }.getType());
     }
 
-    public void deleteQuestionInQuiz(Quiz quiz, Question question) {
-        quiz.getQuestions().remove(question);
-        quizDAO.insertQuiz(quiz);
-}
 
-    public void addQuestionFromQuestionLibrary(Quiz quiz, Question question) {
-            quiz.getQuestions().add(question);
-            quizDAO.insertQuiz(quiz);
+    public void deleteQuestionInQuiz(int quizId, int questionId) {
+        Optional<Quiz> quizOptional = quizRepository.findById(quizId);
+        Quiz quiz;
+        if (quizOptional.isPresent()) {
+            quiz = quizOptional.get();
+            Optional<Question> questionOptional = quiz
+                    .getQuestions()
+                    .stream()
+                    .filter(question -> question.getQuestionId() == questionId)
+                    .findFirst();
+            questionOptional.ifPresent(question -> quiz.getQuestions().remove(question));
+            quizRepository.save(quiz);
+        }
     }
 
-    public void addQuetsionInQuizOnYourOwn(Quiz quiz, Question question) {
-        Question questionToBeAddedInQuiz = questionService.addQuestion(question);
-        quiz.getQuestions().add(questionToBeAddedInQuiz);
-        insertQuiz(quiz);
+    public void addQuestionFromQuestionLibrary(QuizDto quizDto, QuestionDto questionDto) {
+        Quiz quiz = modelMapper.map(quizDto, Quiz.class);
+        Question question = modelMapper.map(questionDto, Question.class);
+        quiz.getQuestions().add(question);
+        quizRepository.save(quiz);
     }
 }

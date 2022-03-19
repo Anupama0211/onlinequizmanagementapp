@@ -1,9 +1,6 @@
 package com.epam.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +13,20 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "Question_Options")
+@Table(name = "question_options")
 public class Option {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "option_id")
+    private int optionId;
+    private String value;
+    @Column(name = "is_answer")
+    private boolean isAnswer;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
+
 
     public Option(int optionId, String value, boolean isAnswer) {
         this.optionId = optionId;
@@ -25,16 +34,4 @@ public class Option {
         this.isAnswer = isAnswer;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int optionId;
-    private String value;
-    private boolean isAnswer;
-    @ManyToOne
-    private Question question;
-
-    @Override
-    public String toString() {
-        return value;
-    }
 }
