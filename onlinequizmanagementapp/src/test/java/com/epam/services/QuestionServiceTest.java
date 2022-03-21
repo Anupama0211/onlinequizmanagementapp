@@ -1,6 +1,6 @@
 package com.epam.services;
 
-import com.epam.dao.OptionRepository;
+
 import com.epam.dao.QuestionRepository;
 import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
@@ -32,13 +32,11 @@ class QuestionServiceTest {
     private static QuestionRepository questionRepository;
 
     @Mock
-    private static OptionRepository optionRepository;
+    ModelMapper modelMapper;
 
     @InjectMocks
     private static QuestionService questionService;
 
-    @Mock
-    ModelMapper modelMapper;
 
     QuestionDto questionDto;
     Set<OptionDto> optionDtos;
@@ -48,6 +46,7 @@ class QuestionServiceTest {
 
     @BeforeEach
     void setUp() {
+
         questionDto = new QuestionDto();
         questionDto.setQuestionId(1);
         questionDto.setDifficulty("Easy");
@@ -79,9 +78,8 @@ class QuestionServiceTest {
         }.getType())).thenReturn(options);
         when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
         when(modelMapper.map(question, QuestionDto.class)).thenReturn(questionDto);
-        when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
         assertThat(questionService.addQuestion(questionDto, optionDtos)).isEqualTo(questionDto);
-        verify(questionRepository, times(1)).save(question);
+        verify(questionRepository).save(question);
     }
 
     @Test

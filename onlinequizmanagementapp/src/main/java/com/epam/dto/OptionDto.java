@@ -16,7 +16,6 @@ public class OptionDto {
     private boolean isAnswer;
     private Question question;
 
-
     public OptionDto(int optionId, String value, boolean isAnswer) {
         this.optionId = optionId;
         this.value = value;

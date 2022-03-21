@@ -46,30 +46,45 @@
 			<div class="form-group">
 				<label for="options1">Option 1</label> <input type="text"
 					class="form-control" id="options1" placeholder="Option 1"
-					name="value" required> <input type="boolean"
-					class="form-control" id="options1" placeholder="True/False"
-					name="isAnswer" required>
+					name="value" required>
+					<label for="isAnswer">Is it the answer?</label>
+					<select class="form-select" name="isAnswer" required>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
 			</div>
 			<div class="form-group">
 				<label for="options2">Option 2</label> <input type="text"
 					class="form-control" id="options2" placeholder="Option 2"
-					name="value" required> <input type="boolean"
-					class="form-control" id="options2" placeholder="True/False"
-					name="isAnswer" required>
+					name="value" required>
+					<label for="isAnswer">Is it the answer?</label>
+					<select class="form-select" name="isAnswer" required>
+                       <option value="true">Yes</option>
+                       <option value="false">No</option>
+                    </select>
 
 			</div>
 			<div class="form-group">
 				<label for="options3">Option 3</label> <input type="text"
 					class="form-control" id="options3" placeholder="Option 3"
-					name="value"> <input type="boolean" class="form-control"
-					id="options3" placeholder="True/False" name="isAnswer">
+					name="value">
+					<label for="isAnswer">Is it the answer?</label>
+                    <select class="form-select" name="isAnswer" required>
+                       <option value="true">Yes</option>
+                       <option value="false">No</option>
+                    </select>
 
 			</div>
 			<div class="form-group">
 				<label for="options4">Option 4</label> <input type="text"
 					class="form-control" id="options4" placeholder="Option 4"
-					name="value"> <input type="boolean" class="form-control"
-					id="options3" placeholder="True/False" name="isAnswer">
+					name="value">
+				<label for="isAnswer">Is it the answer?</label>
+                <select class="form-select" name="isAnswer" required>
+                   <option value="true">Yes</option>
+                   <option value="false">No</option>
+                </select>
+
 			</div>
 			<div class="container text-center">
 			        <button type="submit" formaction="addQuestion"

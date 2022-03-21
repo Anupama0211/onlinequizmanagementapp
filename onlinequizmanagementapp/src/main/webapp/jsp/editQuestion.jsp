@@ -20,6 +20,7 @@
 <body class="text-white bg-dark ">
 	<div class="container mt-5">
 		<h1 class="container text-center">Update A Question</h1>
+		<h4>${message}</h4>
 		<form method="post" class="col-md-4 col-md-offset-4 container">
 			<div class="form-group">
 				<label for="questionId">Question ID</label> <input type="text"
@@ -53,10 +54,13 @@
 			<c:forEach items="${question.options}" var="option">
 				<div class="form-group">
 					<input type="text" class="form-control" id="options" name="value"
-						value="${option.value}"> 
-				    <input type="boolean"
-						class="form-control" id="options" name="isAnswer"
-						value="${option.answer}">
+						value="${option.value}">
+					<label for="isAnswer">Is it the answer?</label>
+                    <select class="form-select" name="isAnswer" required>
+                       <option selected value="${option.answer}">"${option.answer}"</option>
+                       <option value="true">Yes</option>
+                       <option value="false">No</option>
+                    </select>
 				</div>
 			</c:forEach>
 
@@ -68,6 +72,7 @@
 				</a>
 			</div>
 		</form>
+
 
 	</div>
 

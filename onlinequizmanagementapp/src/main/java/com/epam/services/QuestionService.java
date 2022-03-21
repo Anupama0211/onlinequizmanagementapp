@@ -1,7 +1,6 @@
 package com.epam.services;
 
 
-import com.epam.dao.OptionRepository;
 import com.epam.dao.QuestionRepository;
 import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
@@ -25,11 +24,7 @@ public class QuestionService {
     QuestionRepository questionRepository;
 
     @Autowired
-    OptionRepository optionRepository;
-
-    @Autowired
     ModelMapper modelMapper;
-
 
     public QuestionDto addQuestion(QuestionDto questionDto, Set<OptionDto> optionDtos) {
         Set<Option> optionSet = modelMapper.map(optionDtos, new TypeToken<Set<Option>>() {

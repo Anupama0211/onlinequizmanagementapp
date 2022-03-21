@@ -80,6 +80,7 @@ class QuizControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewQuizTitles"))
                 .andExpect(model().attribute("quizzes", quizzes));
+
         when(quizService.getAllQuizzes()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/viewQuizTitles"))
                 .andExpect(status().isOk())
@@ -106,6 +107,16 @@ class QuizControllerTest {
                 .andExpect(model().attribute("id", 111))
                 .andExpect(model().attribute("title", quizDto.getTitle()))
                 .andExpect(model().attribute("questions", quizDto.getQuestions()));
+
+        quizDto.setQuestions(Set.of());
+        mockMvc.perform(get("/viewAQuiz?quizId=111"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("viewAQuiz"))
+                .andExpect(model().attribute("message", "Quiz is Empty"))
+                .andExpect(model().attribute("id", 111))
+                .andExpect(model().attribute("title", quizDto.getTitle()))
+                .andExpect(model().attribute("questions", quizDto.getQuestions()));
+
     }
 
     @Test
@@ -143,8 +154,8 @@ class QuizControllerTest {
                 .andExpect(view().name("selectQuestionForQuiz"))
                 .andExpect(model().attribute("quizId", 111))
                 .andExpect(model().attribute("questions", List.of(questionDto)));
-        when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
 
+        when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/selectQuestionForQuiz?quizId=111"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("selectQuestionForQuiz"))
@@ -172,6 +183,6 @@ class QuizControllerTest {
         mockMvc.perform(get("/deleteQuestionInQuiz?questionId=1&quizId=111"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAQuiz"))
-                .andExpect(model().attribute("message","Question Deleted"));
+                .andExpect(model().attribute("message", "Question Deleted"));
     }
 }

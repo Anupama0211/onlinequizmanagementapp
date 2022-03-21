@@ -67,9 +67,14 @@ public class QuestionController {
     }
 
     @RequestMapping("editQuestion")
-    public ModelAndView editQuestion(Integer questionId) throws InvalidIDException {
+    public ModelAndView editQuestion(Integer questionId)  {
         ModelAndView modelAndView = new ModelAndView();
-        QuestionDto questionDto = questionService.getQuestionByID(questionId);
+        QuestionDto questionDto = null;
+        try {
+            questionDto = questionService.getQuestionByID(questionId);
+        } catch (InvalidIDException e) {
+            modelAndView.addObject(MESSAGE, "Wrong Question ID");
+        }
         modelAndView.addObject("question", questionDto);
         modelAndView.setViewName("editQuestion");
         return modelAndView;
