@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 
 
 <!doctype html>
@@ -23,10 +23,9 @@
 		<h4>${message}</h4>
 		<h1>Welcome to The Quiz Portal</h1>
 		<table class="table table-dark table-hover table-striped">
-		  <caption>Menu</caption>
+			<caption>Menu</caption>
 			<tr>
-				<th><a href="createQuiz" class="link-light">Create A
-						Quiz</a></th>
+				<th><a href="createQuiz" class="link-light">Create A Quiz</a></th>
 			</tr>
 			<tr>
 				<th><a href="viewQuizTitles" class="link-light">View

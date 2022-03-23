@@ -32,7 +32,7 @@ public class UserController {
         ModelAndView modelView = new ModelAndView();
         try {
             if (userDto.getType().equalsIgnoreCase("ADMIN")) {
-                boolean status = userService.validateCredentials(userDto.getUserName(), userDto.getPassword(), userDto.getType());
+                boolean status = userService.validateCredentials(userDto);
                 if (status) {
                     modelView.addObject(MESSAGE, "Succesfully Logged In!!!");
                     modelView.setViewName(ADMINPORTAL);

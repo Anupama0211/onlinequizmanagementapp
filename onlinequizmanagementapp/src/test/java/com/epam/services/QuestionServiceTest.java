@@ -2,7 +2,6 @@ package com.epam.services;
 
 
 import com.epam.dao.QuestionRepository;
-import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.entities.Option;
 import com.epam.entities.Question;
@@ -17,10 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,10 +35,10 @@ class QuestionServiceTest {
 
 
     QuestionDto questionDto;
-    Set<OptionDto> optionDtos;
+
 
     Question question;
-    Set<Option> options;
+    List<Option> options;
 
     @BeforeEach
     void setUp() {
@@ -53,9 +49,6 @@ class QuestionServiceTest {
         questionDto.setTitle("What is JAVA");
         questionDto.setTopic("Programming");
         questionDto.setMarks(2);
-        optionDtos = new HashSet<>();
-        optionDtos.addAll(Set.of(new OptionDto(1, "Island", false)
-                , new OptionDto(1, "Coffee", true)));
 
         question = new Question();
         question.setQuestionId(1);
@@ -63,7 +56,7 @@ class QuestionServiceTest {
         question.setTitle("What is JAVA");
         question.setTopic("Programming");
         question.setMarks(2);
-        options = new HashSet<>();
+        options = new ArrayList<>();
         options.addAll(Set.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
         question.setOptions(options);
@@ -74,11 +67,9 @@ class QuestionServiceTest {
     @Test
     void addQuestionTest() {
         when(questionRepository.save(question)).thenReturn(question);
-        when(modelMapper.map(optionDtos, new TypeToken<Set<Option>>() {
-        }.getType())).thenReturn(options);
         when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
         when(modelMapper.map(question, QuestionDto.class)).thenReturn(questionDto);
-        assertThat(questionService.addQuestion(questionDto, optionDtos)).isEqualTo(questionDto);
+        assertThat(questionService.addQuestion(questionDto)).isEqualTo(questionDto);
         verify(questionRepository).save(question);
     }
 
@@ -98,13 +89,18 @@ class QuestionServiceTest {
     }
 
     @Test
-    void modifyQuestionTest() {
+    void modifyQuestionTest() throws InvalidIDException {
         when(questionRepository.save(question)).thenReturn(question);
         question.setOptions(options);
         when(questionRepository.findById(1)).thenReturn(Optional.ofNullable(question));
         when(modelMapper.map(question, QuestionDto.class)).thenReturn(questionDto);
-        assertThat(questionService.modifyQuestion(questionDto, optionDtos)).isEqualTo(questionDto);
+        assertThat(questionService.modifyQuestion(questionDto)).isEqualTo(questionDto);
         verify(questionRepository).save(question);
+    }
+    @Test
+    void modifyQuestionTestWhenIdIsWrong() throws InvalidIDException {
+        when(questionRepository.findById(1)).thenReturn(Optional.ofNullable(null));
+        assertThrows(InvalidIDException.class,()->questionService.modifyQuestion(questionDto));
     }
 
     @Test

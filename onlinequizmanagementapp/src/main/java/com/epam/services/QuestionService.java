@@ -2,7 +2,6 @@ package com.epam.services;
 
 
 import com.epam.dao.QuestionRepository;
-import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.entities.Option;
 import com.epam.entities.Question;
@@ -26,12 +25,10 @@ public class QuestionService {
     @Autowired
     ModelMapper modelMapper;
 
-    public QuestionDto addQuestion(QuestionDto questionDto, Set<OptionDto> optionDtos) {
-        Set<Option> optionSet = modelMapper.map(optionDtos, new TypeToken<Set<Option>>() {
-        }.getType());
-        questionDto.setOptions(optionSet);
-        Question question = modelMapper.map(questionDto, Question.class);
-        question = questionRepository.save(question);
+    public QuestionDto addQuestion(QuestionDto questionDto) {
+        List<Option> options = questionDto.getOptions().stream().filter(option -> !(option.getValue().isEmpty())).toList();
+        questionDto.setOptions(options);
+        Question question = questionRepository.save(modelMapper.map(questionDto, Question.class));
         return modelMapper.map(question, QuestionDto.class);
     }
 
@@ -40,14 +37,15 @@ public class QuestionService {
     }
 
     public QuestionDto getQuestionByID(int questionId) throws InvalidIDException {
-        Optional<Question> questionOptional = questionRepository.findById(questionId);
-        if (questionOptional.isEmpty()) {
-            throw new InvalidIDException("Invalid Question ID!!");
-        }
-        return modelMapper.map(questionOptional.get(), QuestionDto.class);
+        return modelMapper
+                .map(questionRepository
+                                .findById(questionId)
+                                .orElseThrow(() -> new InvalidIDException("Invalid Question ID!!"))
+                        , QuestionDto.class);
+
     }
 
-    public QuestionDto modifyQuestion(QuestionDto newQuestionDto, Set<OptionDto> optionDtos) {
+    public QuestionDto modifyQuestion(QuestionDto newQuestionDto) throws InvalidIDException {
         Optional<Question> questionOptional = questionRepository.findById(newQuestionDto.getQuestionId());
         if (questionOptional.isPresent()) {
             Question question = questionOptional.get();
@@ -55,15 +53,18 @@ public class QuestionService {
             question.setMarks(newQuestionDto.getMarks());
             question.setTopic(newQuestionDto.getTopic());
             question.setDifficulty(newQuestionDto.getDifficulty());
-            Iterator<OptionDto> optionDtoIterator = optionDtos.iterator();
-            Iterator<Option> optionIterator = question.getOptions().iterator();
-            while (optionDtoIterator.hasNext() && optionIterator.hasNext()) {
-                Option option = optionIterator.next();
-                OptionDto optionDto = optionDtoIterator.next();
-                option.setValue(optionDto.getValue());
-                option.setAnswer(optionDto.isAnswer());
+            question.setTitle(newQuestionDto.getTitle());
+            Iterator<Option> newOptionIterator = newQuestionDto.getOptions().iterator();
+            Iterator<Option> oldOptionIterator = question.getOptions().iterator();
+            while (newOptionIterator.hasNext() && oldOptionIterator.hasNext()) {
+                Option oldOption = oldOptionIterator.next();
+                Option newOption = newOptionIterator.next();
+                oldOption.setValue(newOption.getValue());
+                oldOption.setAnswer(newOption.isAnswer());
             }
             newQuestionDto = modelMapper.map(questionRepository.save(question), QuestionDto.class);
+        } else {
+            throw new InvalidIDException("Invalid Question ID!!");
         }
         return newQuestionDto;
     }

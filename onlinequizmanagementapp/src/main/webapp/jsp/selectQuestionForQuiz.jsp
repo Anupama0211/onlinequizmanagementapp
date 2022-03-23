@@ -22,26 +22,38 @@
 	<div class="container mt-5">
 
 		<table class="table table-dark table-hover table-striped">
-		  <caption>Select</caption>
+			<caption>Select</caption>
 			<tr>
 				<th class="text-center"><h1>Questions</h1></th>
 			</tr>
 			<tr>
-            	<td class="text-center"><h4>${message}</h4></td>
-            </tr>
-        </table>
-        <form method="post">
-        <select class="form-select" multiple name="questions" size="10" >
-            <c:forEach items="${questions}" var="question">
-                <option value="${question.questionId}">${question.title}</option>
-            </c:forEach>
-        </select>
-        <div class="container text-center">
-            <button type="submit" formaction="addQuestionInQuiz?quizId=${quizId}"
-            class="btn btn-success text-center">Add Question</button>
-        </div>
-        </form>
-		<a href="viewAQuiz?quizId=${quizId}">
+				<td class="text-center"><h4>${message}</h4></td>
+			</tr>
+		</table>
+		<form method="post">
+		    <div class="form-group">
+                				<label for="quizId">QuizID</label> <input type="text"
+                					class="form-control" id="quizId" value=${quiz.quizId}
+                					name="quizId" readonly>
+            </div>
+		    <div class="form-group">
+        				<label for="title">Title</label> <input type="text"
+        					class="form-control" id="title" value=${quiz.title}
+        					name="title">
+            </div>
+            <label for="questionIds">Select the questions you want to add...</label>
+			<select class="form-select" multiple name="questionIds" size="10">
+				<c:forEach items="${questions}" var="question">
+					<option value="${question.questionId}">${question.title}</option>
+				</c:forEach>
+			</select>
+			<div class="container text-center">
+				<button type="submit"
+					formaction="insertQuiz"
+					class="btn btn-success text-center">Add Questions</button>
+			</div>
+		</form>
+		<a href="viewAQuiz?quizId=${quiz.quizId}">
 			<button type="button" class="btn btn-light">Back</button>
 		</a>
 	</div>

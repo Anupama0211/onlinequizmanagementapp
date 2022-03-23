@@ -12,15 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
+
 import static org.mockito.Mockito.when;
 
 
@@ -53,19 +53,22 @@ class UserServiceTest {
     @Test
     void registerUser() {
         when(userRepository.save(user)).thenReturn(user);
-        when(modelMapper.map(userDto,User.class)).thenReturn(user);
+        when(modelMapper.map(userDto, User.class)).thenReturn(user);
         assertThat(userService.registerUser(userDto)).isTrue();
         when(userRepository.save(user)).thenThrow(DataIntegrityViolationException.class);
         assertThat(userService.registerUser(userDto)).isFalse();
     }
 
-     @Test
+    @Test
     void validateCredentials() throws UserNotFoundException {
         when(userRepository.findDistinctByUserName("Anu")).thenReturn(Optional.ofNullable(user));
-        assertThat(userService.validateCredentials("Anu", "12345", "ADMIN")).isTrue();
-        assertThat(userService.validateCredentials("Anu", "12345", "PLAYER")).isFalse();
-        assertThat(userService.validateCredentials("Anu", "123456", "ADMIN")).isFalse();
+        assertThat(userService.validateCredentials(userDto)).isTrue();
+        userDto.setType("Player");
+        assertThat(userService.validateCredentials(userDto)).isFalse();
+        userDto.setPassword("123456");
+        userDto.setType("ADMIN");
+        assertThat(userService.validateCredentials(userDto)).isFalse();
         when(userRepository.findDistinctByUserName("Anu")).thenReturn(Optional.ofNullable(null));
-        assertThrows(UserNotFoundException.class, () -> userService.validateCredentials("Anu", "12345", "ADMIN"));
+        assertThrows(UserNotFoundException.class, () -> userService.validateCredentials(userDto));
     }
 }

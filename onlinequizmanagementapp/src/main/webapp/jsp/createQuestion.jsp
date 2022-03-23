@@ -23,7 +23,7 @@
 			<div class="form-group">
 				<label for="title">Title</label> <input type="text"
 					class="form-control" id="title" placeholder="Question....."
-					name="title" required  size=4>
+					name="title" required size=4>
 			</div>
 			<div class="form-group">
 				<select class="form-select" name="difficulty" required>
@@ -46,52 +46,52 @@
 			<div class="form-group">
 				<label for="options1">Option 1</label> <input type="text"
 					class="form-control" id="options1" placeholder="Option 1"
-					name="value" required>
-					<label for="isAnswer">Is it the answer?</label>
-					<select class="form-select" name="isAnswer" required>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
+					name="options[0].value" required> <label for="isAnswer">Is
+					it the answer?</label> <select class="form-select"
+					name="options[0].answer" required>
+					<option value="true">Yes</option>
+					<option value="false" selected>No</option>
+				</select>
 			</div>
 			<div class="form-group">
 				<label for="options2">Option 2</label> <input type="text"
 					class="form-control" id="options2" placeholder="Option 2"
-					name="value" required>
-					<label for="isAnswer">Is it the answer?</label>
-					<select class="form-select" name="isAnswer" required>
-                       <option value="true">Yes</option>
-                       <option value="false">No</option>
-                    </select>
+					name="options[1].value" required> <label for="isAnswer">Is
+					it the answer?</label> <select class="form-select"
+					name="options[1].answer" required>
+					<option value="true">Yes</option>
+					<option value="false" selected>No</option>
+				</select>
 
 			</div>
 			<div class="form-group">
 				<label for="options3">Option 3</label> <input type="text"
 					class="form-control" id="options3" placeholder="Option 3"
-					name="value">
-					<label for="isAnswer">Is it the answer?</label>
-                    <select class="form-select" name="isAnswer" required>
-                       <option value="true">Yes</option>
-                       <option value="false">No</option>
-                    </select>
+					name="options[2].value"> <label for="isAnswer">Is
+					it the answer?</label> <select class="form-select"
+					name="options[2].answer" required>
+					<option value="true">Yes</option>
+					<option value="false" selected>No</option>
+				</select>
 
 			</div>
 			<div class="form-group">
 				<label for="options4">Option 4</label> <input type="text"
 					class="form-control" id="options4" placeholder="Option 4"
-					name="value">
-				<label for="isAnswer">Is it the answer?</label>
-                <select class="form-select" name="isAnswer" required>
-                   <option value="true">Yes</option>
-                   <option value="false">No</option>
-                </select>
+					name="options[3].value"> <label for="isAnswer">Is
+					it the answer?</label> <select class="form-select"
+					name="options[3].answer" required>
+					<option value="true">Yes</option>
+					<option value="false" selected>No</option>
+				</select>
 
 			</div>
 			<div class="container text-center">
-			        <button type="submit" formaction="addQuestion"
-			         class="btn btn-success text-center">Add Question</button>
-		    <a href="questionLibraryPortal">
-                     <button type="button" class="btn btn-light">Back</button>
-            </a>
+				<button type="submit" formaction="addQuestion"
+					class="btn btn-success text-center">Add Question</button>
+				<a href="questionLibraryPortal">
+					<button type="button" class="btn btn-light">Back</button>
+				</a>
 			</div>
 		</form>
 

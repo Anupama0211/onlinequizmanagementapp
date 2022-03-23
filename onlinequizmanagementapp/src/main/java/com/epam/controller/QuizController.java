@@ -1,6 +1,6 @@
 package com.epam.controller;
 
-import com.epam.dto.QuestionDto;
+
 import com.epam.dto.QuizDto;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.exceptions.InvalidIDException;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
+
 
 @Controller
 public class QuizController {
@@ -45,7 +45,7 @@ public class QuizController {
     }
 
     @RequestMapping("deleteAQuiz")
-    public ModelAndView deleteAQuiz(int quizId){
+    public ModelAndView deleteAQuiz(int quizId) {
         quizService.deleteQuiz(quizId);
         ModelAndView modelAndView = viewQuizTitles();
         modelAndView.addObject(MESSAGE, "Quiz Deleted!!!");
@@ -80,23 +80,18 @@ public class QuizController {
 
     @PostMapping("insertQuiz")
     public ModelAndView insertQuiz(@RequestParam("questionIds") List<Integer> questionIds, QuizDto quizDto) throws InvalidIDException {
-        Set<QuestionDto> questionDtos = new HashSet<>();
-        for (int questionId : questionIds) {
-            QuestionDto questionDto = questionService.getQuestionByID(questionId);
-            questionDtos.add(questionDto);
-        }
-        quizDto = quizService.insertQuiz(quizDto, questionDtos);
+        quizDto = quizService.insertQuiz(quizDto, questionIds);
         ModelAndView modelAndView = viewAQuiz(quizDto.getQuizId());
         modelAndView.addObject(MESSAGE, "Quiz Created!!!");
         return modelAndView;
     }
 
     @RequestMapping("selectQuestionForQuiz")
-    public ModelAndView selectQuestionForQuiz(int quizId) {
+    public ModelAndView selectQuestionForQuiz(int quizId) throws InvalidIDException {
         ModelAndView modelAndView = new ModelAndView();
         try {
             modelAndView.addObject(QUESTIONS, questionService.getAllQuestions());
-            modelAndView.addObject("quizId", quizId);
+            modelAndView.addObject("quiz", quizService.getAQuiz(quizId));
         } catch (EmptyLibraryException e) {
             modelAndView.addObject(MESSAGE, "Question Library is empty");
         }
@@ -104,21 +99,9 @@ public class QuizController {
         return modelAndView;
     }
 
-    @PostMapping("addQuestionInQuiz")
-    public ModelAndView addQuestionsInQuiz(@RequestParam("questions") List<Integer> questionIds, int quizId) throws InvalidIDException {
-        QuizDto quiz = quizService.getAQuiz(quizId);
-        for (int questionId : questionIds) {
-            QuestionDto question = questionService.getQuestionByID(questionId);
-            quizService.addQuestionFromQuestionLibrary(quiz, question);
-        }
-        ModelAndView modelAndView = viewAQuiz(quizId);
-        modelAndView.addObject(MESSAGE, "Questions added!!!");
-        return modelAndView;
-    }
-
     @RequestMapping("deleteQuestionInQuiz")
     public ModelAndView deleteQuestionInQuiz(int questionId, int quizId) throws InvalidIDException {
-        quizService.deleteQuestionInQuiz(quizId,questionId);
+        quizService.deleteQuestionInQuiz(quizId, questionId);
         ModelAndView modelAndView = viewAQuiz(quizId);
         modelAndView.addObject(MESSAGE, "Question Deleted");
         return modelAndView;

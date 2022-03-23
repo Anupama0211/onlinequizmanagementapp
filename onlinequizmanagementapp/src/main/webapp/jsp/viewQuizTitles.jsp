@@ -22,19 +22,18 @@
 	<div class="container mt-5">
 
 		<table class="table table-dark table-hover table-striped">
-		  <caption>Quizzes</caption>
+			<caption>Quizzes</caption>
 			<tr>
 				<th class="text-center"><h1>Quizzes</h1></th>
 			</tr>
 			<c:forEach items="${quizzes}" var="quiz">
 				<tr>
-					<td>Quiz ID: ${quiz.quizId}
-					${quiz.title}<br> <br>
+					<td>Quiz ID: ${quiz.quizId} ${quiz.title}<br> <br>
 					</td>
 				</tr>
 				<tr>
-					<td><a href="viewAQuiz?quizId=${quiz.quizId}">View</a>|
-					<a href="deleteAQuiz?quizId=${quiz.quizId}">Delete</a></td>
+					<td><a href="viewAQuiz?quizId=${quiz.quizId}">View</a>| <a
+						href="deleteAQuiz?quizId=${quiz.quizId}">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

@@ -33,7 +33,8 @@ class QuizServiceTest {
 
     @Mock
     QuizRepository quizRepository;
-
+    @Mock
+    QuestionService questionService;
     @Mock
     ModelMapper modelMapper;
 
@@ -54,7 +55,7 @@ class QuizServiceTest {
         question.setTitle("What is JAVA");
         question.setTopic("Programming");
         question.setMarks(2);
-        question.setOptions(Set.of(new Option(1, "Island", false)
+        question.setOptions(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
 
         quiz = new Quiz();
@@ -70,7 +71,7 @@ class QuizServiceTest {
         questionDto.setTitle("What is JAVA");
         questionDto.setTopic("Programming");
         questionDto.setMarks(2);
-        questionDto.setOptions(Set.of(new Option(1, "Island", false)
+        questionDto.setOptions(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
 
         quizDto = new QuizDto();
@@ -91,12 +92,17 @@ class QuizServiceTest {
     }
 
     @Test
-    void insertQuizTest() {
+    void insertQuizTest() throws InvalidIDException {
+        when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(quiz));
         when(modelMapper.map(quizDto, Quiz.class)).thenReturn(quiz);
+        when(questionService.getQuestionByID(1)).thenReturn(questionDto);
         when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
         when(quizRepository.save(quiz)).thenReturn(quiz);
         when(modelMapper.map(quiz, QuizDto.class)).thenReturn(quizDto);
-        assertThat(quizService.insertQuiz(quizDto, Set.of(questionDto))).isEqualTo(quizDto);
+        assertThat(quizService.insertQuiz(quizDto, List.of(1))).isEqualTo(quizDto);
+        quiz.setQuestions(null);
+        assertThat(quizService.insertQuiz(quizDto, List.of(1))).isEqualTo(quizDto);
+
     }
 
     @Test
@@ -117,20 +123,14 @@ class QuizServiceTest {
 
 
     @Test
-    void deleteQuestionInQuizTest() {
+    void deleteQuestionInQuizTest() throws InvalidIDException {
         when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(quiz));
         quizService.deleteQuestionInQuiz(111, 1);
         assertThat(quiz.getQuestions().isEmpty());
         verify(quizRepository).save(quiz);
+        when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(null));
+        assertThrows(InvalidIDException.class, () -> quizService.deleteQuestionInQuiz(111, 1));
     }
 
-    @Test
-    void addQuestionFromQuestionLibraryTest() {
-        when(modelMapper.map(quizDto, Quiz.class)).thenReturn(quiz);
-        when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
-        quiz.getQuestions().remove(question);
-        quizService.addQuestionFromQuestionLibrary(quizDto, questionDto);
-        assertThat(quiz.getQuestions(),hasSize(1));
-        verify(quizRepository).save(quiz);
-    }
+
 }

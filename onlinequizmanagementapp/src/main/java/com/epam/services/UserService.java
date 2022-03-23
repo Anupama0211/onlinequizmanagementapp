@@ -24,7 +24,7 @@ public class UserService {
     ModelMapper modelMapper;
 
     public boolean registerUser(UserDto userDto) {
-        User user=modelMapper.map(userDto,User.class);
+        User user = modelMapper.map(userDto, User.class);
         boolean insertStatus = true;
         try {
             userRepository.save(user);
@@ -34,14 +34,14 @@ public class UserService {
         return insertStatus;
     }
 
-    public boolean validateCredentials(String name, String password, String type) throws UserNotFoundException {
+    public boolean validateCredentials(UserDto userDto) throws UserNotFoundException {
         boolean check = false;
 
-        Optional<User> userOptional = userRepository.findDistinctByUserName(name);
+        Optional<User> userOptional = userRepository.findDistinctByUserName(userDto.getUserName());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (user.getPassword().equals(password) &&
-                    user.getType().equalsIgnoreCase(type)) {
+            if (user.getPassword().equals(userDto.getPassword()) &&
+                    user.getType().equalsIgnoreCase(userDto.getType())) {
                 check = true;
             }
         } else {

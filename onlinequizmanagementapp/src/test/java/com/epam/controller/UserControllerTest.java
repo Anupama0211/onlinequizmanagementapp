@@ -7,12 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.epam.dto.UserDto;
-import com.epam.entities.User;
+
 import com.epam.exceptions.UserNotFoundException;
 import com.epam.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -47,8 +47,8 @@ class UserControllerTest {
     }
 
     @Test
-    void login() throws Exception {
-        when(userService.validateCredentials("Anu", "1234", "ADMIN")).thenReturn(true);
+    void loginSuccessful() throws Exception {
+        when(userService.validateCredentials(any(UserDto.class))).thenReturn(true);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")
@@ -57,7 +57,11 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("adminPortal"))
                 .andExpect(model().attribute("message", "Succesfully Logged In!!!"));
-        when(userService.validateCredentials("Anu", "1234", "ADMIN")).thenReturn(false);
+    }
+
+    @Test
+    void loginNotSuccesfulAdmin() throws Exception {
+        when(userService.validateCredentials(any(UserDto.class))).thenReturn(false);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")
@@ -66,6 +70,11 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"))
                 .andExpect(model().attribute("message", "Wrong UserName Or Password!!!"));
+    }
+
+    @Test
+    void loginPlayer() throws Exception {
+        when(userService.validateCredentials(any(UserDto.class))).thenReturn(false);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")
@@ -74,7 +83,12 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"))
                 .andExpect(model().attribute("message", "Player Functionalities not defined!!"));
-        when(userService.validateCredentials("Anu", "1234", "ADMIN")).thenThrow(new UserNotFoundException("User doesnt exist!! Register!"));
+    }
+
+    @Test
+    void loginUserDoesNotExist() throws Exception {
+        when(userService.validateCredentials(any(UserDto.class))).
+                thenThrow(new UserNotFoundException("User doesnt exist!! Register!"));
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")
@@ -86,9 +100,9 @@ class UserControllerTest {
     }
 
     @Test
-    void register() throws Exception {
+    void registerUserAlreadyExists() throws Exception {
         UserDto userDto = new UserDto("Anu", "ADMIN", "1234");
-       when(userService.registerUser(any(UserDto.class))).thenReturn(false);
+        when(userService.registerUser(any(UserDto.class))).thenReturn(false);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")
@@ -97,6 +111,10 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"))
                 .andExpect(model().attribute("message", "User Already Exists"));
+    }
+
+    @Test
+    void registerAdmin() throws Exception {
         when(userService.registerUser(any(UserDto.class))).thenReturn(true);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -106,6 +124,10 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("adminPortal"))
                 .andExpect(model().attribute("message", "SuccesfulLy Registered!!!"));
+    }
+
+    @Test
+    void registerPlayer() throws Exception {
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")

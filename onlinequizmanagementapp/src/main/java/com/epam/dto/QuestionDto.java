@@ -3,11 +3,13 @@ package com.epam.dto;
 import com.epam.entities.Option;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class QuestionDto {
 
 
@@ -16,7 +18,7 @@ public class QuestionDto {
     private String difficulty;
     private String topic;
     private int marks;
-    private Set<Option> options;
+    private List<Option> options;
 
 
 }

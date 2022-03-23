@@ -20,23 +20,24 @@
 </head>
 <body class="text-white bg-dark">
 	<div class="container mt-5">
-        <form method="post">
-        <div class="form-group">
-            <label for="title">Title</label> <input type="text"
-                class="form-control" id="title" placeholder="Quiz Title...."
-                name="title" required >
-        </div>
-            <label for="questionIds">Select the questions you want to add...</label>
-        <select class="form-select" multiple name="questionIds" size="10" required>
-            <c:forEach items="${questions}" var="question">
-                <option value="${question.questionId}">${question.title}</option>
-            </c:forEach>
-        </select>
-        <div class="container text-center">
-            <button type="submit" formaction="insertQuiz"
-            class="btn btn-success text-center">Create Quiz</button>
-        </div>
-        </form>
+		<form method="post">
+			<div class="form-group">
+				<label for="title">Title</label> <input type="text"
+					class="form-control" id="title" placeholder="Quiz Title...."
+					name="title" required>
+			</div>
+			<label for="questionIds">Select the questions you want to
+				add...</label> <select class="form-select" multiple name="questionIds"
+				size="10" required>
+				<c:forEach items="${questions}" var="question">
+					<option value="${question.questionId}">${question.title}</option>
+				</c:forEach>
+			</select>
+			<div class="container text-center">
+				<button type="submit" formaction="insertQuiz"
+					class="btn btn-success text-center">Create Quiz</button>
+			</div>
+		</form>
 		<h4>${message}</h4>
 		<a href="quizLibraryPortal">
 			<button type="button" class="btn btn-light">Back</button>

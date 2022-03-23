@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 
 
 <!doctype html>
@@ -23,7 +23,7 @@
 		<h4>${message}</h4>
 		<h1>Welcome to The Questions Portal</h1>
 		<table class="table table-dark table-hover table-striped">
-		  <caption>Menu</caption>
+			<caption>Menu</caption>
 			<tr>
 				<th><a href="createQuestion" class="link-light">Create A
 						Question</a></th>

@@ -22,35 +22,32 @@
 	<div class="container mt-5">
 
 		<table class="table table-dark table-hover table-striped">
-		  <caption>Quiz</caption>
+			<caption>Quiz</caption>
 			<tr>
 				<th class="text-center"><h1>ID:${id}&nbsp;&nbsp;${title}</h1></th>
 			</tr>
 
 			<c:forEach items="${questions}" var="question">
 				<tr>
-					<td>Question ID: ${question.questionId}
-					${question.title}<br> <br>
-					<c:forEach items="${question.options}" var="option">
+					<td>Question ID: ${question.questionId} ${question.title}<br>
+						<br> <c:forEach items="${question.options}" var="option">
 						>>${option.value}&nbsp;&nbsp;${option.answer}<br>
-					</c:forEach>
-					<br>
-					Difficulty:${question.difficulty}||
-					Topic:${question.topic}||
-					Marks:${question.marks}
+						</c:forEach> <br> Difficulty:${question.difficulty}||
+						Topic:${question.topic}|| Marks:${question.marks}
 					</td>
 				</tr>
 				<tr>
-					<td><a href="deleteQuestionInQuiz?questionId=${question.questionId}&quizId=${id}">Delete</a></td>
+					<td><a
+						href="deleteQuestionInQuiz?questionId=${question.questionId}&quizId=${id}">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>
 		<h4>${message}</h4>
 		<div class="container text-center">
-            <a href="selectQuestionForQuiz?quizId=${id}">
-                <button type="button" class="btn btn-light">Add Question</button>
-            </a>
-        </div>
+			<a href="selectQuestionForQuiz?quizId=${id}">
+				<button type="button" class="btn btn-light">Add Question</button>
+			</a>
+		</div>
 		<a href="viewQuizTitles">
 			<button type="button" class="btn btn-light">Back</button>
 		</a>

@@ -22,7 +22,7 @@
 	<div class="container mt-5">
 
 		<table class="table table-dark table-hover table-striped">
-		  <caption>Questions</caption>
+			<caption>Questions</caption>
 			<tr>
 				<th class="text-center"><h1>Questions</h1></th>
 			</tr>
@@ -30,20 +30,16 @@
 			<c:forEach items="${questions}" var="question">
 
 				<tr>
-					<td>Question ID: ${question.questionId}
-					${question.title}<br> <br>
-					<c:forEach items="${question.options}" var="option">
+					<td>Question ID: ${question.questionId} ${question.title}<br>
+						<br> <c:forEach items="${question.options}" var="option">
 						>>${option.value}&nbsp&nbsp${option.answer}<br>
-					</c:forEach>
-					<br>
-					Difficulty:${question.difficulty}||
-					Topic:${question.topic}||
-					Marks:${question.marks}
+						</c:forEach> <br> Difficulty:${question.difficulty}||
+						Topic:${question.topic}|| Marks:${question.marks}
 					</td>
 				</tr>
 				<tr>
-					<td><a href="editQuestion?questionId=${question.questionId}">Edit</a> | <a
-						href="deleteQuestion?questionId=${question.questionId}">Delete</a></td>
+					<td><a href="editQuestion?questionId=${question.questionId}">Edit</a>
+						| <a href="deleteQuestion?questionId=${question.questionId}">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

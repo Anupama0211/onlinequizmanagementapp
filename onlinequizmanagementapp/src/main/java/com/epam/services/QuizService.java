@@ -2,7 +2,6 @@ package com.epam.services;
 
 
 import com.epam.dao.QuizRepository;
-import com.epam.dto.QuestionDto;
 import com.epam.dto.QuizDto;
 import com.epam.entities.Question;
 import com.epam.entities.Quiz;
@@ -25,26 +24,37 @@ public class QuizService {
 
     @Autowired
     QuizRepository quizRepository;
+    @Autowired
+    QuestionService questionService;
 
     @Autowired
     ModelMapper modelMapper;
 
 
     public QuizDto getAQuiz(int quizId) throws InvalidIDException {
-        Optional<Quiz> quizOptional = quizRepository.findById(quizId);
-        if (quizOptional.isEmpty()) {
-            throw new InvalidIDException("Invalid Question ID!!");
-        }
-        return modelMapper.map(quizOptional.get(), QuizDto.class);
+        return modelMapper
+                .map(quizRepository
+                                .findById(quizId)
+                                .orElseThrow(() -> new InvalidIDException("Invalid Quiz ID!!"))
+                        , QuizDto.class);
     }
 
-    public QuizDto insertQuiz(QuizDto quizDto, Set<QuestionDto> questionDtoSet) {
+    public QuizDto insertQuiz(QuizDto quizDto, List<Integer> questionIds) throws InvalidIDException {
+        if (quizDto.getQuizId() != 0) {
+            String title = quizDto.getTitle();
+            quizDto = getAQuiz(quizDto.getQuizId());
+            quizDto.setTitle(title);
+        }
         Quiz quiz = modelMapper.map(quizDto, Quiz.class);
         Set<Question> questions = new HashSet<>();
-        questionDtoSet
-                .forEach(questionDto -> questions
-                        .add(modelMapper.map(questionDto, Question.class)));
-        quiz.setQuestions(questions);
+        for (int questionId : questionIds) {
+            questions.add(modelMapper.map(questionService.getQuestionByID(questionId), Question.class));
+        }
+        if (quiz.getQuestions() == null) {
+            quiz.setQuestions(questions);
+        } else {
+            quiz.getQuestions().addAll(questions);
+        }
         return modelMapper.map(quizRepository.save(quiz), QuizDto.class);
     }
 
@@ -62,11 +72,11 @@ public class QuizService {
     }
 
 
-    public void deleteQuestionInQuiz(int quizId, int questionId) {
+    public void deleteQuestionInQuiz(int quizId, int questionId) throws InvalidIDException {
         Optional<Quiz> quizOptional = quizRepository.findById(quizId);
-        Quiz quiz;
+
         if (quizOptional.isPresent()) {
-            quiz = quizOptional.get();
+            Quiz quiz = quizOptional.get();
             Optional<Question> questionOptional = quiz
                     .getQuestions()
                     .stream()
@@ -75,12 +85,8 @@ public class QuizService {
             questionOptional.ifPresent(question -> quiz.getQuestions().remove(question));
             quizRepository.save(quiz);
         }
-    }
-
-    public void addQuestionFromQuestionLibrary(QuizDto quizDto, QuestionDto questionDto) {
-        Quiz quiz = modelMapper.map(quizDto, Quiz.class);
-        Question question = modelMapper.map(questionDto, Question.class);
-        quiz.getQuestions().add(question);
-        quizRepository.save(quiz);
+        else{
+            throw new InvalidIDException("Invalid Quiz ID");
+        }
     }
 }

@@ -5,7 +5,6 @@ import com.epam.dto.QuestionDto;
 import com.epam.dto.QuizDto;
 import com.epam.entities.Option;
 import com.epam.entities.Question;
-import com.epam.entities.Quiz;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.services.QuestionService;
 import com.epam.services.QuizService;
@@ -53,7 +52,7 @@ class QuizControllerTest {
         questionDto.setTitle("What is JAVA");
         questionDto.setTopic("Programming");
         questionDto.setMarks(2);
-        questionDto.setOptions(Set.of(new Option(1, "Island", false)
+        questionDto.setOptions(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
 
         quizDto = new QuizDto();
@@ -73,14 +72,17 @@ class QuizControllerTest {
     }
 
     @Test
-    void viewQuizTitles() throws Exception {
+    void viewQuizTitlesWhenQuizNotEmpty() throws Exception {
         List<QuizDto> quizzes = List.of(quizDto);
         when(quizService.getAllQuizzes()).thenReturn(quizzes);
         mockMvc.perform(get("/viewQuizTitles"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewQuizTitles"))
                 .andExpect(model().attribute("quizzes", quizzes));
+    }
 
+    @Test
+    void viewQuizTitlesWhenQuizEmpty() throws Exception {
         when(quizService.getAllQuizzes()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/viewQuizTitles"))
                 .andExpect(status().isOk())
@@ -99,20 +101,25 @@ class QuizControllerTest {
     }
 
     @Test
-    void viewAQuiz() throws Exception {
+    void viewAQuizWhenEmpty() throws Exception {
+        quizDto.setQuestions(Set.of());
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(get("/viewAQuiz?quizId=111"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAQuiz"))
+                .andExpect(model().attribute("message", "Quiz is Empty"))
                 .andExpect(model().attribute("id", 111))
                 .andExpect(model().attribute("title", quizDto.getTitle()))
                 .andExpect(model().attribute("questions", quizDto.getQuestions()));
 
-        quizDto.setQuestions(Set.of());
+    }
+
+    @Test
+    void viewAQuizWhenNotEmpty() throws Exception {
+        when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(get("/viewAQuiz?quizId=111"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAQuiz"))
-                .andExpect(model().attribute("message", "Quiz is Empty"))
                 .andExpect(model().attribute("id", 111))
                 .andExpect(model().attribute("title", quizDto.getTitle()))
                 .andExpect(model().attribute("questions", quizDto.getQuestions()));
@@ -127,6 +134,10 @@ class QuizControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("createQuiz"))
                 .andExpect(model().attribute("questions", questions));
+    }
+
+    @Test
+    void createQuizWhenQUestionIsEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/createQuiz"))
                 .andExpect(status().isOk())
@@ -136,7 +147,7 @@ class QuizControllerTest {
 
     @Test
     void insertQuiz() throws Exception {
-        when(quizService.insertQuiz(any(QuizDto.class), anySet())).thenReturn(quizDto);
+        when(quizService.insertQuiz(any(QuizDto.class), anyList())).thenReturn(quizDto);
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(post("/insertQuiz")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -147,34 +158,23 @@ class QuizControllerTest {
     }
 
     @Test
-    void selectQuestionForQuiz() throws Exception {
+    void selectQuestionForQuizWhenQuestionLibraryNotEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenReturn(List.of(questionDto));
+        when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(get("/selectQuestionForQuiz?quizId=111"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("selectQuestionForQuiz"))
-                .andExpect(model().attribute("quizId", 111))
+                .andExpect(model().attribute("quiz", quizDto))
                 .andExpect(model().attribute("questions", List.of(questionDto)));
+    }
 
+    @Test
+    void selectQuestionForQuizWhenQuestionLibraryIsEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/selectQuestionForQuiz?quizId=111"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("selectQuestionForQuiz"))
                 .andExpect(model().attribute("message", "Question Library is empty"));
-    }
-
-
-    @Test
-    void addQuestionsInQuiz() throws Exception {
-        when(quizService.getAQuiz(111)).thenReturn(quizDto);
-        when(questionService.getQuestionByID(anyInt())).thenReturn(questionDto);
-        mockMvc.perform(post("/addQuestionInQuiz?quizId=111")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("questions", "1", "2", "3", "4"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("viewAQuiz"))
-                .andExpect(model().attribute("message", "Questions added!!!"));
-
-
     }
 
     @Test

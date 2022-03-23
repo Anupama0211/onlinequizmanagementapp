@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
+
 
 @Component
 @Scope("prototype")
@@ -31,14 +32,13 @@ public class Question {
     private @Setter
     int marks;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Option> options;
+    private List<Option> options;
 
 
-    public void setOptions(Set<Option> options) {
+    public void setOptions(List<Option> options) {
         options.forEach(option -> option.setQuestion(this));
         this.options = options;
     }
-
 
 
 }
