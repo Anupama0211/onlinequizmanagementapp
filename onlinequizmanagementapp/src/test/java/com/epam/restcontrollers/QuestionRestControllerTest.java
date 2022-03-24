@@ -13,15 +13,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 
 import java.util.List;
 
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -52,18 +58,25 @@ class QuestionRestControllerTest {
     @Test
     void addQuestion() throws Exception {
         QuestionDto questionDto = new QuestionDto();
-        questionDto.setTitle("What is JAVA?");
+        questionDto.setQuestionId(2);
+        questionDto.setTitle("JPA is JAVA Programming API.");
         questionDto.setMarks(1);
-        Option option = new Option();
-        option.setAnswer(true);
-        option.setValue("OOP");
-        questionDto.setOptions(List.of(option));
+        questionDto.setDifficulty("Hard");
+        questionDto.setTopic("Programming");
+        Option option1 = new Option();
+        option1.setAnswer(true);
+        option1.setValue("OOP");
+        Option option2 = new Option();
+        option2.setAnswer(true);
+        option2.setValue("OOP");
+        questionDto.setOptions(List.of(option1, option2));
 
         when(questionService.addQuestion(questionDto)).thenReturn(questionDto);
         mockMvc.perform(post("/questions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(questionDto)))
                 .andExpect(status().isCreated());
+        verify(questionService).addQuestion(any(QuestionDto.class));
 
     }
 
@@ -73,24 +86,34 @@ class QuestionRestControllerTest {
         questionDto.setQuestionId(2);
         questionDto.setTitle("JPA is JAVA Programming API.");
         questionDto.setMarks(1);
+        questionDto.setDifficulty("Hard");
         questionDto.setTopic("Programming");
-        Option option = new Option();
-        option.setAnswer(true);
-        option.setValue("OOP");
-        questionDto.setOptions(List.of(option));
+        Option option1 = new Option();
+        option1.setAnswer(true);
+        option1.setValue("OOP");
+        Option option2 = new Option();
+        option2.setAnswer(true);
+        option2.setValue("OOP");
+        questionDto.setOptions(List.of(option1, option2));
 
         when(questionService.modifyQuestion(questionDto)).thenReturn(questionDto);
-        mockMvc.perform(put("/questions/question")
-                        .contentType(MediaType.APPLICATION_JSON)
+        MvcResult mvcResult = mockMvc.perform(put("/questions/question")
+                        .contentType("application/json")
                         .content(objectMapper.writeValueAsString(questionDto)))
-                .andExpect(status().isOk());
-             //   .andExpect(jsonPath("$.title").value(questionDto.getTitle()));
+                .andExpect(status().isOk())
+                .andDo(print())
+                //.andExpect(jsonPath("$.title").value(questionDto.getTitle()))
+                .andReturn();
+        //System.out.println(mvcResult.getResponse().getContentAsString());
+        //  assertThat(mvcResult.getResponse().getContentAsString()).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(questionDto));
+
+        // assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(questionDto);
     }
 
     @Test
     void deleteQuestion() throws Exception {
         mockMvc.perform(delete("/questions/1"))
                 .andExpect(status().isNoContent());
-
+        verify(questionService).removeQuestion(1);
     }
 }

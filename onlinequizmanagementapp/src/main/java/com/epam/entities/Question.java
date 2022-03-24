@@ -1,17 +1,16 @@
 package com.epam.entities;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+
 
 import javax.persistence.*;
 import java.util.List;
 
 
-@Component
-@Scope("prototype")
+
 @NoArgsConstructor
 @Getter
 @Entity
