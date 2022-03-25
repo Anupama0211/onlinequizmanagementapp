@@ -26,7 +26,11 @@ public class QuestionService {
     ModelMapper modelMapper;
 
     public QuestionDto addQuestion(QuestionDto questionDto) {
-        List<Option> options = questionDto.getOptions().stream().filter(option -> !(option.getValue().isEmpty())).toList();
+        List<Option> options = questionDto.getOptions()
+                .stream()
+                .filter(option -> !(option.getValue().isEmpty()))
+                .toList();
+
         questionDto.setOptions(options);
         Question question = questionRepository.save(modelMapper.map(questionDto, Question.class));
         return modelMapper.map(question, QuestionDto.class);
@@ -62,11 +66,9 @@ public class QuestionService {
                 oldOption.setValue(newOption.getValue());
                 oldOption.setAnswer(newOption.isAnswer());
             }
-            newQuestionDto = modelMapper.map(questionRepository.save(question), QuestionDto.class);
-        } else {
-            throw new InvalidIDException("Invalid Question ID!!");
+            return modelMapper.map(questionRepository.save(question), QuestionDto.class);
         }
-        return newQuestionDto;
+        throw new InvalidIDException("Invalid Question ID!!");
     }
 
     public List<QuestionDto> getAllQuestions() throws EmptyLibraryException {

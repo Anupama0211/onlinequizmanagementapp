@@ -43,7 +43,7 @@ public class QuestionRestController {
     @Operation(description = "It updates the question")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "200", description = "Sucessfull")
-    @PutMapping(value = "question", produces = "application/json")
+    @PutMapping
     public ResponseEntity<QuestionDto> updateQuestion(@RequestBody @Valid QuestionDto questionDto) throws InvalidIDException {
         return new ResponseEntity<>(questionService.modifyQuestion(questionDto), HttpStatus.OK);
 

@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@EqualsAndHashCode
 @Table(name = "question_options")
 public class Option {
 

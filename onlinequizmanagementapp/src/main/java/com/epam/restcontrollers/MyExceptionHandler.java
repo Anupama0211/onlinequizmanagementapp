@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -21,69 +22,61 @@ import java.util.List;
 @RestControllerAdvice
 public class MyExceptionHandler {
 
-    @ExceptionHandler(InvalidIDException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidIDException(InvalidIDException exception, WebRequest request) {
+
+    ExceptionResponse getExceptionResponse(String error, HttpStatus badRequest, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(exception.getMessage());
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
+        exceptionResponse.setError(error);
+        exceptionResponse.setStatus(badRequest.name());
         exceptionResponse.setTimestamp(new Date().toString());
         exceptionResponse.setPath(request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+        return exceptionResponse;
+    }
+
+    @ExceptionHandler(InvalidIDException.class)
+    ResponseEntity<ExceptionResponse> handleInvalidIDException(InvalidIDException exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = getExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND, request);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<ExceptionResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException exception, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError("No such Id exists!");
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
-        exceptionResponse.setTimestamp(new Date().toString());
-        exceptionResponse.setPath(request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    ResponseEntity<ExceptionResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = getExceptionResponse("No such Id exists!", HttpStatus.NOT_FOUND, request);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EmptyLibraryException.class)
-    public ResponseEntity<ExceptionResponse> handleEmptyLibraryException(EmptyLibraryException exception, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(exception.getMessage());
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
-        exceptionResponse.setTimestamp(new Date().toString());
-        exceptionResponse.setPath(request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    ResponseEntity<ExceptionResponse> handleEmptyLibraryException(EmptyLibraryException exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = getExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND, request);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(exception.getMessage());
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
-        exceptionResponse.setTimestamp(new Date().toString());
-        exceptionResponse.setPath(request.getDescription(false));
+    ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = getExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND, request);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(DataIntegrityViolationException exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = getExceptionResponse("Question is present in the quiz!Cannot be deleted", HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(DataIntegrityViolationException exception, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError("Question is present in the quiz!Cannot be deleted");
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
-        exceptionResponse.setTimestamp(new Date().toString());
-        exceptionResponse.setPath(request.getDescription(false));
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    ResponseEntity<ExceptionResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = getExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, WebRequest webRequest) {
+    ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, WebRequest webRequest) {
         List<String> errors = exception
                 .getBindingResult()
                 .getAllErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(errors.toString());
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
-        exceptionResponse.setTimestamp(new Date().toString());
-        exceptionResponse.setPath(webRequest.getDescription(false));
+        ExceptionResponse exceptionResponse = getExceptionResponse(errors.toString(), HttpStatus.BAD_REQUEST, webRequest);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-
 }

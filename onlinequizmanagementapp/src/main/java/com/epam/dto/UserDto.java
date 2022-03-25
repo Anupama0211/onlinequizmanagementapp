@@ -4,7 +4,7 @@ package com.epam.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
 
 import javax.validation.constraints.NotEmpty;
 
@@ -12,7 +12,6 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 @Getter
-@ToString
 public class UserDto {
     private int userId;
     @NotEmpty(message = "UserName should not be empty")

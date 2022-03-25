@@ -23,4 +23,5 @@ public class OnlineQuizManagementAppUsingSpringBootApplication {
     }
 
 }
+//Learn @Transanctional, @Repository, inorder verify, remove star import, make shorter functions
 //http://localhost:8080/swagger-ui/index.html

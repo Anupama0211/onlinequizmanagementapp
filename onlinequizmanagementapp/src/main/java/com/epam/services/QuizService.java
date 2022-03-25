@@ -82,10 +82,13 @@ public class QuizService {
                     .stream()
                     .filter(question -> question.getQuestionId() == questionId)
                     .findFirst();
-            questionOptional.ifPresent(question -> quiz.getQuestions().remove(question));
-            quizRepository.save(quiz);
-        }
-        else{
+            if (questionOptional.isPresent()) {
+                quiz.getQuestions().remove(questionOptional.get());
+                quizRepository.save(quiz);
+            } else {
+                throw new InvalidIDException("Invalid Question ID");
+            }
+        } else {
             throw new InvalidIDException("Invalid Quiz ID");
         }
     }

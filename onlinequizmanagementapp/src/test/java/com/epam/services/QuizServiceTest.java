@@ -58,13 +58,6 @@ class QuizServiceTest {
         question.setOptions(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
 
-        quiz = new Quiz();
-        quiz.setQuizId(111);
-        Set<Question> questions = new HashSet<>();
-        questions.add(question);
-        quiz.setQuestions(questions);
-        quiz.setTitle("DEMO");
-
         questionDto = new QuestionDto();
         questionDto.setQuestionId(1);
         questionDto.setDifficulty("Easy");
@@ -73,6 +66,14 @@ class QuizServiceTest {
         questionDto.setMarks(2);
         questionDto.setOptions(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
+
+        Set<Question> questions = new HashSet<>();
+        questions.add(question);
+
+        quiz = new Quiz();
+        quiz.setQuizId(111);
+        quiz.setQuestions(questions);
+        quiz.setTitle("DEMO");
 
         quizDto = new QuizDto();
         quizDto.setQuizId(111);
@@ -87,7 +88,7 @@ class QuizServiceTest {
         when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(quiz));
         when(modelMapper.map(quiz, QuizDto.class)).thenReturn(quizDto);
         assertThat(quizService.getAQuiz(111)).isEqualTo(quizDto);
-        when(quizRepository.findById(112)).thenReturn(Optional.ofNullable(null));
+        when(quizRepository.findById(112)).thenReturn(Optional.empty());
         assertThrows(InvalidIDException.class, () -> quizService.getAQuiz(112));
     }
 
@@ -128,8 +129,12 @@ class QuizServiceTest {
         quizService.deleteQuestionInQuiz(111, 1);
         assertThat(quiz.getQuestions().isEmpty());
         verify(quizRepository).save(quiz);
-        when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(null));
+
+        when(quizRepository.findById(111)).thenReturn(Optional.empty());
         assertThrows(InvalidIDException.class, () -> quizService.deleteQuestionInQuiz(111, 1));
+
+        when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(quiz));
+        assertThrows(InvalidIDException.class, () -> quizService.deleteQuestionInQuiz(111, 2));
     }
 
 

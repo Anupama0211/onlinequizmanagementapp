@@ -51,11 +51,12 @@ class UserRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
+
         when(userService.validateCredentials(any(UserDto.class))).thenThrow(UserNotFoundException.class);
         mockMvc.perform(post("/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
 
     }
 
