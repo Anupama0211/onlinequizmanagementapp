@@ -51,7 +51,7 @@ public class QuizRestController {
     @Operation(description = "It fetches a quiz")
     @ApiResponse(responseCode = "200", description = "Successful")
     @ApiResponse(responseCode = "400", description = "Bad Request")
-    @GetMapping("quiz/{quizId}")
+    @GetMapping("{quizId}")
     public ResponseEntity<QuizDto> viewAQuiz(@PathVariable int quizId) throws InvalidIDException {
         return new ResponseEntity<>(quizService.getAQuiz(quizId), HttpStatus.OK);
     }
@@ -68,7 +68,7 @@ public class QuizRestController {
     @Operation(description = "It updates the quiz")
     @ApiResponse(responseCode = "200", description = "Successful")
     @ApiResponse(responseCode = "400", description = "Bad Request")
-    @PutMapping("quiz")
+    @PutMapping
     public ResponseEntity<QuizDto> updateQuiz(@RequestParam("questionIds") List<Integer> questionIds,
                                               @Valid @RequestBody QuizDto quizDto) throws InvalidIDException {
         return new ResponseEntity<>(quizService.insertQuiz(quizDto, questionIds), HttpStatus.OK);
@@ -76,9 +76,8 @@ public class QuizRestController {
 
     @Operation(description = "It deletes a question in a quiz")
     @ApiResponse(responseCode = "204", description = "No Content")
-    @ApiResponse(responseCode = "400", description = "Bad Request")
-    @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteQuestionInQuiz(@RequestParam int questionId, @RequestParam int quizId) throws InvalidIDException {
+    @DeleteMapping("{quizId}/{questionId}")
+    public ResponseEntity<HttpStatus> deleteQuestionInQuiz(@PathVariable int quizId, @PathVariable int questionId) throws InvalidIDException {
         quizService.deleteQuestionInQuiz(quizId, questionId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 

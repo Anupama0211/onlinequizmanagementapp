@@ -20,7 +20,7 @@ public class UserRestController {
 
     @Operation(description = "It validates user credentials")
     @ApiResponse(responseCode = "200", description = "Successful")
-    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "404", description = "Not Found")
     @PostMapping("/login")
     public ResponseEntity<Boolean> login(@RequestBody @Valid UserDto userDto) throws UserNotFoundException {
         return new ResponseEntity<>(userService.validateCredentials(userDto), HttpStatus.OK);

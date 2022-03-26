@@ -77,11 +77,11 @@ class QuizRestControllerTest {
     @Test
     void viewAQuiz() throws Exception {
         when(quizService.getAQuiz(1)).thenReturn(new QuizDto());
-        mockMvc.perform(get("/quizzes/quiz/1"))
+        mockMvc.perform(get("/quizzes/1"))
                 .andExpect(status().isOk());
 
         when(quizService.getAQuiz(1)).thenThrow(InvalidIDException.class);
-        mockMvc.perform(get("/quizzes/quiz/1"))
+        mockMvc.perform(get("/quizzes/1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -116,6 +116,7 @@ class QuizRestControllerTest {
         verify(quizService).insertQuiz(any(QuizDto.class), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue()).isEqualTo(List.of(1));
     }
+
     @Test
     void insertQuizWithMissingRequestParam() throws Exception {
         QuizDto quizDto = new QuizDto();
@@ -131,7 +132,7 @@ class QuizRestControllerTest {
         QuizDto quizDto = new QuizDto();
         quizDto.setTitle("Quiz Test");
         when(quizService.insertQuiz(quizDto, List.of(1, 2, 3))).thenReturn(quizDto);
-        mockMvc.perform(put("/quizzes/quiz?questionIds=1,2,3").
+        mockMvc.perform(put("/quizzes?questionIds=1,2,3").
                         contentType(MediaType.APPLICATION_JSON).
                         content(objectMapper.writeValueAsString(quizDto)))
                 .andExpect(status().isOk());
@@ -139,10 +140,11 @@ class QuizRestControllerTest {
 
     @Test
     void deleteQuestionInQuiz() throws Exception {
-        mockMvc.perform(delete("/quizzes?questionId=1&quizId=1"))
+        mockMvc.perform(delete("/quizzes/1/1"))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(delete("/quizzes"))
-                .andExpect(status().isBadRequest());
+        doThrow(InvalidIDException.class).when(quizService).deleteQuestionInQuiz(1, 1);
+        mockMvc.perform(delete("/quizzes/1/1"))
+                .andExpect(status().isNotFound());
     }
 }
