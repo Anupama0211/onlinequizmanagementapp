@@ -1,5 +1,6 @@
 package com.epam.restcontrollers;
 
+import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.entities.Option;
 import com.epam.exceptions.EmptyLibraryException;
@@ -71,10 +72,10 @@ class QuestionRestControllerTest {
         questionDto.setMarks(1);
         questionDto.setDifficulty("Hard");
         questionDto.setTopic("Programming");
-        Option option1 = new Option();
+        OptionDto option1 = new OptionDto();
         option1.setAnswer(true);
         option1.setValue("OOP");
-        Option option2 = new Option();
+        OptionDto option2 = new OptionDto();
         option2.setAnswer(true);
         option2.setValue("OOP");
         questionDto.setOptions(List.of(option1, option2));
@@ -107,20 +108,19 @@ class QuestionRestControllerTest {
         questionDto.setMarks(1);
         questionDto.setDifficulty("Hard");
         questionDto.setTopic("Programming");
-        Option option1 = new Option();
+        OptionDto option1 = new OptionDto();
         option1.setAnswer(true);
         option1.setValue("OOP");
-        Option option2 = new Option();
+        OptionDto option2 = new OptionDto();
         option2.setAnswer(true);
         option2.setValue("OOP");
         questionDto.setOptions(List.of(option1, option2));
 
-        when(questionService.modifyQuestion(questionDto)).thenReturn(questionDto);
-        MvcResult mvcResult = mockMvc.perform(put("/questions")
+        when(questionService.modifyQuestion(questionDto,2)).thenReturn(questionDto);
+        MvcResult mvcResult = mockMvc.perform(put("/questions/1")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(questionDto)))
                 .andExpect(status().isOk())
-                .andDo(print())
                 //.andExpect(jsonPath("$.title").value(questionDto.getTitle()))
                 .andReturn();
         //System.out.println(mvcResult.getResponse().getContentAsString());
@@ -137,16 +137,16 @@ class QuestionRestControllerTest {
         questionDto.setMarks(1);
         questionDto.setDifficulty("Hard");
         questionDto.setTopic("Programming");
-        Option option1 = new Option();
+        OptionDto option1 = new OptionDto();
         option1.setAnswer(true);
         option1.setValue("OOP");
-        Option option2 = new Option();
+        OptionDto option2 = new OptionDto();
         option2.setAnswer(true);
         option2.setValue("OOP");
         questionDto.setOptions(List.of(option1, option2));
 
-        when(questionService.modifyQuestion(any(QuestionDto.class))).thenThrow(InvalidIDException.class);
-        mockMvc.perform(put("/questions")
+        when(questionService.modifyQuestion(any(QuestionDto.class),anyInt())).thenThrow(InvalidIDException.class);
+        mockMvc.perform(put("/questions/1")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(questionDto)))
                 .andExpect(status().isNotFound());

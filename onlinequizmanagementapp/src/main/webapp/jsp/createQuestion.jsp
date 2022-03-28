@@ -39,7 +39,7 @@
 					required>
 			</div>
 			<div class="form-group">
-				<label for="marks">Marks</label> <input type="text"
+				<label for="marks">Marks</label> <input type="number"
 					class="form-control" id="marks" placeholder="Marks" name="marks"
 					required>
 			</div>
@@ -48,7 +48,7 @@
 					class="form-control" id="options1" placeholder="Option 1"
 					name="options[0].value" required> <label for="isAnswer">Is
 					it the answer?</label> <select class="form-select"
-					name="options[0].answer" required>
+					name="options[0].answer" >
 					<option value="true">Yes</option>
 					<option value="false" selected>No</option>
 				</select>
@@ -56,9 +56,9 @@
 			<div class="form-group">
 				<label for="options2">Option 2</label> <input type="text"
 					class="form-control" id="options2" placeholder="Option 2"
-					name="options[1].value" required> <label for="isAnswer">Is
+					name="options[1].value"  required> <label for="isAnswer">Is
 					it the answer?</label> <select class="form-select"
-					name="options[1].answer" required>
+					name="options[1].answer" >
 					<option value="true">Yes</option>
 					<option value="false" selected>No</option>
 				</select>
@@ -69,7 +69,7 @@
 					class="form-control" id="options3" placeholder="Option 3"
 					name="options[2].value"> <label for="isAnswer">Is
 					it the answer?</label> <select class="form-select"
-					name="options[2].answer" required>
+					name="options[2].answer">
 					<option value="true">Yes</option>
 					<option value="false" selected>No</option>
 				</select>
@@ -80,7 +80,7 @@
 					class="form-control" id="options4" placeholder="Option 4"
 					name="options[3].value"> <label for="isAnswer">Is
 					it the answer?</label> <select class="form-select"
-					name="options[3].answer" required>
+					name="options[3].answer">
 					<option value="true">Yes</option>
 					<option value="false" selected>No</option>
 				</select>

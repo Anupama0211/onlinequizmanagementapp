@@ -2,8 +2,6 @@ package com.epam.restcontrollers;
 
 
 import com.epam.dto.QuizDto;
-import com.epam.exceptions.EmptyLibraryException;
-import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,7 +33,7 @@ public class QuizRestController {
     @ApiResponse(responseCode = "204", description = "Bad Request")
     @ApiResponse(responseCode = "200", description = "Sucessfull")
     @GetMapping
-    public ResponseEntity<List<QuizDto>> viewQuizzes() throws EmptyLibraryException {
+    public ResponseEntity<List<QuizDto>> viewQuizzes(){
         return new ResponseEntity<>(quizService.getAllQuizzes(), HttpStatus.OK);
     }
 
@@ -52,7 +50,7 @@ public class QuizRestController {
     @ApiResponse(responseCode = "200", description = "Successful")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @GetMapping("{quizId}")
-    public ResponseEntity<QuizDto> viewAQuiz(@PathVariable int quizId) throws InvalidIDException {
+    public ResponseEntity<QuizDto> viewAQuiz(@PathVariable int quizId) {
         return new ResponseEntity<>(quizService.getAQuiz(quizId), HttpStatus.OK);
     }
 
@@ -61,23 +59,24 @@ public class QuizRestController {
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @PostMapping
     public ResponseEntity<QuizDto> insertQuiz(@RequestParam("questionIds") List<Integer> questionIds,
-                                              @Valid @RequestBody QuizDto quizDto) throws InvalidIDException {
+                                              @Valid @RequestBody QuizDto quizDto) {
         return new ResponseEntity<>(quizService.insertQuiz(quizDto, questionIds), HttpStatus.CREATED);
     }
 
     @Operation(description = "It updates the quiz")
     @ApiResponse(responseCode = "200", description = "Successful")
     @ApiResponse(responseCode = "400", description = "Bad Request")
-    @PutMapping
+    @PutMapping("{quizId}")
     public ResponseEntity<QuizDto> updateQuiz(@RequestParam("questionIds") List<Integer> questionIds,
-                                              @Valid @RequestBody QuizDto quizDto) throws InvalidIDException {
+                                              @Valid @RequestBody QuizDto quizDto,@PathVariable int quizId) {
+       quizDto.setQuizId(quizId);
         return new ResponseEntity<>(quizService.insertQuiz(quizDto, questionIds), HttpStatus.OK);
     }
 
     @Operation(description = "It deletes a question in a quiz")
     @ApiResponse(responseCode = "204", description = "No Content")
     @DeleteMapping("{quizId}/{questionId}")
-    public ResponseEntity<HttpStatus> deleteQuestionInQuiz(@PathVariable int quizId, @PathVariable int questionId) throws InvalidIDException {
+    public ResponseEntity<HttpStatus> deleteQuestionInQuiz(@PathVariable int quizId, @PathVariable int questionId) {
         quizService.deleteQuestionInQuiz(quizId, questionId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 

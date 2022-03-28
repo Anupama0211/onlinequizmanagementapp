@@ -2,7 +2,6 @@ package com.epam.restcontrollers;
 
 import com.epam.dto.UserDto;
 import com.epam.exceptions.UserNotFoundException;
-import com.epam.services.QuestionService;
 import com.epam.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;

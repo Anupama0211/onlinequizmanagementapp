@@ -34,7 +34,7 @@ public class UserService {
         return insertStatus;
     }
 
-    public boolean validateCredentials(UserDto userDto) throws UserNotFoundException {
+    public boolean validateCredentials(UserDto userDto)  {
         boolean check = false;
 
         Optional<User> userOptional = userRepository.findDistinctByUserName(userDto.getUserName());

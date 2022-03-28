@@ -1,6 +1,7 @@
 package com.epam.services;
 
 import com.epam.dao.QuizRepository;
+import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.dto.QuizDto;
 import com.epam.entities.Option;
@@ -64,8 +65,8 @@ class QuizServiceTest {
         questionDto.setTitle("What is JAVA");
         questionDto.setTopic("Programming");
         questionDto.setMarks(2);
-        questionDto.setOptions(List.of(new Option(1, "Island", false)
-                , new Option(1, "Coffee", true)));
+        questionDto.setOptions(List.of(new OptionDto(1, "Island", false)
+                , new OptionDto(1, "Coffee", true)));
 
         Set<Question> questions = new HashSet<>();
         questions.add(question);
@@ -77,7 +78,7 @@ class QuizServiceTest {
 
         quizDto = new QuizDto();
         quizDto.setQuizId(111);
-        quizDto.setQuestions(questions);
+        quizDto.setQuestions(Set.of(questionDto));
         quizDto.setTitle("DEMO");
     }
 

@@ -31,7 +31,7 @@ public class QuizService {
     ModelMapper modelMapper;
 
 
-    public QuizDto getAQuiz(int quizId) throws InvalidIDException {
+    public QuizDto getAQuiz(int quizId) {
         return modelMapper
                 .map(quizRepository
                                 .findById(quizId)
@@ -39,7 +39,7 @@ public class QuizService {
                         , QuizDto.class);
     }
 
-    public QuizDto insertQuiz(QuizDto quizDto, List<Integer> questionIds) throws InvalidIDException {
+    public QuizDto insertQuiz(QuizDto quizDto, List<Integer> questionIds)  {
         if (quizDto.getQuizId() != 0) {
             String title = quizDto.getTitle();
             quizDto = getAQuiz(quizDto.getQuizId());
@@ -62,7 +62,7 @@ public class QuizService {
         quizRepository.deleteById(quizId);
     }
 
-    public List<QuizDto> getAllQuizzes() throws EmptyLibraryException {
+    public List<QuizDto> getAllQuizzes() {
         List<Quiz> quizzes = (List<Quiz>) quizRepository.findAll();
         if (quizzes.isEmpty()) {
             throw new EmptyLibraryException("Quiz Library is empty!!");
@@ -72,7 +72,7 @@ public class QuizService {
     }
 
 
-    public void deleteQuestionInQuiz(int quizId, int questionId) throws InvalidIDException {
+    public void deleteQuestionInQuiz(int quizId, int questionId) {
         Optional<Quiz> quizOptional = quizRepository.findById(quizId);
 
         if (quizOptional.isPresent()) {

@@ -132,7 +132,7 @@ class QuizRestControllerTest {
         QuizDto quizDto = new QuizDto();
         quizDto.setTitle("Quiz Test");
         when(quizService.insertQuiz(quizDto, List.of(1, 2, 3))).thenReturn(quizDto);
-        mockMvc.perform(put("/quizzes?questionIds=1,2,3").
+        mockMvc.perform(put("/quizzes/1?questionIds=1,2,3").
                         contentType(MediaType.APPLICATION_JSON).
                         content(objectMapper.writeValueAsString(quizDto)))
                 .andExpect(status().isOk());

@@ -1,6 +1,7 @@
 package com.epam.controller;
 
 
+import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.dto.QuizDto;
 import com.epam.entities.Option;
@@ -52,14 +53,14 @@ class QuizControllerTest {
         questionDto.setTitle("What is JAVA");
         questionDto.setTopic("Programming");
         questionDto.setMarks(2);
-        questionDto.setOptions(List.of(new Option(1, "Island", false)
-                , new Option(1, "Coffee", true)));
+        questionDto.setOptions(List.of(new OptionDto(1, "Island", false)
+                , new OptionDto(1, "Coffee", true)));
 
         quizDto = new QuizDto();
         quizDto.setQuizId(111);
         Set<QuestionDto> questions = new HashSet<>();
         questions.add(questionDto);
-        quizDto.setQuestions(Set.of(new Question()));
+        quizDto.setQuestions(Set.of(new QuestionDto()));
         quizDto.setTitle("DEMO");
     }
 

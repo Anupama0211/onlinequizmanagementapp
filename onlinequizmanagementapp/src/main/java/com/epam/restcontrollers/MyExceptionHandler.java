@@ -4,6 +4,7 @@ import com.epam.dto.ExceptionResponse;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.exceptions.InvalidIDException;
 import com.epam.exceptions.UserNotFoundException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -77,6 +78,12 @@ public class MyExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
         ExceptionResponse exceptionResponse = getExceptionResponse(errors.toString(), HttpStatus.BAD_REQUEST, webRequest);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = InvalidFormatException.class)
+    ResponseEntity<ExceptionResponse> handleInvalidFormatException(InvalidFormatException exception, WebRequest webRequest) {
+        ExceptionResponse exceptionResponse = getExceptionResponse(exception.getOriginalMessage(), HttpStatus.BAD_REQUEST, webRequest);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.*;
 
 
+import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.entities.Option;
 import com.epam.exceptions.EmptyLibraryException;
@@ -51,8 +52,8 @@ class QuestionControllerTest {
 
     @Test
     void viewQuestionWhenNotEmpty() throws Exception {
-        Option option = new Option();
-        List<Option> options = List.of(option);
+        OptionDto option = new OptionDto();
+        List<OptionDto> options = List.of(option);
         QuestionDto question1 = new QuestionDto();
         QuestionDto question2 = new QuestionDto();
         QuestionDto question3 = new QuestionDto();
@@ -109,7 +110,7 @@ class QuestionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewQuestions"))
                 .andExpect(model().attribute("message", "Question Modified Succesfully!!!"));
-        verify(questionService).modifyQuestion(any(QuestionDto.class));
+        verify(questionService).modifyQuestion(any(QuestionDto.class),anyInt());
     }
 
 

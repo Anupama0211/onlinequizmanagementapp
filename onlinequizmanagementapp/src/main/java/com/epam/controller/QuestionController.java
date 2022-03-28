@@ -64,7 +64,7 @@ public class QuestionController {
 
     @PostMapping("updateQuestion")
     public ModelAndView updateQuestion(QuestionDto questionDto) throws InvalidIDException {
-        questionService.modifyQuestion(questionDto);
+        questionService.modifyQuestion(questionDto,questionDto.getQuestionId());
         ModelAndView modelAndView = viewQuestions();
         modelAndView.addObject(MESSAGE, "Question Modified Succesfully!!!");
         return modelAndView;

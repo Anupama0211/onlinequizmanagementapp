@@ -2,6 +2,7 @@ package com.epam.services;
 
 
 import com.epam.dao.QuestionRepository;
+import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
 import com.epam.entities.Option;
 import com.epam.entities.Question;
@@ -39,6 +40,7 @@ class QuestionServiceTest {
 
     Question question;
     List<Option> options;
+    List<OptionDto> optionDtos;
 
     @BeforeEach
     void setUp() {
@@ -57,10 +59,13 @@ class QuestionServiceTest {
         question.setTopic("Programming");
         question.setMarks(2);
         options = new ArrayList<>();
-        options.addAll(Set.of(new Option(1, "Island", false)
+        optionDtos = new ArrayList<>();
+        options.addAll(List.of(new Option(1, "Island", false)
                 , new Option(1, "Coffee", true)));
         question.setOptions(options);
-        questionDto.setOptions(options);
+        optionDtos.addAll(List.of(new OptionDto(1, "Island", false)
+                , new OptionDto(1, "Coffee", true)));
+        questionDto.setOptions(optionDtos);
     }
 
 
@@ -94,13 +99,13 @@ class QuestionServiceTest {
         question.setOptions(options);
         when(questionRepository.findById(1)).thenReturn(Optional.ofNullable(question));
         when(modelMapper.map(question, QuestionDto.class)).thenReturn(questionDto);
-        assertThat(questionService.modifyQuestion(questionDto)).isEqualTo(questionDto);
+        assertThat(questionService.modifyQuestion(questionDto,1)).isEqualTo(questionDto);
         verify(questionRepository).save(question);
     }
     @Test
     void modifyQuestionTestWhenIdIsWrong() throws InvalidIDException {
         when(questionRepository.findById(1)).thenReturn(Optional.ofNullable(null));
-        assertThrows(InvalidIDException.class,()->questionService.modifyQuestion(questionDto));
+        assertThrows(InvalidIDException.class,()->questionService.modifyQuestion(questionDto,1));
     }
 
     @Test

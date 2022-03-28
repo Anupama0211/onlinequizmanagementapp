@@ -1,8 +1,6 @@
 package com.epam.restcontrollers;
 
 import com.epam.dto.QuestionDto;
-import com.epam.exceptions.EmptyLibraryException;
-import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +26,7 @@ public class QuestionRestController {
     @ApiResponse(responseCode = "200", description = "Sucessfull")
 
     @GetMapping
-    public ResponseEntity<List<QuestionDto>> viewQuestions() throws EmptyLibraryException {
+    public ResponseEntity<List<QuestionDto>> viewQuestions() {
         return new ResponseEntity<>(questionService.getAllQuestions(), HttpStatus.OK);
     }
 
@@ -43,9 +41,9 @@ public class QuestionRestController {
     @Operation(description = "It updates the question")
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "200", description = "Sucessfull")
-    @PutMapping
-    public ResponseEntity<QuestionDto> updateQuestion(@RequestBody @Valid QuestionDto questionDto) throws InvalidIDException {
-        return new ResponseEntity<>(questionService.modifyQuestion(questionDto), HttpStatus.OK);
+    @PutMapping("{questionId}")
+    public ResponseEntity<QuestionDto> updateQuestion(@RequestBody @Valid QuestionDto questionDto,@PathVariable int questionId) {
+        return new ResponseEntity<>(questionService.modifyQuestion(questionDto,questionId), HttpStatus.OK);
 
     }
 

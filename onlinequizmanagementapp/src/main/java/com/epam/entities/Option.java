@@ -1,10 +1,11 @@
 package com.epam.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 
 import javax.persistence.*;
+
 
 
 @Getter
@@ -22,7 +23,6 @@ public class Option {
     @Column(name = "is_answer")
     private boolean isAnswer;
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "question_id")
     private Question question;
 

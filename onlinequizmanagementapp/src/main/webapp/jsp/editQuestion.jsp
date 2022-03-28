@@ -46,7 +46,7 @@
 					name="topic">
 			</div>
 			<div class="form-group">
-				<label for="marks">Marks</label> <input type="text"
+				<label for="marks">Marks</label> <input type="number"
 					class="form-control" id="marks" value="${question.marks}"
 					name="marks">
 			</div>

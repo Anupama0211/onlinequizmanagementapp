@@ -1,6 +1,5 @@
 package com.epam.dto;
 
-import com.epam.entities.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,5 +17,5 @@ public class QuizDto {
     @NotEmpty(message = "Title should not be empty")
     @Size(min = 3, max = 20, message = "Title should be between 3 and 20 characters length")
     private String title;
-    private Set<Question> questions;
+    private Set<QuestionDto> questions;
 }

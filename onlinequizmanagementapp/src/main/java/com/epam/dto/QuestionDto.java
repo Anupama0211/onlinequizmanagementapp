@@ -1,6 +1,6 @@
 package com.epam.dto;
 
-import com.epam.entities.Option;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,7 +34,7 @@ public class QuestionDto {
     private int marks;
     @NotEmpty(message = "Options should not be empty")
     @Size(min=2, message = "Question should have minimum 2 options")
-    private List<Option> options;
+    private List<OptionDto> options;
 
 
 }

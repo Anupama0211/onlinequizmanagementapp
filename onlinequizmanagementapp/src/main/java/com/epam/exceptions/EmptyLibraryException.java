@@ -1,6 +1,6 @@
 package com.epam.exceptions;
 
-public class EmptyLibraryException extends Exception {
+public class EmptyLibraryException extends RuntimeException {
     public EmptyLibraryException(String message) {
         super(message);
     }
