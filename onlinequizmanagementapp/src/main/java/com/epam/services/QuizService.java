@@ -39,22 +39,26 @@ public class QuizService {
                         , QuizDto.class);
     }
 
-    public QuizDto insertQuiz(QuizDto quizDto, List<Integer> questionIds)  {
-        if (quizDto.getQuizId() != 0) {
-            String title = quizDto.getTitle();
-            quizDto = getAQuiz(quizDto.getQuizId());
-            quizDto.setTitle(title);
+    public QuizDto updateQuiz(QuizDto quizDto, List<Integer> questionIds, int quizId) {
+
+        Quiz quiz = modelMapper.map(getAQuiz(quizId), Quiz.class);
+        quiz.setTitle(quizDto.getTitle());
+        Set<Question> questions = new HashSet<>();
+        for (int questionId : questionIds) {
+            questions.add(modelMapper.map(questionService.getQuestionByID(questionId), Question.class));
         }
+        quiz.getQuestions().addAll(questions);
+        return modelMapper.map(quizRepository.save(quiz), QuizDto.class);
+    }
+
+    public QuizDto insertQuiz(QuizDto quizDto, List<Integer> questionIds) {
+
         Quiz quiz = modelMapper.map(quizDto, Quiz.class);
         Set<Question> questions = new HashSet<>();
         for (int questionId : questionIds) {
             questions.add(modelMapper.map(questionService.getQuestionByID(questionId), Question.class));
         }
-        if (quiz.getQuestions() == null) {
-            quiz.setQuestions(questions);
-        } else {
-            quiz.getQuestions().addAll(questions);
-        }
+        quiz.setQuestions(questions);
         return modelMapper.map(quizRepository.save(quiz), QuizDto.class);
     }
 

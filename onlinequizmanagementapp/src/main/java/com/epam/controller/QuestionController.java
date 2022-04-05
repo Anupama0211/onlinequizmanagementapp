@@ -9,8 +9,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -45,7 +47,7 @@ public class QuestionController {
     }
 
     @PostMapping("addQuestion")
-    public ModelAndView addQuestion(QuestionDto questionDto) {
+    public ModelAndView addQuestion(@Valid QuestionDto questionDto) {
         questionService.addQuestion(questionDto);
         ModelAndView modelAndView = viewQuestions();
         modelAndView.addObject(MESSAGE, "Question Added Succesfully!!!");
@@ -53,9 +55,9 @@ public class QuestionController {
     }
 
     @RequestMapping("editQuestion")
-    public ModelAndView editQuestion(Integer questionId) throws InvalidIDException {
+    public ModelAndView editQuestion(@RequestParam int questionId) throws InvalidIDException {
         ModelAndView modelAndView = new ModelAndView();
-        QuestionDto questionDto = null;
+        QuestionDto questionDto;
         questionDto = questionService.getQuestionByID(questionId);
         modelAndView.addObject("question", questionDto);
         modelAndView.setViewName("editQuestion");
@@ -63,8 +65,8 @@ public class QuestionController {
     }
 
     @PostMapping("updateQuestion")
-    public ModelAndView updateQuestion(QuestionDto questionDto) throws InvalidIDException {
-        questionService.modifyQuestion(questionDto,questionDto.getQuestionId());
+    public ModelAndView updateQuestion(@RequestParam int questionId, @Valid QuestionDto questionDto) throws InvalidIDException {
+        questionService.modifyQuestion(questionDto, questionId);
         ModelAndView modelAndView = viewQuestions();
         modelAndView.addObject(MESSAGE, "Question Modified Succesfully!!!");
         return modelAndView;
@@ -72,7 +74,7 @@ public class QuestionController {
 
 
     @RequestMapping("deleteQuestion")
-    public ModelAndView deleteQuestion(int questionId) {
+    public ModelAndView deleteQuestion(@RequestParam int questionId) {
         ModelAndView modelAndView;
         try {
             questionService.removeQuestion(questionId);

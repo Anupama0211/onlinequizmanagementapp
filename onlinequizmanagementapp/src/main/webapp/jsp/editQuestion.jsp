@@ -67,7 +67,7 @@
 			</c:forEach>
 
 			<div class="container text-center">
-				<button type="submit" formaction="updateQuestion"
+				<button type="submit" formaction="updateQuestion?questionId=${question.questionId}"
 					class="btn btn-success text-center">Update Question</button>
 				<a href="viewQuestions">
 					<button type="button" class="btn btn-light">Back</button>

@@ -7,7 +7,6 @@ import com.epam.entities.User;
 import com.epam.exceptions.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 
@@ -23,18 +22,12 @@ public class UserService {
     @Autowired
     ModelMapper modelMapper;
 
-    public boolean registerUser(UserDto userDto) {
+    public UserDto registerUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
-        boolean insertStatus = true;
-        try {
-            userRepository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            insertStatus = false;
-        }
-        return insertStatus;
+        return modelMapper.map(userRepository.save(user), UserDto.class);
     }
 
-    public boolean validateCredentials(UserDto userDto)  {
+    public boolean validateCredentials(UserDto userDto) {
         boolean check = false;
 
         Optional<User> userOptional = userRepository.findDistinctByUserName(userDto.getUserName());

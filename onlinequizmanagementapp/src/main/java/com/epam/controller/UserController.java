@@ -4,10 +4,13 @@ import com.epam.dto.UserDto;
 import com.epam.exceptions.UserNotFoundException;
 import com.epam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -28,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ModelAndView login(UserDto userDto) {
+    public ModelAndView login(@Valid UserDto userDto) {
         ModelAndView modelView = new ModelAndView();
         try {
             if (userDto.getType().equalsIgnoreCase("ADMIN")) {
@@ -54,23 +57,21 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ModelAndView register(UserDto userDto) {
+    public ModelAndView register(@Valid UserDto userDto) {
         ModelAndView modelView = new ModelAndView();
-        boolean status = userService.registerUser(userDto);
-        if (userDto.getType().equalsIgnoreCase("ADMIN")) {
-
-            if (status) {
+        try {
+            userService.registerUser(userDto);
+            if (userDto.getType().equalsIgnoreCase("ADMIN")) {
                 modelView.addObject(MESSAGE, "SuccesfulLy Registered!!!");
                 modelView.setViewName(ADMINPORTAL);
             } else {
-                modelView.addObject(MESSAGE, "User Already Exists");
+                modelView.addObject(MESSAGE, "Player Functionalities not defined!!");
                 modelView.setViewName("home");
             }
-        } else {
-            modelView.addObject(MESSAGE, "Player Functionalities not defined!!");
+        } catch (DataIntegrityViolationException e) {
+            modelView.addObject(MESSAGE, "User Already Exists");
             modelView.setViewName("home");
         }
-
         return modelView;
     }
 }

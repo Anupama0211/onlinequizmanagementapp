@@ -29,7 +29,7 @@ public class UserRestController {
     @Operation(description = "It registers a user and returns true if registered and false if the user is already present")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping("/register")
-    public ResponseEntity<Boolean> register(@RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<UserDto> register(@RequestBody @Valid UserDto userDto) {
         return new ResponseEntity<>(userService.registerUser(userDto), HttpStatus.CREATED);
     }
 }

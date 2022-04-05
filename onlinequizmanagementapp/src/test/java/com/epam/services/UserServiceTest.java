@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
@@ -54,9 +53,8 @@ class UserServiceTest {
     void registerUser() {
         when(userRepository.save(user)).thenReturn(user);
         when(modelMapper.map(userDto, User.class)).thenReturn(user);
-        assertThat(userService.registerUser(userDto)).isTrue();
-        when(userRepository.save(user)).thenThrow(DataIntegrityViolationException.class);
-        assertThat(userService.registerUser(userDto)).isFalse();
+        when(modelMapper.map(user,UserDto.class)).thenReturn(userDto);
+        assertThat(userService.registerUser(userDto)).isEqualTo(userDto);
     }
 
     @Test
@@ -68,7 +66,7 @@ class UserServiceTest {
         userDto.setPassword("123456");
         userDto.setType("ADMIN");
         assertThat(userService.validateCredentials(userDto)).isFalse();
-        when(userRepository.findDistinctByUserName("Anu")).thenReturn(Optional.ofNullable(null));
+        when(userRepository.findDistinctByUserName("Anu")).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.validateCredentials(userDto));
     }
 }

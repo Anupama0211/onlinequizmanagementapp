@@ -59,7 +59,7 @@ public class MyExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(DataIntegrityViolationException exception, WebRequest request) {
-        ExceptionResponse exceptionResponse = getExceptionResponse("Question is present in the quiz!Cannot be deleted", HttpStatus.BAD_REQUEST, request);
+        ExceptionResponse exceptionResponse = getExceptionResponse("Operation Cannot be performed!", HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 

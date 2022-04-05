@@ -103,7 +103,7 @@ class QuestionControllerTest {
 
     @Test
     void updateQuestion() throws Exception {
-        mockMvc.perform(post("/updateQuestion")
+        mockMvc.perform(post("/updateQuestion?questionId=1")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("value", "1", "2", "3", "4")
                         .param("answer", "true", "false", "false", "false"))

@@ -13,7 +13,7 @@
 <body  class="text-white bg-dark ">
 
 <div class="alert alert-dark container" role="alert">
-    <h1>Something went wrong! </h1>
+    <h1>Invalid Request!</h1>
     <a href="/">Go Home</a>
 </div>
 

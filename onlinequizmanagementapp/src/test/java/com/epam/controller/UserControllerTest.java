@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -102,7 +103,7 @@ class UserControllerTest {
     @Test
     void registerUserAlreadyExists() throws Exception {
         UserDto userDto = new UserDto("Anu", "ADMIN", "1234");
-        when(userService.registerUser(any(UserDto.class))).thenReturn(false);
+        when(userService.registerUser(any(UserDto.class))).thenThrow(DataIntegrityViolationException.class);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")
@@ -115,7 +116,8 @@ class UserControllerTest {
 
     @Test
     void registerAdmin() throws Exception {
-        when(userService.registerUser(any(UserDto.class))).thenReturn(true);
+        UserDto userDto = new UserDto("Anu", "ADMIN", "1234");
+        when(userService.registerUser(any(UserDto.class))).thenReturn(userDto);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "Anu")

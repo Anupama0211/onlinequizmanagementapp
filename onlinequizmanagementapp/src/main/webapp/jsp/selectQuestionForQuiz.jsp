@@ -49,11 +49,11 @@
 			</select>
 			<div class="container text-center">
 				<button type="submit"
-					formaction="insertQuiz"
+					formaction="updateQuiz?quizId=${quiz.quizId}"
 					class="btn btn-success text-center">Add Questions</button>
 			</div>
 		</form>
-		<a href="viewAQuiz?quizId=${quiz.quizId}">
+		<a href="/viewAQuiz?quizId=${quiz.quizId}">
 			<button type="button" class="btn btn-light">Back</button>
 		</a>
 	</div>

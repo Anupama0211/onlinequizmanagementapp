@@ -157,6 +157,18 @@ class QuizControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAQuiz"));
     }
+    @Test
+    void updateQuiz() throws Exception {
+        when(quizService.updateQuiz(any(QuizDto.class), anyList(),anyInt())).thenReturn(quizDto);
+        when(quizService.getAQuiz(111)).thenReturn(quizDto);
+        mockMvc.perform(post("/updateQuiz?quizId=111")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("questionIds", "1", "2", "3", "4")
+                        .sessionAttr("quizDto", quizDto))
+                .andExpect(status().isOk())
+                .andExpect(view().name("viewAQuiz"));
+    }
+
 
     @Test
     void selectQuestionForQuizWhenQuestionLibraryNotEmpty() throws Exception {

@@ -2,7 +2,6 @@ package com.epam.restcontrollers;
 
 import com.epam.dto.OptionDto;
 import com.epam.dto.QuestionDto;
-import com.epam.entities.Option;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
@@ -18,19 +17,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+
 
 
 import java.util.List;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -117,16 +113,11 @@ class QuestionRestControllerTest {
         questionDto.setOptions(List.of(option1, option2));
 
         when(questionService.modifyQuestion(questionDto,2)).thenReturn(questionDto);
-        MvcResult mvcResult = mockMvc.perform(put("/questions/1")
+        mockMvc.perform(put("/questions/1")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(questionDto)))
                 .andExpect(status().isOk())
-                //.andExpect(jsonPath("$.title").value(questionDto.getTitle()))
                 .andReturn();
-        //System.out.println(mvcResult.getResponse().getContentAsString());
-        //  assertThat(mvcResult.getResponse().getContentAsString()).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(questionDto));
-
-        // assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(questionDto);
     }
 
     @Test

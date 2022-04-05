@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -45,7 +46,7 @@ public class QuizController {
     }
 
     @RequestMapping("deleteAQuiz")
-    public ModelAndView deleteAQuiz(int quizId) {
+    public ModelAndView deleteAQuiz(@RequestParam int quizId) {
         quizService.deleteQuiz(quizId);
         ModelAndView modelAndView = viewQuizTitles();
         modelAndView.addObject(MESSAGE, "Quiz Deleted!!!");
@@ -53,7 +54,7 @@ public class QuizController {
     }
 
     @RequestMapping("viewAQuiz")
-    public ModelAndView viewAQuiz(int quizId) throws InvalidIDException {
+    public ModelAndView viewAQuiz(@RequestParam int quizId) throws InvalidIDException {
         ModelAndView modelAndView = new ModelAndView();
         QuizDto quizDto = quizService.getAQuiz(quizId);
         if (quizDto.getQuestions().isEmpty()) {
@@ -79,10 +80,18 @@ public class QuizController {
     }
 
     @PostMapping("insertQuiz")
-    public ModelAndView insertQuiz(@RequestParam("questionIds") List<Integer> questionIds, QuizDto quizDto) throws InvalidIDException {
+    public ModelAndView insertQuiz(@RequestParam("questionIds") List<Integer> questionIds, @Valid QuizDto quizDto) throws InvalidIDException {
         quizDto = quizService.insertQuiz(quizDto, questionIds);
         ModelAndView modelAndView = viewAQuiz(quizDto.getQuizId());
         modelAndView.addObject(MESSAGE, "Quiz Created!!!");
+        return modelAndView;
+    }
+
+    @PostMapping("updateQuiz")
+    public ModelAndView updateQuiz(@RequestParam int quizId, @RequestParam("questionIds") List<Integer> questionIds, @Valid QuizDto quizDto) throws InvalidIDException {
+        quizDto = quizService.updateQuiz(quizDto, questionIds, quizId);
+        ModelAndView modelAndView = viewAQuiz(quizDto.getQuizId());
+        modelAndView.addObject(MESSAGE, "Quiz Updated!!!");
         return modelAndView;
     }
 
@@ -100,7 +109,7 @@ public class QuizController {
     }
 
     @RequestMapping("deleteQuestionInQuiz")
-    public ModelAndView deleteQuestionInQuiz(int questionId, int quizId) throws InvalidIDException {
+    public ModelAndView deleteQuestionInQuiz(@RequestParam int questionId, @RequestParam int quizId) throws InvalidIDException {
         quizService.deleteQuestionInQuiz(quizId, questionId);
         ModelAndView modelAndView = viewAQuiz(quizId);
         modelAndView.addObject(MESSAGE, "Question Deleted");

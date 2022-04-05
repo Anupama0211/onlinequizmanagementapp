@@ -61,7 +61,7 @@ class UserRestControllerTest {
 
     @Test
     void register()throws Exception {
-        when(userService.registerUser(userDto)).thenReturn(true);
+        when(userService.registerUser(userDto)).thenReturn(userDto );
         mockMvc.perform(post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))

@@ -33,7 +33,7 @@ public class QuizRestController {
     @ApiResponse(responseCode = "204", description = "Bad Request")
     @ApiResponse(responseCode = "200", description = "Sucessfull")
     @GetMapping
-    public ResponseEntity<List<QuizDto>> viewQuizzes(){
+    public ResponseEntity<List<QuizDto>> viewQuizzes() {
         return new ResponseEntity<>(quizService.getAllQuizzes(), HttpStatus.OK);
     }
 
@@ -68,9 +68,8 @@ public class QuizRestController {
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @PutMapping("{quizId}")
     public ResponseEntity<QuizDto> updateQuiz(@RequestParam("questionIds") List<Integer> questionIds,
-                                              @Valid @RequestBody QuizDto quizDto,@PathVariable int quizId) {
-       quizDto.setQuizId(quizId);
-        return new ResponseEntity<>(quizService.insertQuiz(quizDto, questionIds), HttpStatus.OK);
+                                              @Valid @RequestBody QuizDto quizDto, @PathVariable int quizId) {
+        return new ResponseEntity<>(quizService.updateQuiz(quizDto, questionIds, quizId), HttpStatus.OK);
     }
 
     @Operation(description = "It deletes a question in a quiz")

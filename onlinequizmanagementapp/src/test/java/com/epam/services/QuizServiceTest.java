@@ -95,16 +95,24 @@ class QuizServiceTest {
 
     @Test
     void insertQuizTest() throws InvalidIDException {
-        when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(quiz));
+
         when(modelMapper.map(quizDto, Quiz.class)).thenReturn(quiz);
         when(questionService.getQuestionByID(1)).thenReturn(questionDto);
         when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
         when(quizRepository.save(quiz)).thenReturn(quiz);
         when(modelMapper.map(quiz, QuizDto.class)).thenReturn(quizDto);
         assertThat(quizService.insertQuiz(quizDto, List.of(1))).isEqualTo(quizDto);
-        quiz.setQuestions(null);
-        assertThat(quizService.insertQuiz(quizDto, List.of(1))).isEqualTo(quizDto);
 
+    }
+    @Test
+    void updateQuizTest() throws InvalidIDException {
+        when(quizRepository.findById(111)).thenReturn(Optional.ofNullable(quiz));
+        when(modelMapper.map(quizDto, Quiz.class)).thenReturn(quiz);
+        when(questionService.getQuestionByID(1)).thenReturn(questionDto);
+        when(modelMapper.map(questionDto, Question.class)).thenReturn(question);
+        when(quizRepository.save(quiz)).thenReturn(quiz);
+        when(modelMapper.map(quiz, QuizDto.class)).thenReturn(quizDto);
+        assertThat(quizService.updateQuiz(quizDto, List.of(1),111)).isEqualTo(quizDto);
     }
 
     @Test

@@ -22,7 +22,7 @@ public class QuestionDto {
     int questionId;
 
     @NotEmpty(message = "Title should not be empty")
-    @Size(min = 10, message = "Title should be above 9 characters length")
+    @Size(min = 5, message = "Title should be above 4 characters length")
     private String title;
     @NotEmpty(message = "Difficulty should not be empty")
     private String difficulty;
@@ -33,7 +33,7 @@ public class QuestionDto {
     @Min(value = 1, message = "Marks should not be less than 1")
     private int marks;
     @NotEmpty(message = "Options should not be empty")
-    @Size(min=2, message = "Question should have minimum 2 options")
+    @Size(min = 2, message = "Question should have minimum 2 options")
     private List<OptionDto> options;
 
 
