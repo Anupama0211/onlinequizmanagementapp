@@ -36,11 +36,11 @@ public class QuestionService {
         return modelMapper.map(question, QuestionDto.class);
     }
 
-    public void removeQuestion(int questionId){
+    public void removeQuestion(int questionId) {
         questionRepository.deleteById(questionId);
     }
 
-    public QuestionDto getQuestionByID(int questionId){
+    public QuestionDto getQuestionByID(int questionId) {
         return modelMapper
                 .map(questionRepository
                                 .findById(questionId)
@@ -49,7 +49,12 @@ public class QuestionService {
 
     }
 
-    public QuestionDto modifyQuestion(QuestionDto newQuestionDto,int questionId) {
+    public QuestionDto modifyQuestion(QuestionDto newQuestionDto, int questionId) {
+//        getQuestionByID(questionId);
+//        newQuestionDto.setQuestionId(questionId);
+//        Question question = questionRepository.save(modelMapper.map(newQuestionDto, Question.class));
+//        return modelMapper.map(question, QuestionDto.class);
+
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         if (questionOptional.isPresent()) {
             Question question = questionOptional.get();
