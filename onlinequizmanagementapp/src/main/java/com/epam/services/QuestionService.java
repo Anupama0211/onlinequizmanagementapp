@@ -50,10 +50,6 @@ public class QuestionService {
     }
 
     public QuestionDto modifyQuestion(QuestionDto newQuestionDto, int questionId) {
-//        getQuestionByID(questionId);
-//        newQuestionDto.setQuestionId(questionId);
-//        Question question = questionRepository.save(modelMapper.map(newQuestionDto, Question.class));
-//        return modelMapper.map(question, QuestionDto.class);
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         if (questionOptional.isPresent()) {
             Question question = questionOptional.get();
