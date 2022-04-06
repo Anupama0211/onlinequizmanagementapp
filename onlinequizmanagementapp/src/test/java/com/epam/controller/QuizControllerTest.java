@@ -57,6 +57,7 @@ class QuizControllerTest {
                 , new OptionDto(1, "Coffee", true)));
 
         quizDto = new QuizDto();
+        quizDto.setTitle("ABCDEFGH");
         quizDto.setQuizId(111);
         Set<QuestionDto> questions = new HashSet<>();
         questions.add(questionDto);
@@ -152,7 +153,7 @@ class QuizControllerTest {
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(post("/insertQuiz")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("questionIds", "1", "2", "3", "4")
+                        .param("questionIds", "1","2","3","4")
                         .sessionAttr("quizDto", quizDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAQuiz"));

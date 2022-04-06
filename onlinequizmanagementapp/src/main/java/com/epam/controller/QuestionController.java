@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -47,7 +46,7 @@ public class QuestionController {
     }
 
     @PostMapping("addQuestion")
-    public ModelAndView addQuestion(@Valid QuestionDto questionDto) {
+    public ModelAndView addQuestion( QuestionDto questionDto) {
         questionService.addQuestion(questionDto);
         ModelAndView modelAndView = viewQuestions();
         modelAndView.addObject(MESSAGE, "Question Added Succesfully!!!");
@@ -65,7 +64,7 @@ public class QuestionController {
     }
 
     @PostMapping("updateQuestion")
-    public ModelAndView updateQuestion(@RequestParam int questionId, @Valid QuestionDto questionDto) throws InvalidIDException {
+    public ModelAndView updateQuestion(@RequestParam int questionId,QuestionDto questionDto) throws InvalidIDException {
         questionService.modifyQuestion(questionDto, questionId);
         ModelAndView modelAndView = viewQuestions();
         modelAndView.addObject(MESSAGE, "Question Modified Succesfully!!!");

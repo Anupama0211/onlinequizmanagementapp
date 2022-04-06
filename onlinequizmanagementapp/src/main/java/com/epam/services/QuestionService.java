@@ -54,7 +54,6 @@ public class QuestionService {
 //        newQuestionDto.setQuestionId(questionId);
 //        Question question = questionRepository.save(modelMapper.map(newQuestionDto, Question.class));
 //        return modelMapper.map(question, QuestionDto.class);
-
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         if (questionOptional.isPresent()) {
             Question question = questionOptional.get();
@@ -62,13 +61,11 @@ public class QuestionService {
             question.setTopic(newQuestionDto.getTopic());
             question.setDifficulty(newQuestionDto.getDifficulty());
             question.setTitle(newQuestionDto.getTitle());
-            Iterator<OptionDto> newOptionIterator = newQuestionDto.getOptions().iterator();
-            Iterator<Option> oldOptionIterator = question.getOptions().iterator();
-            while (newOptionIterator.hasNext() && oldOptionIterator.hasNext()) {
-                Option oldOption = oldOptionIterator.next();
-                OptionDto newOption = newOptionIterator.next();
-                oldOption.setValue(newOption.getValue());
-                oldOption.setAnswer(newOption.isAnswer());
+            List<OptionDto> newOptions = newQuestionDto.getOptions();
+            List<Option> oldOptions = question.getOptions();
+            for (int i = 0; i < oldOptions.size(); i++) {
+                oldOptions.get(i).setValue(newOptions.get(i).getValue());
+                oldOptions.get(i).setAnswer(newOptions.get(i).isAnswer());
             }
             return modelMapper.map(questionRepository.save(question), QuestionDto.class);
         }

@@ -78,7 +78,6 @@ public class QuizService {
 
     public void deleteQuestionInQuiz(int quizId, int questionId) {
         Optional<Quiz> quizOptional = quizRepository.findById(quizId);
-
         if (quizOptional.isPresent()) {
             Quiz quiz = quizOptional.get();
             Optional<Question> questionOptional = quiz

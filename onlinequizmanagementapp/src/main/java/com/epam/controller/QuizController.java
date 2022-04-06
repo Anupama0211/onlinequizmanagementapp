@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import javax.validation.Valid;
+
 import java.util.List;
 
 
@@ -80,7 +80,7 @@ public class QuizController {
     }
 
     @PostMapping("insertQuiz")
-    public ModelAndView insertQuiz(@RequestParam("questionIds") List<Integer> questionIds, @Valid QuizDto quizDto) throws InvalidIDException {
+    public ModelAndView insertQuiz(@RequestParam("questionIds") List<Integer> questionIds,  QuizDto quizDto)  {
         quizDto = quizService.insertQuiz(quizDto, questionIds);
         ModelAndView modelAndView = viewAQuiz(quizDto.getQuizId());
         modelAndView.addObject(MESSAGE, "Quiz Created!!!");
@@ -88,7 +88,7 @@ public class QuizController {
     }
 
     @PostMapping("updateQuiz")
-    public ModelAndView updateQuiz(@RequestParam int quizId, @RequestParam("questionIds") List<Integer> questionIds, @Valid QuizDto quizDto) throws InvalidIDException {
+    public ModelAndView updateQuiz(@RequestParam int quizId, @RequestParam("questionIds") List<Integer> questionIds,QuizDto quizDto) throws InvalidIDException {
         quizDto = quizService.updateQuiz(quizDto, questionIds, quizId);
         ModelAndView modelAndView = viewAQuiz(quizDto.getQuizId());
         modelAndView.addObject(MESSAGE, "Quiz Updated!!!");
