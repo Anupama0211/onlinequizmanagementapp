@@ -3,7 +3,6 @@ package com.epam.controller;
 
 import com.epam.dto.QuizDto;
 import com.epam.exceptions.EmptyLibraryException;
-import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
 import com.epam.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class QuizController {
     }
 
     @RequestMapping("viewAQuiz")
-    public ModelAndView viewAQuiz(@RequestParam int quizId) throws InvalidIDException {
+    public ModelAndView viewAQuiz(@RequestParam int quizId){
         ModelAndView modelAndView = new ModelAndView();
         QuizDto quizDto = quizService.getAQuiz(quizId);
         if (quizDto.getQuestions().isEmpty()) {
@@ -88,7 +87,7 @@ public class QuizController {
     }
 
     @PostMapping("updateQuiz")
-    public ModelAndView updateQuiz(@RequestParam int quizId, @RequestParam("questionIds") List<Integer> questionIds,QuizDto quizDto) throws InvalidIDException {
+    public ModelAndView updateQuiz(@RequestParam int quizId, @RequestParam("questionIds") List<Integer> questionIds,QuizDto quizDto) {
         quizDto = quizService.updateQuiz(quizDto, questionIds, quizId);
         ModelAndView modelAndView = viewAQuiz(quizDto.getQuizId());
         modelAndView.addObject(MESSAGE, "Quiz Updated!!!");
@@ -96,7 +95,7 @@ public class QuizController {
     }
 
     @RequestMapping("selectQuestionForQuiz")
-    public ModelAndView selectQuestionForQuiz(int quizId) throws InvalidIDException {
+    public ModelAndView selectQuestionForQuiz(int quizId){
         ModelAndView modelAndView = new ModelAndView();
         try {
             modelAndView.addObject(QUESTIONS, questionService.getAllQuestions());
@@ -109,7 +108,7 @@ public class QuizController {
     }
 
     @RequestMapping("deleteQuestionInQuiz")
-    public ModelAndView deleteQuestionInQuiz(@RequestParam int questionId, @RequestParam int quizId) throws InvalidIDException {
+    public ModelAndView deleteQuestionInQuiz(@RequestParam int questionId, @RequestParam int quizId) {
         quizService.deleteQuestionInQuiz(quizId, questionId);
         ModelAndView modelAndView = viewAQuiz(quizId);
         modelAndView.addObject(MESSAGE, "Question Deleted");

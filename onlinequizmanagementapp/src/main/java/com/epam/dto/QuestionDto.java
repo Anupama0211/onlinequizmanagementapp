@@ -20,7 +20,6 @@ public class QuestionDto {
 
 
     int questionId;
-
     @NotEmpty(message = "Title should not be empty")
     @Size(min = 5, message = "Title should be above 4 characters length")
     private String title;

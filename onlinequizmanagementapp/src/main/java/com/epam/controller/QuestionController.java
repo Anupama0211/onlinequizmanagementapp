@@ -2,7 +2,6 @@ package com.epam.controller;
 
 import com.epam.dto.QuestionDto;
 import com.epam.exceptions.EmptyLibraryException;
-import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -54,7 +53,7 @@ public class QuestionController {
     }
 
     @RequestMapping("editQuestion")
-    public ModelAndView editQuestion(@RequestParam int questionId) throws InvalidIDException {
+    public ModelAndView editQuestion(@RequestParam int questionId){
         ModelAndView modelAndView = new ModelAndView();
         QuestionDto questionDto;
         questionDto = questionService.getQuestionByID(questionId);
@@ -64,7 +63,7 @@ public class QuestionController {
     }
 
     @PostMapping("updateQuestion")
-    public ModelAndView updateQuestion(@RequestParam int questionId,QuestionDto questionDto) throws InvalidIDException {
+    public ModelAndView updateQuestion(@RequestParam int questionId,QuestionDto questionDto)  {
         questionService.modifyQuestion(questionDto, questionId);
         ModelAndView modelAndView = viewQuestions();
         modelAndView.addObject(MESSAGE, "Question Modified Succesfully!!!");
