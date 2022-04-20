@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-
 @Getter
 @Setter
 @Entity
@@ -21,8 +20,9 @@ public class User {
     @Column(name = "user_id")
     private int userId;
     @Column(unique = true, name = "user_name")
-    private String userName;
-    private String type;
+    private String username;
+    private String role;
     private String password;
+    private boolean isActive=true;
 
 }

@@ -19,6 +19,15 @@
 <title>Create Quiz</title>
 </head>
 <body class="text-white bg-dark">
+  <div class="card text-center">
+      <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" href="logout">Logout</a>
+              </li>
+            </ul>
+        </div>
+      </div>
 	<div class="container mt-5">
 		<form method="post">
 			<div class="form-group">

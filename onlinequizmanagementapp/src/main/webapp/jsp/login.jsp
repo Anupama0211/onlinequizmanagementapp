@@ -17,6 +17,15 @@
 <title>User Details</title>
 </head>
 <body class="text-white bg-dark ">
+    <div class="card text-center">
+      <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" href="logout">Logout</a>
+              </li>
+            </ul>
+        </div>
+      </div>
 	<div class="container mt-5">
 		<h1 class="container text-center">Welcome To The Quiz Application</h1>
 		<h4 class="container text-center">${message}</h4>
@@ -24,23 +33,17 @@
 			<div class="form-group">
 				<label for="UserName">UserName</label> <input type="text"
 					class="form-control" id="UserName" placeholder="UserName"
-					name="userName" required>
+					name="username" required>
 			</div>
 			<div class="form-group">
 				<label for="password">Password</label> <input type="password"
 					class="form-control" id="password" placeholder="********"
 					name="password" required>
 			</div>
-			<div class="form-group">
-				<label for="Type">Type</label> <input type="text"
-					class="form-control" id="Type" placeholder="ADMIN/PLAYER"
-					name="type" required>
-			</div>
+
 			<div class="container text-center">
-				<button type="submit" formaction="login"
+				<button type="submit" formaction="#"
 					class="btn btn-success text-center">Login</button>
-				<button type="submit" formaction="register"
-					class="btn btn-success text-center">Register</button>
 			</div>
 
 		</form>

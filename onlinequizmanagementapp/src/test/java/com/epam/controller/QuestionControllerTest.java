@@ -16,6 +16,7 @@ import com.epam.dto.QuestionDto;
 import com.epam.entities.Option;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.services.QuestionService;
+import com.epam.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -36,7 +39,13 @@ class QuestionControllerTest {
     @MockBean
     private QuestionService questionService;
 
+    @MockBean
+    JwtUtil jwtUtil;
+    @MockBean
+    UserDetailsService userDetailsService;
+
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void questionLibraryPortal() throws Exception {
         mockMvc.perform(get("/questionLibraryPortal"))
                 .andExpect(status().isOk())
@@ -44,6 +53,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void createQuestion() throws Exception {
         mockMvc.perform(get("/createQuestion"))
                 .andExpect(status().isOk())
@@ -51,6 +61,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewQuestionWhenNotEmpty() throws Exception {
         OptionDto option = new OptionDto();
         List<OptionDto> options = List.of(option);
@@ -71,6 +82,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewQuestionsWhenEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/viewQuestions"))
@@ -80,6 +92,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void addQuestion() throws Exception {
 
         mockMvc.perform(post("/addQuestion")
@@ -93,6 +106,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void editQuestion() throws Exception {
         mockMvc.perform(get("/editQuestion?questionId=1"))
                 .andExpect(status().isOk())
@@ -102,6 +116,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void updateQuestion() throws Exception {
         mockMvc.perform(post("/updateQuestion?questionId=1")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -115,6 +130,7 @@ class QuestionControllerTest {
 
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteQuestionWhenInQuiz() throws Exception {
         doThrow(DataIntegrityViolationException.class).when(questionService).removeQuestion(1);
         mockMvc.perform(get("/deleteQuestion?questionId=1"))
@@ -124,6 +140,7 @@ class QuestionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteQuestionWhenNotInQuiz() throws Exception {
         mockMvc.perform(get("/deleteQuestion?questionId=1"))
                 .andExpect(status().isOk())

@@ -42,8 +42,8 @@ public class QuestionRestController {
     @ApiResponse(responseCode = "400", description = "Bad Request")
     @ApiResponse(responseCode = "200", description = "Sucessfull")
     @PutMapping("{questionId}")
-    public ResponseEntity<QuestionDto> updateQuestion(@RequestBody @Valid QuestionDto questionDto,@PathVariable int questionId) {
-        return new ResponseEntity<>(questionService.modifyQuestion(questionDto,questionId), HttpStatus.OK);
+    public ResponseEntity<QuestionDto> updateQuestion(@RequestBody @Valid QuestionDto questionDto, @PathVariable int questionId) {
+        return new ResponseEntity<>(questionService.modifyQuestion(questionDto, questionId), HttpStatus.OK);
 
     }
 

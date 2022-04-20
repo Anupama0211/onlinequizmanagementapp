@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 
+
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title="Quiz API", version="1.0", description="Creating Quizzes"))
 public class OnlineQuizManagementAppUsingSpringBootApplication {
@@ -21,6 +22,7 @@ public class OnlineQuizManagementAppUsingSpringBootApplication {
     public ModelMapper getMapper() {
         return new ModelMapper();
     }
+
 
 }
 //Learn @Transanctional, @Repository, inorder verify, remove star import, make shorter functions

@@ -17,6 +17,15 @@
 <title>User Details</title>
 </head>
 <body class="text-white bg-dark ">
+  <div class="card text-center">
+      <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" href="logout">Logout</a>
+              </li>
+            </ul>
+        </div>
+      </div>
 	<div class="container mt-5">
 		<h1 class="container text-center">Create A Question</h1>
 		<form method="post" class="col-md-4 col-md-offset-4 container">

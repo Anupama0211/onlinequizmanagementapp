@@ -2,14 +2,15 @@ package com.epam.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.epam.dto.UserDto;
 
-import com.epam.exceptions.UserNotFoundException;
-import com.epam.services.UserService;
+import com.epam.services.UserDetailsServiceImpl;
+import com.epam.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -18,8 +19,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.jar.JarEntry;
 
 
 @ExtendWith(SpringExtension.class)
@@ -30,74 +35,31 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    private UserDetailsServiceImpl userService;
+    @MockBean
+    JwtUtil jwtUtil;
 
     @Test
     void userDetails() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home"));
+                .andExpect(view().name("register"));
 
     }
 
     @Test
+    void login() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"));
+
+    }
+    @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void adminPortal() throws Exception {
         mockMvc.perform(get("/adminPortal"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("adminPortal"));
-    }
-
-    @Test
-    void loginSuccessful() throws Exception {
-        when(userService.validateCredentials(any(UserDto.class))).thenReturn(true);
-        mockMvc.perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("userName", "Anu")
-                        .param("password", "1234")
-                        .param("type", "ADMIN"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("adminPortal"))
-                .andExpect(model().attribute("message", "Succesfully Logged In!!!"));
-    }
-
-    @Test
-    void loginNotSuccesfulAdmin() throws Exception {
-        when(userService.validateCredentials(any(UserDto.class))).thenReturn(false);
-        mockMvc.perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("userName", "Anu")
-                        .param("password", "1234")
-                        .param("type", "ADMIN"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("home"))
-                .andExpect(model().attribute("message", "Wrong UserName Or Password!!!"));
-    }
-
-    @Test
-    void loginPlayer() throws Exception {
-        when(userService.validateCredentials(any(UserDto.class))).thenReturn(false);
-        mockMvc.perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("userName", "Anu")
-                        .param("password", "1234")
-                        .param("type", "PLAYER"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("home"))
-                .andExpect(model().attribute("message", "Player Functionalities not defined!!"));
-    }
-
-    @Test
-    void loginUserDoesNotExist() throws Exception {
-        when(userService.validateCredentials(any(UserDto.class))).
-                thenThrow(new UserNotFoundException("User doesnt exist!! Register!"));
-        mockMvc.perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("userName", "Anu")
-                        .param("password", "1234")
-                        .param("type", "ADMIN"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("home"))
-                .andExpect(model().attribute("message", "User doesnt exist!! Register!"));
     }
 
     @Test
@@ -110,33 +72,21 @@ class UserControllerTest {
                         .param("type", "ADMIN")
                         .param("password", "1234"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home"))
+                .andExpect(view().name("register"))
                 .andExpect(model().attribute("message", "User Already Exists"));
     }
 
     @Test
-    void registerAdmin() throws Exception {
-        UserDto userDto = new UserDto("Anu", "ADMIN", "1234");
+    void register() throws Exception {
+        UserDto userDto = new UserDto("Anupama", "ADMIN", "12345678");
         when(userService.registerUser(any(UserDto.class))).thenReturn(userDto);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("userName", "Anu")
+                        .param("userName", "Anupama")
                         .param("type", "ADMIN")
-                        .param("password", "1234"))
+                        .param("password", "12345678"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("adminPortal"))
+                .andExpect(view().name("register"))
                 .andExpect(model().attribute("message", "SuccesfulLy Registered!!!"));
-    }
-
-    @Test
-    void registerPlayer() throws Exception {
-        mockMvc.perform(post("/register")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("userName", "Anu")
-                        .param("type", "PLAYER")
-                        .param("password", "1234"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("home"))
-                .andExpect(model().attribute("message", "Player Functionalities not defined!!"));
     }
 }

@@ -7,6 +7,7 @@ import com.epam.exceptions.EmptyLibraryException;
 import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
 import com.epam.services.QuizService;
+import com.epam.util.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +20,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,10 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class QuizRestControllerTest {
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     QuizService quizService;
-
+    @MockBean
+    UserDetailsService userDetailsService;
+    @MockBean
+    JwtUtil jwtUtil;
 
     static ObjectMapper objectMapper;
 
@@ -52,6 +57,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewQuizzes() throws Exception {
         when(quizService.getAllQuizzes()).thenReturn(List.of(new QuizDto()));
         mockMvc.perform(get("/quizzes"))
@@ -65,6 +71,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteAQuiz() throws Exception {
         mockMvc.perform(delete("/quizzes/1"))
                 .andExpect(status().isNoContent());
@@ -75,6 +82,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewAQuiz() throws Exception {
         when(quizService.getAQuiz(1)).thenReturn(new QuizDto());
         mockMvc.perform(get("/quizzes/1"))
@@ -86,6 +94,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void insertQuiz() throws Exception {
         QuizDto quizDto = new QuizDto();
         quizDto.setTitle("QuizTest");
@@ -104,6 +113,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void insertQuizWithInavlidQuestionId() throws Exception {
         QuizDto quizDto = new QuizDto();
         quizDto.setTitle("QuizTest");
@@ -118,6 +128,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void insertQuizWithMissingRequestParam() throws Exception {
         QuizDto quizDto = new QuizDto();
         quizDto.setTitle("QuizTest");
@@ -128,6 +139,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void updateQuiz() throws Exception {
         QuizDto quizDto = new QuizDto();
         quizDto.setTitle("Quiz Test");
@@ -139,6 +151,7 @@ class QuizRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteQuestionInQuiz() throws Exception {
         mockMvc.perform(delete("/quizzes/1/1"))
                 .andExpect(status().isNoContent());

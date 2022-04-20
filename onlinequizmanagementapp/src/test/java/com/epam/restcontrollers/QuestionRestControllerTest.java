@@ -5,6 +5,7 @@ import com.epam.dto.QuestionDto;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.exceptions.InvalidIDException;
 import com.epam.services.QuestionService;
+import com.epam.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,6 +42,10 @@ class QuestionRestControllerTest {
 
     @MockBean
     QuestionService questionService;
+    @MockBean
+    UserDetailsService userDetailsService;
+    @MockBean
+    JwtUtil jwtUtil;
 
     static ObjectMapper objectMapper;
 
@@ -48,6 +55,7 @@ class QuestionRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewQuestions() throws Exception {
 
         when(questionService.getAllQuestions()).thenReturn(List.of(new QuestionDto()));
@@ -61,6 +69,7 @@ class QuestionRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void addQuestion() throws Exception {
         QuestionDto questionDto = new QuestionDto();
         questionDto.setQuestionId(2);
@@ -86,6 +95,7 @@ class QuestionRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void addInvalidQuestion() throws Exception {
         QuestionDto questionDto = new QuestionDto();
 
@@ -97,6 +107,7 @@ class QuestionRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void updateQuestion() throws Exception {
         QuestionDto questionDto = new QuestionDto();
         questionDto.setQuestionId(2);
@@ -121,6 +132,7 @@ class QuestionRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void updateQuestionWithInavlidId() throws Exception {
         QuestionDto questionDto = new QuestionDto();
         questionDto.setQuestionId(2);
@@ -144,12 +156,14 @@ class QuestionRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteQuestionWhenInQuiz() throws Exception {
         doThrow(DataIntegrityViolationException.class).when(questionService).removeQuestion(1);
         mockMvc.perform(delete("/questions/1"))
                 .andExpect(status().isBadRequest());
     }
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteQuestion() throws Exception {
         mockMvc.perform(delete("/questions/1"))
                 .andExpect(status().isNoContent());

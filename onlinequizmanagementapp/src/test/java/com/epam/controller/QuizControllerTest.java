@@ -9,6 +9,7 @@ import com.epam.entities.Question;
 import com.epam.exceptions.EmptyLibraryException;
 import com.epam.services.QuestionService;
 import com.epam.services.QuizService;
+import com.epam.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +29,7 @@ import java.util.Set;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,6 +46,10 @@ class QuizControllerTest {
     private QuizService quizService;
     @MockBean
     private QuestionService questionService;
+    @MockBean
+    JwtUtil jwtUtil;
+    @MockBean
+    UserDetailsService userDetailsService;
     QuizDto quizDto;
     QuestionDto questionDto;
 
@@ -66,14 +74,16 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void quizLibraryPortal() throws Exception {
 
-        mockMvc.perform(get("/quizLibraryPortal"))
+        mockMvc.perform(get("/quizLibraryPortal").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("quizLibraryPortal"));
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewQuizTitlesWhenQuizNotEmpty() throws Exception {
         List<QuizDto> quizzes = List.of(quizDto);
         when(quizService.getAllQuizzes()).thenReturn(quizzes);
@@ -84,6 +94,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewQuizTitlesWhenQuizEmpty() throws Exception {
         when(quizService.getAllQuizzes()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/viewQuizTitles"))
@@ -93,6 +104,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteAQuiz() throws Exception {
 
         mockMvc.perform(get("/deleteAQuiz?quizId=111"))
@@ -103,6 +115,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewAQuizWhenEmpty() throws Exception {
         quizDto.setQuestions(Set.of());
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
@@ -117,6 +130,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void viewAQuizWhenNotEmpty() throws Exception {
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(get("/viewAQuiz?quizId=111"))
@@ -129,6 +143,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void createQuiz() throws Exception {
         List<QuestionDto> questions = List.of(questionDto);
         when(questionService.getAllQuestions()).thenReturn(questions);
@@ -139,6 +154,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void createQuizWhenQUestionIsEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/createQuiz"))
@@ -148,6 +164,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void insertQuiz() throws Exception {
         when(quizService.insertQuiz(any(QuizDto.class), anyList())).thenReturn(quizDto);
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
@@ -159,6 +176,7 @@ class QuizControllerTest {
                 .andExpect(view().name("viewAQuiz"));
     }
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void updateQuiz() throws Exception {
         when(quizService.updateQuiz(any(QuizDto.class), anyList(),anyInt())).thenReturn(quizDto);
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
@@ -172,6 +190,7 @@ class QuizControllerTest {
 
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void selectQuestionForQuizWhenQuestionLibraryNotEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenReturn(List.of(questionDto));
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
@@ -183,6 +202,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void selectQuestionForQuizWhenQuestionLibraryIsEmpty() throws Exception {
         when(questionService.getAllQuestions()).thenThrow(EmptyLibraryException.class);
         mockMvc.perform(get("/selectQuestionForQuiz?quizId=111"))
@@ -192,6 +212,7 @@ class QuizControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "qwerty",roles = {"USER","ADMIN"})
     void deleteQuestionInQuiz() throws Exception {
         when(quizService.getAQuiz(111)).thenReturn(quizDto);
         mockMvc.perform(get("/deleteQuestionInQuiz?questionId=1&quizId=111"))
